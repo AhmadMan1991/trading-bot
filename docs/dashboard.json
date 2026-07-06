@@ -1,0 +1,21 @@
+{
+  "updated_at": "2026-07-06 19:50:21.602361+00:00",
+  "signals": [
+    {
+      "layer": "scalp",
+      "asset": "XAUUSD",
+      "direction": "LONG",
+      "entry": 0,
+      "stop": 0,
+      "tp1": 0,
+      "tp2": 0,
+      "score_or_conf": 0,
+      "timestamp": "2026-07-06 19:50:21.602331+00:00",
+      "chart": null,
+      "note": "unit test"
+    }
+  ],
+  "forecasts": [],
+  "performance": {},
+  "open_positions": []
+}

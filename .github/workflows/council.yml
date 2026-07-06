@@ -1,0 +1,42 @@
+name: Council (7-Agent)
+
+on:
+  schedule:
+    # Every 2 hours 07-19 UTC Mon-Fri (at :30 to stagger with scalp)
+    - cron: '30 7,9,11,13,15,17,19 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Council mode: scalp or swing'
+        required: false
+        default: 'scalp'
+
+jobs:
+  council:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run council layer
+        env:
+          TELEGRAM_TOKEN:    ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID:  ${{ secrets.TELEGRAM_CHAT_ID }}
+          TWELVEDATA_KEY:    ${{ secrets.TWELVEDATA_KEY }}
+          OLLAMA_API_KEY:    ${{ secrets.OLLAMA_API_KEY }}
+        run: python main.py --layer council --council-mode ${{ github.event.inputs.mode || 'scalp' }}
+
+      - name: Commit dashboard + state
+        run: |
+          git config user.name  "trading-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/ docs/ || true
+          git diff --staged --quiet || git commit -m "chore: update dashboard + state [skip ci]"
+          git push || true

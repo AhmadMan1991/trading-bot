@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trading Bot — Live Dashboard</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2128; --border:#21262d;
+    --text:#e6edf3; --dim:#8b949e; --green:#26a641; --red:#f85149;
+    --yellow:#ffd700; --blue:#58a6ff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  }
+  header{
+    padding:20px 28px; border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  }
+  header h1{font-size:20px; margin:0; font-weight:600;}
+  header .sub{color:var(--dim); font-size:13px; margin-top:4px;}
+  .refresh-btn{
+    background:var(--panel2); border:1px solid var(--border); color:var(--text);
+    padding:8px 14px; border-radius:6px; cursor:pointer; font-size:13px;
+  }
+  .refresh-btn:hover{background:var(--border);}
+  main{padding:24px 28px; max-width:1400px; margin:0 auto;}
+  .stats-row{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+    gap:14px; margin-bottom:28px;
+  }
+  .stat-card{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:16px; text-align:center;
+  }
+  .stat-card .label{color:var(--dim); font-size:12px; text-transform:uppercase; letter-spacing:.04em;}
+  .stat-card .value{font-size:24px; font-weight:700; margin-top:6px;}
+  .pos{color:var(--green);} .neg{color:var(--red);}
+  section{margin-bottom:36px;}
+  section h2{
+    font-size:15px; text-transform:uppercase; letter-spacing:.05em; color:var(--dim);
+    border-bottom:1px solid var(--border); padding-bottom:8px; margin-bottom:16px;
+  }
+  .tabs{display:flex; gap:8px; margin-bottom:16px;}
+  .tab{
+    background:var(--panel); border:1px solid var(--border); color:var(--dim);
+    padding:6px 14px; border-radius:20px; cursor:pointer; font-size:13px;
+  }
+  .tab.active{background:var(--blue); color:#00121f; font-weight:600; border-color:var(--blue);}
+  .cards{display:grid; grid-template-columns:repeat(auto-fill, minmax(360px,1fr)); gap:18px;}
+  .card{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+  }
+  .card img{width:100%; display:block; background:#000;}
+  .card-body{padding:14px 16px;}
+  .card-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
+  .asset{font-weight:700; font-size:15px;}
+  .badge{
+    padding:3px 10px; border-radius:5px; font-size:12px; font-weight:700;
+  }
+  .badge.long, .badge.bullish, .badge.up{background:rgba(38,166,65,.18); color:var(--green);}
+  .badge.short, .badge.bearish, .badge.down{background:rgba(248,81,73,.18); color:var(--red);}
+  .badge.neutral, .badge.none{background:rgba(139,148,158,.18); color:var(--dim);}
+  .levels{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; font-size:12px; margin:10px 0;}
+  .levels div{background:var(--panel2); border-radius:6px; padding:6px; text-align:center;}
+  .levels .k{color:var(--dim); display:block; font-size:10px; text-transform:uppercase;}
+  .meta{color:var(--dim); font-size:12px; display:flex; justify-content:space-between; margin-top:8px;}
+  table{width:100%; border-collapse:collapse; font-size:13px;}
+  th, td{padding:9px 12px; text-align:left; border-bottom:1px solid var(--border);}
+  th{color:var(--dim); font-weight:600; font-size:11px; text-transform:uppercase;}
+  .empty{color:var(--dim); font-size:13px; padding:20px; text-align:center; background:var(--panel); border-radius:10px; border:1px dashed var(--border);}
+  .updated{color:var(--dim); font-size:12px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>📊 Trading Bot — Live Dashboard</h1>
+    <div class="sub">Signals, forecasts, and performance — for monitoring only, no auto-execution</div>
+  </div>
+  <div>
+    <span class="updated" id="updated">loading…</span>
+    <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+  </div>
+</header>
+
+<main>
+
+  <div class="stats-row" id="stats"></div>
+
+  <section>
+    <h2>Forecast — Setup / Bias per Asset</h2>
+    <div class="cards" id="forecasts"><div class="empty">No forecast data yet — runs daily via the Forecast workflow.</div></div>
+  </section>
+
+  <section>
+    <h2>Latest Trade Setups</h2>
+    <div class="tabs" id="signalTabs">
+      <div class="tab active" data-layer="all">All</div>
+      <div class="tab" data-layer="scalp">Scalp</div>
+      <div class="tab" data-layer="swing">Swing</div>
+      <div class="tab" data-layer="council_scalp">Council (scalp)</div>
+      <div class="tab" data-layer="council_swing">Council (swing)</div>
+    </div>
+    <div class="cards" id="signals"><div class="empty">No signals fired yet.</div></div>
+  </section>
+
+  <section>
+    <h2>Open Positions</h2>
+    <div id="openPositions"><div class="empty">No open positions.</div></div>
+  </section>
+
+</main>
+
+<script>
+let DATA = null;
+let activeLayer = "all";
+
+async function loadData(){
+  document.getElementById("updated").textContent = "loading…";
+  try{
+    const res = await fetch("dashboard.json?ts=" + Date.now());
+    DATA = await res.json();
+    render();
+  }catch(e){
+    document.getElementById("updated").textContent = "failed to load dashboard.json";
+    console.error(e);
+  }
+}
+
+function fmtNum(v){
+  if (v === null || v === undefined || v === "") return "–";
+  const n = Number(v);
+  if (isNaN(n)) return v;
+  return n < 10 ? n.toFixed(4) : n.toFixed(2);
+}
+
+function badgeClass(dir){
+  dir = (dir || "").toUpperCase();
+  if (["LONG","BUY","BULLISH","UP"].includes(dir)) return "long";
+  if (["SHORT","SELL","BEARISH","DOWN"].includes(dir)) return "short";
+  return "neutral";
+}
+
+function render(){
+  if (!DATA) return;
+  document.getElementById("updated").textContent =
+    "Updated: " + (DATA.updated_at ? new Date(DATA.updated_at).toLocaleString() : "never");
+
+  renderStats();
+  renderForecasts();
+  renderSignals();
+  renderOpenPositions();
+}
+
+function renderStats(){
+  const p = DATA.performance || {};
+  const el = document.getElementById("stats");
+  const winRate = p.win_rate !== undefined ? Math.round(p.win_rate * 100) + "%" : "–";
+  const totalR = p.total_r !== undefined ? (p.total_r >= 0 ? "+" : "") + p.total_r.toFixed(1) + "R" : "–";
+  const rClass = (p.total_r || 0) >= 0 ? "pos" : "neg";
+  el.innerHTML = `
+    <div class="stat-card"><div class="label">Total trades</div><div class="value">${p.total ?? "–"}</div></div>
+    <div class="stat-card"><div class="label">Win rate</div><div class="value">${winRate}</div></div>
+    <div class="stat-card"><div class="label">Total R</div><div class="value ${rClass}">${totalR}</div></div>
+    <div class="stat-card"><div class="label">Avg R / trade</div><div class="value">${p.avg_r !== undefined ? p.avg_r.toFixed(2) : "–"}</div></div>
+    <div class="stat-card"><div class="label">Open positions</div><div class="value">${(DATA.open_positions||[]).length}</div></div>
+  `;
+}
+
+function renderForecasts(){
+  const el = document.getElementById("forecasts");
+  const items = DATA.forecasts || [];
+  if (!items.length){ return; }
+  el.innerHTML = items.map(f => `
+    <div class="card">
+      ${f.chart ? `<img src="${f.chart}?ts=${Date.now()}" loading="lazy">` : ""}
+      <div class="card-body">
+        <div class="card-top">
+          <span class="asset">${f.asset}</span>
+          <span class="badge ${badgeClass(f.bias)}">${f.bias || "N/A"}</span>
+        </div>
+        <div class="levels">
+          <div><span class="k">Price</span>${fmtNum(f.price)}</div>
+          <div><span class="k">Target</span>${(f.forecast && f.forecast.target_zone) ? f.forecast.target_zone.map(fmtNum).join(" – ") : "–"}</div>
+          <div><span class="k">Invalid</span>${fmtNum(f.forecast && f.forecast.invalidation)}</div>
+          <div><span class="k">Dir</span>${(f.forecast && f.forecast.direction) || "–"}</div>
+        </div>
+        <div class="meta"><span>forecast</span><span>${f.timestamp ? new Date(f.timestamp).toLocaleString() : ""}</span></div>
+      </div>
+    </div>
+  `).join("");
+}
+
+function renderSignals(){
+  const el = document.getElementById("signals");
+  let items = DATA.signals || [];
+  if (activeLayer !== "all"){
+    items = items.filter(s => s.layer === activeLayer);
+  }
+  if (!items.length){
+    el.innerHTML = `<div class="empty">No signals for this filter yet.</div>`;
+    return;
+  }
+  el.innerHTML = items.map(s => `
+    <div class="card">
+      ${s.chart ? `<img src="${s.chart}" loading="lazy">` : ""}
+      <div class="card-body">
+        <div class="card-top">
+          <span class="asset">${s.asset} <span style="color:var(--dim); font-weight:400; font-size:11px;">· ${s.layer}</span></span>
+          <span class="badge ${badgeClass(s.direction)}">${s.direction || "–"}</span>
+        </div>
+        <div class="levels">
+          <div><span class="k">Entry</span>${fmtNum(s.entry)}</div>
+          <div><span class="k">Stop</span>${fmtNum(s.stop)}</div>
+          <div><span class="k">TP1</span>${fmtNum(s.tp1)}</div>
+          <div><span class="k">TP2</span>${fmtNum(s.tp2)}</div>
+        </div>
+        <div class="meta">
+          <span>${typeof s.score_or_conf === "number" && s.score_or_conf <= 1 ? "conf " + Math.round(s.score_or_conf*100) + "%" : "score " + (s.score_or_conf ?? "–")}</span>
+          <span>${s.timestamp ? new Date(s.timestamp).toLocaleString() : ""}</span>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+function renderOpenPositions(){
+  const el = document.getElementById("openPositions");
+  const items = DATA.open_positions || [];
+  if (!items.length){
+    el.innerHTML = `<div class="empty">No open positions.</div>`;
+    return;
+  }
+  el.innerHTML = `
+    <table>
+      <thead><tr><th>Asset</th><th>Direction</th><th>Entry</th><th>Stop</th><th>TP1</th><th>TP2</th><th>Opened</th></tr></thead>
+      <tbody>
+        ${items.map(p => `
+          <tr>
+            <td>${p.asset || "–"}</td>
+            <td><span class="badge ${badgeClass(p.direction)}">${p.direction || "–"}</span></td>
+            <td>${fmtNum(p.entry)}</td>
+            <td>${fmtNum(p.stop ?? p.stop_loss)}</td>
+            <td>${fmtNum(p.tp1 ?? p.target_1)}</td>
+            <td>${fmtNum(p.tp2 ?? p.target_2)}</td>
+            <td>${p.opened_at ? new Date(p.opened_at).toLocaleString() : "–"}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+document.getElementById("signalTabs").addEventListener("click", (e) => {
+  if (!e.target.classList.contains("tab")) return;
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  e.target.classList.add("active");
+  activeLayer = e.target.dataset.layer;
+  renderSignals();
+});
+
+loadData();
+setInterval(loadData, 60000); // auto-refresh every 60s
+</script>
+
+</body>
+</html>

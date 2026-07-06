@@ -1,0 +1,36 @@
+name: Scalp Scanner
+
+on:
+  schedule:
+    # Every hour 07-20 UTC Mon-Fri (5-min offset to avoid rate limits)
+    - cron: '5 7-20 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  scalp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run scalp layer
+        env:
+          TELEGRAM_TOKEN:    ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID:  ${{ secrets.TELEGRAM_CHAT_ID }}
+          TWELVEDATA_KEY:    ${{ secrets.TWELVEDATA_KEY }}
+          OLLAMA_API_KEY:    ${{ secrets.OLLAMA_API_KEY }}
+        run: python main.py --layer scalp
+
+      - name: Commit dashboard + state
+        run: |
+          git config user.name  "trading-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/ docs/ || true
+          git diff --staged --quiet || git commit -m "chore: update dashboard + state [skip ci]"
+          git push || true

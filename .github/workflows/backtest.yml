@@ -1,0 +1,44 @@
+name: Backtest (Manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      asset:
+        description: 'Asset to backtest (leave empty for all)'
+        required: false
+        default: ''
+      bars:
+        description: 'Number of 15m bars to use'
+        required: false
+        default: '2000'
+      window:
+        description: 'Training window size'
+        required: false
+        default: '500'
+
+jobs:
+  backtest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run backtest
+        env:
+          TWELVEDATA_KEY: ${{ secrets.TWELVEDATA_KEY }}
+        run: |
+          ASSET="${{ github.event.inputs.asset }}"
+          BARS="${{ github.event.inputs.bars }}"
+          WINDOW="${{ github.event.inputs.window }}"
+          if [ -n "$ASSET" ]; then
+            python main.py --layer backtest --asset "$ASSET" --bars "$BARS" --window "$WINDOW"
+          else
+            python main.py --layer backtest --bars "$BARS" --window "$WINDOW"
+          fi

@@ -1,0 +1,8 @@
+cot_state.json
+bot.log
+*.pyc
+__pycache__/
+.env
+data/charts/
+*.png
+!docs/**/*.png

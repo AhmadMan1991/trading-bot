@@ -1,0 +1,36 @@
+name: Swing Scanner
+
+on:
+  schedule:
+    # Every 3 hours Mon-Fri (06/09/12/15/18/21 UTC)
+    - cron: '0 6,9,12,15,18,21 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  swing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run swing layer
+        env:
+          TELEGRAM_TOKEN:    ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID:  ${{ secrets.TELEGRAM_CHAT_ID }}
+          TWELVEDATA_KEY:    ${{ secrets.TWELVEDATA_KEY }}
+          OLLAMA_API_KEY:    ${{ secrets.OLLAMA_API_KEY }}
+        run: python main.py --layer swing
+
+      - name: Commit dashboard + state
+        run: |
+          git config user.name  "trading-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/ docs/ || true
+          git diff --staged --quiet || git commit -m "chore: update dashboard + state [skip ci]"
+          git push || true
