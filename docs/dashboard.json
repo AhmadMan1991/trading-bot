@@ -1,6 +1,19 @@
 {
-  "updated_at": "2026-07-07 12:41:02.404634+00:00",
+  "updated_at": "2026-07-07 13:40:46.315852+00:00",
   "signals": [
+    {
+      "layer": "scalp",
+      "asset": "ETHUSD",
+      "direction": "SHORT",
+      "entry": 1770.92,
+      "stop": 1779.75,
+      "tp1": 1760.05,
+      "tp2": 1753.25,
+      "score_or_conf": 7,
+      "timestamp": "2026-07-07 13:38:44.611720+00:00",
+      "chart": "charts/scalp_ETHUSD_20260707T133844Z.png",
+      "caption": "ETHUSD \u2014 SHORT scalp setup (score 7/9)"
+    },
     {
       "layer": "scalp",
       "asset": "XAUUSD",
@@ -19,152 +32,181 @@
     {
       "asset": "ETHUSD",
       "bias": "BEARISH (weekly) / NEUTRAL (daily)",
-      "price": 1813.739990234375,
+      "price": 1771.1099853515625,
       "forecast": {
         "direction": "DOWN",
         "target_zone": [
           1510.505859,
-          1555.9909786851563
+          1549.5964779527344
         ],
-        "invalidation": 1822.126099
+        "invalidation": 1829.513672
       },
-      "timestamp": "2026-07-06 21:28:17.957447+00:00",
+      "timestamp": "2026-07-07 13:31:22.415457+00:00",
       "chart": "charts/forecast_ETHUSD.png"
     },
     {
       "asset": "BTCUSD",
-      "bias": "BEARISH (weekly) / NEUTRAL (daily)",
-      "price": 64214.51171875,
+      "bias": "BEARISH",
+      "price": 63096.8515625,
       "forecast": {
         "direction": "DOWN",
         "target_zone": [
           57747.765625,
-          58717.7775390625
+          58550.128515625
         ],
-        "invalidation": 66354.625
+        "invalidation": 65544.0
       },
-      "timestamp": "2026-07-06 21:28:17.181945+00:00",
+      "timestamp": "2026-07-07 13:31:21.234794+00:00",
       "chart": "charts/forecast_BTCUSD.png"
     },
     {
       "asset": "US100",
-      "bias": "BULLISH",
-      "price": 29697.873046875,
+      "bias": "BULLISH (weekly) / NEUTRAL (daily)",
+      "price": 29382.27734375,
       "forecast": {
         "direction": "UP",
         "target_zone": [
-          30500.86572223125,
+          30453.5263667625,
           30642.570312
         ],
         "invalidation": 28196.900391
       },
-      "timestamp": "2026-07-06 21:28:16.518445+00:00",
+      "timestamp": "2026-07-07 13:31:20.174566+00:00",
       "chart": "charts/forecast_US100.png"
     },
     {
       "asset": "SPX500",
-      "bias": "BULLISH",
-      "price": 7537.43017578125,
+      "bias": "BEARISH (weekly) / BULLISH (daily)",
+      "price": 7529.6201171875,
       "forecast": {
         "direction": "UP",
         "target_zone": [
-          7571.846460067188,
+          7570.674951278125,
           7577.919922
         ],
         "invalidation": 7237.850098
       },
-      "timestamp": "2026-07-06 21:28:15.994853+00:00",
+      "timestamp": "2026-07-07 13:31:19.201467+00:00",
       "chart": "charts/forecast_SPX500.png"
     },
     {
       "asset": "XAUUSD",
       "bias": "BULLISH (weekly) / BEARISH (daily)",
-      "price": 4175.2001953125,
+      "price": 4182.5,
       "forecast": {
         "direction": "UP",
         "target_zone": [
-          4427.734863546874,
-          4472.299805
+          4347.825,
+          4377.0
         ],
         "invalidation": 3962.5
       },
-      "timestamp": "2026-07-06 21:28:12.489704+00:00",
+      "timestamp": "2026-07-07 13:31:17.945348+00:00",
       "chart": "charts/forecast_XAUUSD.png"
     },
     {
       "asset": "DXY",
-      "bias": "BULLISH",
-      "price": 100.86199951171875,
+      "bias": "BEARISH (weekly) / BULLISH (daily)",
+      "price": 100.9219970703125,
       "forecast": {
         "direction": "UP",
         "target_zone": [
-          101.65930247675782,
+          101.66830211054688,
           101.800003
         ],
-        "invalidation": 99.160004
+        "invalidation": 99.379997
       },
-      "timestamp": "2026-07-06 21:28:11.632499+00:00",
+      "timestamp": "2026-07-07 13:31:14.493432+00:00",
       "chart": "charts/forecast_DXY.png"
     },
     {
       "asset": "USDJPY",
       "bias": "BULLISH",
-      "price": 162.05799865722656,
+      "price": 161.89100646972656,
       "forecast": {
         "direction": "UP",
         "target_zone": [
-          162.71929894858397,
+          162.69425012045897,
           162.835999
         ],
         "invalidation": 159.886993
       },
-      "timestamp": "2026-07-06 21:28:10.700718+00:00",
+      "timestamp": "2026-07-07 13:31:13.348562+00:00",
       "chart": "charts/forecast_USDJPY.png"
     },
     {
       "asset": "GBPUSD",
       "bias": "BULLISH (weekly) / NEUTRAL (daily)",
-      "price": 1.3392976522445679,
+      "price": 1.338114857673645,
       "forecast": {
         "direction": "UP",
         "target_zone": [
-          1.345089847836685,
+          1.3449124286510468,
           1.346112
         ],
         "invalidation": 1.314302
       },
-      "timestamp": "2026-07-06 21:28:09.928874+00:00",
+      "timestamp": "2026-07-07 13:31:12.348107+00:00",
       "chart": "charts/forecast_GBPUSD.png"
     },
     {
       "asset": "EURUSD",
       "bias": "BULLISH (weekly) / BEARISH (daily)",
-      "price": 1.144426703453064,
+      "price": 1.1439030170440674,
       "forecast": {
         "direction": "UP",
         "target_zone": [
-          1.1595765055179597,
+          1.15949795255661,
           1.16225
         ],
         "invalidation": 1.132541
       },
-      "timestamp": "2026-07-06 21:28:08.603712+00:00",
+      "timestamp": "2026-07-07 13:31:11.391864+00:00",
       "chart": "charts/forecast_EURUSD.png"
     }
   ],
   "performance": {},
-  "open_positions": [],
+  "open_positions": [
+    {
+      "direction": "SHORT",
+      "score": 7,
+      "setup_type": "CON",
+      "rev_long": 1,
+      "rev_short": 1,
+      "con_long": 1,
+      "con_short": 7,
+      "factors": [
+        "MACD bearish cross",
+        "EMA9 < EMA20",
+        "Below EMA50",
+        "Lower high structure",
+        "Volume 1.9x \u2014 participation",
+        "MACD histogram falling"
+      ],
+      "entry": 1770.92,
+      "stop": 1779.75,
+      "tp1": 1760.05,
+      "tp2": 1753.25,
+      "rr": 1.23,
+      "rsi": 41.3,
+      "atr": 6.795741592103999,
+      "price": 1770.92,
+      "asset": "ETHUSD",
+      "timestamp": "2026-07-07 13:38:22.182100+00:00",
+      "opened_at": "2026-07-07 13:38:44.612294+00:00"
+    }
+  ],
   "daily_brief": {
     "date": "2026-07-07",
-    "summary": "ملخص اختبار تلقائي. ⚠️ الخطر الأكبر: بيانات اقتصادية قادمة.",
+    "summary": "\u0645\u0644\u062e\u0635 \u0627\u062e\u062a\u0628\u0627\u0631 \u062a\u0644\u0642\u0627\u0626\u064a. \u26a0\ufe0f \u0627\u0644\u062e\u0637\u0631 \u0627\u0644\u0623\u0643\u0628\u0631: \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0642\u062a\u0635\u0627\u062f\u064a\u0629 \u0642\u0627\u062f\u0645\u0629.",
     "scores": [
       {
         "asset": "XAUUSD",
-        "emoji": "🥇",
+        "emoji": "\ud83e\udd47",
         "score": 3,
-        "signal": "🟢🟢",
+        "signal": "\ud83d\udfe2\ud83d\udfe2",
         "confidence": "medium",
-        "confidence_ar": "متوسطة",
+        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -172,11 +214,11 @@
       },
       {
         "asset": "EURUSD",
-        "emoji": "🇪🇺",
+        "emoji": "\ud83c\uddea\ud83c\uddfa",
         "score": 2,
-        "signal": "🟢",
+        "signal": "\ud83d\udfe2",
         "confidence": "medium",
-        "confidence_ar": "متوسطة",
+        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -184,11 +226,11 @@
       },
       {
         "asset": "GBPUSD",
-        "emoji": "🇬🇧",
+        "emoji": "\ud83c\uddec\ud83c\udde7",
         "score": 2,
-        "signal": "🟢",
+        "signal": "\ud83d\udfe2",
         "confidence": "medium",
-        "confidence_ar": "متوسطة",
+        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -196,11 +238,11 @@
       },
       {
         "asset": "USDJPY",
-        "emoji": "🇯🇵",
+        "emoji": "\ud83c\uddef\ud83c\uddf5",
         "score": 2,
-        "signal": "🟢",
+        "signal": "\ud83d\udfe2",
         "confidence": "medium",
-        "confidence_ar": "متوسطة",
+        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -208,11 +250,11 @@
       },
       {
         "asset": "DXY",
-        "emoji": "💵",
+        "emoji": "\ud83d\udcb5",
         "score": 2,
-        "signal": "🟢",
+        "signal": "\ud83d\udfe2",
         "confidence": "medium",
-        "confidence_ar": "متوسطة",
+        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -220,11 +262,11 @@
       },
       {
         "asset": "SPX500",
-        "emoji": "📈",
+        "emoji": "\ud83d\udcc8",
         "score": 2,
-        "signal": "🟢",
+        "signal": "\ud83d\udfe2",
         "confidence": "medium",
-        "confidence_ar": "متوسطة",
+        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -232,11 +274,11 @@
       },
       {
         "asset": "US100",
-        "emoji": "💻",
+        "emoji": "\ud83d\udcbb",
         "score": 2,
-        "signal": "🟢",
+        "signal": "\ud83d\udfe2",
         "confidence": "medium",
-        "confidence_ar": "متوسطة",
+        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -244,11 +286,11 @@
       },
       {
         "asset": "BTCUSD",
-        "emoji": "₿",
+        "emoji": "\u20bf",
         "score": 2,
-        "signal": "🟢",
+        "signal": "\ud83d\udfe2",
         "confidence": "medium",
-        "confidence_ar": "متوسطة",
+        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -256,11 +298,11 @@
       },
       {
         "asset": "ETHUSD",
-        "emoji": "💠",
+        "emoji": "\ud83d\udca0",
         "score": 2,
-        "signal": "🟢",
+        "signal": "\ud83d\udfe2",
         "confidence": "medium",
-        "confidence_ar": "متوسطة",
+        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -270,28 +312,28 @@
     "actions": [
       {
         "asset": "XAUUSD",
-        "direction_ar": "صعود",
-        "action_ar": "مراقبة مناطق الدعم للدخول LONG"
+        "direction_ar": "\u0635\u0639\u0648\u062f",
+        "action_ar": "\u0645\u0631\u0627\u0642\u0628\u0629 \u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u062f\u0639\u0645 \u0644\u0644\u062f\u062e\u0648\u0644 LONG"
       },
       {
         "asset": "EURUSD",
-        "direction_ar": "صعود",
-        "action_ar": "مراقبة مناطق الدعم للدخول LONG"
+        "direction_ar": "\u0635\u0639\u0648\u062f",
+        "action_ar": "\u0645\u0631\u0627\u0642\u0628\u0629 \u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u062f\u0639\u0645 \u0644\u0644\u062f\u062e\u0648\u0644 LONG"
       },
       {
         "asset": "GBPUSD",
-        "direction_ar": "صعود",
-        "action_ar": "مراقبة مناطق الدعم للدخول LONG"
+        "direction_ar": "\u0635\u0639\u0648\u062f",
+        "action_ar": "\u0645\u0631\u0627\u0642\u0628\u0629 \u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u062f\u0639\u0645 \u0644\u0644\u062f\u062e\u0648\u0644 LONG"
       },
       {
         "asset": "USDJPY",
-        "direction_ar": "صعود",
-        "action_ar": "مراقبة مناطق الدعم للدخول LONG"
+        "direction_ar": "\u0635\u0639\u0648\u062f",
+        "action_ar": "\u0645\u0631\u0627\u0642\u0628\u0629 \u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u062f\u0639\u0645 \u0644\u0644\u062f\u062e\u0648\u0644 LONG"
       },
       {
         "asset": "DXY",
-        "direction_ar": "صعود",
-        "action_ar": "مؤشر تأكيد — لا يُتداول مباشرة"
+        "direction_ar": "\u0635\u0639\u0648\u062f",
+        "action_ar": "\u0645\u0624\u0634\u0631 \u062a\u0623\u0643\u064a\u062f \u2014 \u0644\u0627 \u064a\u064f\u062a\u062f\u0627\u0648\u0644 \u0645\u0628\u0627\u0634\u0631\u0629"
       }
     ]
   }
