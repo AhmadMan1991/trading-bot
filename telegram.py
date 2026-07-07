@@ -3,7 +3,7 @@ Telegram message formatter and sender — multi-layer OODA system.
 """
 
 import requests
-from config import TELEGRAM_TOKEN, TELEGRAM_CHAT_ID, ACCOUNT_SIZE, RISK_PCT
+from config import TELEGRAM_TOKEN, TELEGRAM_CHAT_ID, ACCOUNT_SIZE, RISK_PCT, DASHBOARD_URL
 
 TELEGRAM_BOT_TOKEN = TELEGRAM_TOKEN  # backward-compat alias
 API = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}"
@@ -201,8 +201,10 @@ def format_scalp(sig: dict) -> str:
 
 # ── COT Map ───────────────────────────────────────────────────────────────────
 
-def format_cot_map(cot_map: list[dict]) -> str:
+def format_cot_map(cot_map: list[dict], summary: str = "") -> str:
     lines = ["<b>🗺️ COT MAP — Institutional Positioning</b>", ""]
+    if summary:
+        lines += [summary, ""]
     for item in cot_map:
         idx    = item.get("cot_index", 50)
         sig    = item.get("signal", "NEUTRAL")
@@ -211,6 +213,8 @@ def format_cot_map(cot_map: list[dict]) -> str:
         arrow  = "▲" if change > 0 else "▼" if change < 0 else "─"
         lines.append(f"{emoji} <b>{item['market']:<10}</b>  {idx:>3}/100  {_bar(idx)}  {arrow}{abs(change):,}")
     lines += ["", "<i>&lt;25=extreme short🟢  &gt;75=extreme long🔴</i>"]
+    if DASHBOARD_URL:
+        lines += ["", f'🔗 <a href="{DASHBOARD_URL}/#cot">Full COT report + history on dashboard</a>']
     return "\n".join(lines)
 
 

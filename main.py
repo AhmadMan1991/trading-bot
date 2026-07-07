@@ -89,11 +89,11 @@ def run_cot_layer():
     explicitly) gets this run's data for free via the 180-min cache / the
     returned dict."""
     print("\n═══ STEP 1 — COT AGENT ═══")
-    from cot_agent import run_cot_agent
+    from cot_agent import run_cot_agent, build_cot_summary
     cot_map = run_cot_agent()
     cot_list = [{"market": m, **c} for m, c in cot_map.items() if c]
     if cot_list:
-        telegram.send_text(telegram.format_cot_map(cot_list))
+        telegram.send_text(telegram.format_cot_map(cot_list, summary=build_cot_summary(cot_map)))
     return cot_map
 
 
@@ -275,10 +275,17 @@ def run_daily_brief_layer():
 def run_cot_weekly_layer():
     print("\n═══ WEEKLY COT REPORT ═══")
     from data_feeds import fetch_all_cot
+    from cot_agent import build_cot_summary
+    import dashboard_export as dash
     cot_map = fetch_all_cot()
     cot_list = [{"market": m, **c} for m, c in cot_map.items() if c]
     if cot_list:
-        telegram.send_text(telegram.format_cot_map(cot_list))
+        summary = build_cot_summary(cot_map)
+        telegram.send_text(telegram.format_cot_map(cot_list, summary=summary))
+        try:
+            dash.record_cot(cot_map, summary)
+        except Exception as e:
+            print(f"    ⚠ dashboard export failed: {e}")
         print(f"  sent COT map for {len(cot_list)} market(s)")
     else:
         print("  no COT data available this run")

@@ -118,23 +118,35 @@ always-on checks or once-a-day/week jobs:
 
 ## Dashboard
 
-`docs/index.html` is a self-contained, private dashboard: Arabic daily
-brief, a Macro Context card (Gemini synthesis), forecasts (with the
-forward-path chart), latest trade setups — filterable by layer, with a
-dedicated **Deep Pipeline** tab and a **🎯 Sniper only** tab (Sniper cards get
-a gold highlight) — performance stats, and open positions. It reads
-`docs/dashboard.json`, which every layer updates automatically
-(`dashboard_export.py`) whenever it fires a signal, forecast, macro read, or
-resolves trades.
+`docs/index.html` is a self-contained dashboard: Arabic daily brief, a Macro
+Context card (Gemini synthesis), a **COT — Institutional Positioning**
+section (current snapshot table + per-asset weekly history, ~90 days back),
+forecasts (with the forward-path chart), latest trade setups — filterable by
+layer, with a dedicated **Deep Pipeline** tab and a **🎯 Sniper only** tab
+(Sniper cards get a gold highlight) — performance stats, and open positions.
+It reads `docs/dashboard.json`, which every layer updates automatically
+(`dashboard_export.py`) whenever it fires a signal, forecast, macro read, COT
+snapshot, or resolves trades.
 
-**To view it:**
-1. Make sure your local clone/synced project folder is up to date.
-2. Run `python3 serve_dashboard.py` — opens `http://127.0.0.1:8765`
-   automatically.
-3. Refresh any time after pulling new data (auto-refreshes every 60s while
-   open).
+**Hosted on GitHub Pages** (repo is public, per your choice — no hardcoded
+secrets exist anywhere in this codebase, so nothing sensitive is exposed by
+that, but your strategy logic and signal history are visible to anyone with
+the link). Telegram messages link straight to it — the COT message links to
+`{DASHBOARD_URL}/#cot` specifically. One-time setup on GitHub:
+1. Settings → General → Danger Zone → Change repository visibility → Public.
+2. Settings → Pages → Source: "Deploy from a branch" → Branch: `main`,
+   folder: `/docs` → Save.
+3. Give it a couple minutes; it'll be live at
+   `https://<your-username>.github.io/<repo-name>/`.
 
-Repo stays private by default, nothing is publicly hosted.
+`config.py`'s `DASHBOARD_URL` defaults to
+`https://ahmadman1991.github.io/trading-bot` — override it with a
+`DASHBOARD_URL` env var (or repo variable in Actions) if you host it
+somewhere else (Cloudflare Pages, Vercel, a custom domain, etc.) instead.
+
+**To view it locally instead** (e.g. before Pages is set up, or for a
+private-only setup): run `python3 serve_dashboard.py` from inside
+`Trading_Bot_COT` — opens `http://127.0.0.1:8765`, auto-refreshes every 60s.
 
 ## GitHub Actions
 

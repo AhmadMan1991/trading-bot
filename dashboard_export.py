@@ -16,8 +16,9 @@ DOCS_ROOT   = Path(__file__).parent / "docs"
 CHARTS_ROOT = DOCS_ROOT / "charts"
 DASH_FILE   = DOCS_ROOT / "dashboard.json"
 
-MAX_SIGNALS   = 40
-MAX_FORECASTS = 12
+MAX_SIGNALS    = 40
+MAX_FORECASTS  = 12
+MAX_COT_WEEKS  = 15   # ~90 days of weekly COT reports
 
 
 def _load() -> dict:
@@ -27,7 +28,7 @@ def _load() -> dict:
         except Exception:
             pass
     return {"updated_at": None, "signals": [], "forecasts": [],
-            "performance": {}, "open_positions": []}
+            "performance": {}, "open_positions": [], "cot_history": []}
 
 
 def _save(d: dict) -> None:
@@ -94,4 +95,24 @@ def record_macro(synthesis: str) -> None:
         return
     d = _load()
     d["macro"] = {"synthesis": synthesis, "timestamp": str(pd.Timestamp.now(tz="UTC"))}
+    _save(d)
+
+
+def record_cot(cot_map: dict, summary: str) -> None:
+    """Record the latest COT snapshot + a rolling weekly history so the
+    dashboard's COT section can show a trend, not just today's read.
+    Called by cot_agent.py (step 1 of the pipeline). One history entry per
+    calendar date — re-runs on the same day overwrite that day's entry
+    instead of piling up duplicates (COT itself only updates weekly)."""
+    d = _load()
+    today = str(pd.Timestamp.now(tz="UTC").date())
+
+    d["cot"] = {"data": cot_map, "summary": summary, "timestamp": str(pd.Timestamp.now(tz="UTC"))}
+
+    history = d.get("cot_history", [])
+    history = [h for h in history if h.get("date") != today]
+    history.append({"date": today, "data": cot_map})
+    history.sort(key=lambda h: h["date"])
+    d["cot_history"] = history[-MAX_COT_WEEKS:]
+
     _save(d)

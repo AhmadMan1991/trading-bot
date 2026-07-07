@@ -2,6 +2,12 @@
 
 import os
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()   # loads a local .env file if present — no-op in GitHub Actions
+except ImportError:
+    pass
+
 # ── Credentials ───────────────────────────────────────────────────────────────
 TELEGRAM_TOKEN   = os.environ.get("TELEGRAM_TOKEN", "")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
@@ -15,6 +21,11 @@ OLLAMA_MODEL     = "gpt-oss:20b-cloud"
 GEMINI_API_KEY   = os.environ.get("GEMINI_API_KEY", "")
 GEMINI_MODEL     = "gemini-2.5-flash"
 GEMINI_URL       = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
+
+# GitHub Pages URL for the dashboard (repo made public, Pages serving /docs).
+# Override via env var if you host it elsewhere (Cloudflare Pages, Vercel, a
+# custom domain, etc.) — Telegram messages link here for "full report" reads.
+DASHBOARD_URL = os.environ.get("DASHBOARD_URL", "https://ahmadman1991.github.io/trading-bot")
 
 _missing = [n for n, v in [("TELEGRAM_TOKEN", TELEGRAM_TOKEN), ("TWELVEDATA_KEY", TWELVEDATA_KEY)] if not v]
 if _missing:
