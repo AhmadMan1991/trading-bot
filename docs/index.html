@@ -72,6 +72,16 @@
   th{color:var(--dim); font-weight:600; font-size:11px; text-transform:uppercase;}
   .empty{color:var(--dim); font-size:13px; padding:20px; text-align:center; background:var(--panel); border-radius:10px; border:1px dashed var(--border);}
   .updated{color:var(--dim); font-size:12px;}
+  .daily-brief{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:20px 24px; font-size:14px; line-height:1.9;}
+  .daily-brief .db-summary{margin-bottom:16px;}
+  .daily-brief .db-date{color:var(--dim); font-size:12px; margin-bottom:10px;}
+  .daily-brief .db-row{display:flex; align-items:center; gap:10px; padding:6px 0; border-bottom:1px solid var(--border);}
+  .daily-brief .db-row:last-child{border-bottom:none;}
+  .daily-brief .db-asset{font-weight:700; min-width:90px;}
+  .daily-brief .db-score{min-width:40px; text-align:center;}
+  .daily-brief .db-conf{color:var(--dim); font-size:12px;}
+  .daily-brief h3{font-size:13px; color:var(--dim); text-transform:none; margin:18px 0 8px;}
+  .daily-brief .db-action{padding:4px 0;}
 </style>
 </head>
 <body>
@@ -90,6 +100,11 @@
 <main>
 
   <div class="stats-row" id="stats"></div>
+
+  <section id="dailyBriefSection" style="display:none;">
+    <h2>التحليل اليومي — Daily Brief</h2>
+    <div class="daily-brief" dir="rtl" id="dailyBrief"></div>
+  </section>
 
   <section>
     <h2>Forecast — Setup / Bias per Asset</h2>
@@ -151,9 +166,39 @@ function render(){
     "Updated: " + (DATA.updated_at ? new Date(DATA.updated_at).toLocaleString() : "never");
 
   renderStats();
+  renderDailyBrief();
   renderForecasts();
   renderSignals();
   renderOpenPositions();
+}
+
+function renderDailyBrief(){
+  const brief = DATA.daily_brief;
+  const section = document.getElementById("dailyBriefSection");
+  if (!brief){ section.style.display = "none"; return; }
+  section.style.display = "";
+
+  const scoresHtml = (brief.scores || []).map(r => `
+    <div class="db-row">
+      <span>${r.signal}</span>
+      <span class="db-asset">${r.asset}</span>
+      <span class="db-score ${r.score > 0 ? 'pos' : r.score < 0 ? 'neg' : ''}">${r.score > 0 ? '+' : ''}${r.score}</span>
+      <span class="db-conf">الثقة: ${r.confidence_ar}</span>
+    </div>
+  `).join("");
+
+  const actionsHtml = (brief.actions || []).map((a, i) => `
+    <div class="db-action">${i + 1}. <b>${a.asset}</b> (${a.direction_ar}) — ${a.action_ar}</div>
+  `).join("");
+
+  document.getElementById("dailyBrief").innerHTML = `
+    <div class="db-date">${brief.date || ""}</div>
+    <div class="db-summary">${brief.summary || ""}</div>
+    <h3>جدول الأصول</h3>
+    ${scoresHtml}
+    <h3>الخلاصة التشغيلية</h3>
+    ${actionsHtml}
+  `;
 }
 
 function renderStats(){

@@ -4,7 +4,7 @@ LLM-powered swing engine.
 Flow:
   1. Fetch 1h + 4h bars via TwelveData/OKX
   2. Compute base indicators + quant math
-  3. Fetch COT from insider-week (0-100 index) + CFTC spec_net percentile
+  3. Fetch COT index (official CFTC, 0-100) + CFTC spec_net percentile
   4. Build structured prompt → Ollama → parse trade plan
   5. Apply gates: COT conflict, news, session, cooldown
   6. Return fired signals list

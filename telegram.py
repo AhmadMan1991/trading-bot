@@ -347,6 +347,47 @@ def format_swing_new(sig: dict) -> str:
     )
 
 
+def format_news_pre(ev: dict) -> str:
+    t = ev["time"]
+    return (
+        "<b>🔔 Coming up — red-folder USD event</b>\n"
+        f"━━━━━━━━━━━━━━━━━━━━━\n"
+        f"<b>{ev.get('title','?')}</b>  ({ev.get('currency','?')})\n"
+        f"Time:      {t.strftime('%H:%M UTC')}  (~15 min)\n"
+        f"Previous:  <b>{ev.get('previous') or 'n/a'}</b>\n"
+        f"Forecast:  <b>{ev.get('forecast') or 'n/a'}</b>\n"
+        f"━━━━━━━━━━━━━━━━━━━━━\n"
+        f"<i>Beat forecast tends to be USD-bullish (XAU/indices bearish); "
+        f"miss tends to be USD-bearish (XAU/indices bullish) — a tendency, not a rule.</i>"
+    )
+
+
+def format_news_post(ev: dict, bias_read: str) -> str:
+    t = ev["time"]
+    return (
+        "<b>📊 Released — red-folder USD event</b>\n"
+        f"━━━━━━━━━━━━━━━━━━━━━\n"
+        f"<b>{ev.get('title','?')}</b>  ({ev.get('currency','?')})  · {t.strftime('%H:%M UTC')}\n"
+        f"Previous:  <b>{ev.get('previous') or 'n/a'}</b>\n"
+        f"Forecast:  <b>{ev.get('forecast') or 'n/a'}</b>\n"
+        f"Actual:    <b>{ev.get('actual') or 'n/a'}</b>\n"
+        f"━━━━━━━━━━━━━━━━━━━━━\n"
+        f"{bias_read}"
+    )
+
+
+def format_tracer_update(pos: dict, progress_pct: float, current_price: float) -> str:
+    direction = pos.get("direction", "?")
+    return (
+        "<b>🧭 Tracer — position update</b>\n"
+        f"━━━━━━━━━━━━━━━━━━━━━\n"
+        f"<b>{pos.get('asset','?')}</b>  {direction}  · {pos.get('layer','')}\n"
+        f"Entry: {pos.get('entry')}  Current: {current_price}\n"
+        f"Progress to target: <b>{progress_pct:.0%}</b>\n"
+        f"SL: {pos.get('stop')}  TP1: {pos.get('tp1')}  TP2: {pos.get('tp2')}"
+    )
+
+
 def format_forecast_new(fc: dict) -> str:
     asset = fc["asset"]
     bias  = fc.get("bias", "N/A")

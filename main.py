@@ -161,6 +161,36 @@ def run_btc_deep_layer():
     btc_deep_pipeline.run_once()
 
 
+def run_news_layer():
+    print("\n═══ NEWS AGENT LAYER ═══")
+    from news_agent import run_news_agent
+    run_news_agent()
+
+
+def run_tracer_layer():
+    print("\n═══ TRACER LAYER ═══")
+    from tracer_agent import run_tracer_agent
+    run_tracer_agent()
+
+
+def run_daily_brief_layer():
+    print("\n═══ DAILY BRIEF (AR) ═══")
+    from daily_brief import run_daily_brief
+    run_daily_brief()
+
+
+def run_cot_weekly_layer():
+    print("\n═══ WEEKLY COT REPORT ═══")
+    from data_feeds import fetch_all_cot
+    cot_map = fetch_all_cot()
+    cot_list = [{"market": m, **c} for m, c in cot_map.items() if c]
+    if cot_list:
+        telegram.send_text(telegram.format_cot_map(cot_list))
+        print(f"  sent COT map for {len(cot_list)} market(s)")
+    else:
+        print("  no COT data available this run")
+
+
 def run_backtest_layer(assets=None, bars=2000, window=500):
     print("\n═══ BACKTEST LAYER ═══")
     from backtest import run_backtest
@@ -170,7 +200,8 @@ def run_backtest_layer(assets=None, bars=2000, window=500):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="OODA TradingBot")
     parser.add_argument("--layer", default=None,
-                        choices=["scalp","swing","council","forecast","performance","backtest","btc_deep"])
+                        choices=["scalp","swing","council","forecast","performance","backtest","btc_deep",
+                                 "news","tracer","cot_weekly","daily_brief"])
     parser.add_argument("--asset",        default=None)
     parser.add_argument("--council-mode", default="scalp", choices=["scalp","swing"])
     parser.add_argument("--bars",         type=int, default=2000)
@@ -196,6 +227,14 @@ if __name__ == "__main__":
             run_backtest_layer(assets, args.bars, args.window)
         if args.layer == "btc_deep":
             run_btc_deep_layer()
+        if args.layer == "news":
+            run_news_layer()
+        if args.layer == "tracer":
+            run_tracer_layer()
+        if args.layer == "cot_weekly":
+            run_cot_weekly_layer()
+        if args.layer == "daily_brief":
+            run_daily_brief_layer()
         print("\n  ✅ OODA cycle complete")
     except KeyboardInterrupt:
         print("\nInterrupted.")

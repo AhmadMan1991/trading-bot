@@ -2,8 +2,10 @@ name: Council (7-Agent)
 
 on:
   schedule:
-    # Every 2 hours 07-19 UTC Mon-Fri (at :30 to stagger with scalp)
-    - cron: '30 7,9,11,13,15,17,19 * * 1-5'
+    # Scalp-mode council: every 2h 07-19 UTC, offset :35
+    - cron: '35 7,9,11,13,15,17,19 * * 1-5'
+    # Swing-mode council = the "H1 forecast" pulse: hourly, offset :50
+    - cron: '50 7-20 * * 1-5'
   workflow_dispatch:
     inputs:
       mode:
@@ -25,18 +27,37 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Determine mode from trigger
+        id: pick_mode
+        run: |
+          if [ -n "${{ github.event.inputs.mode }}" ]; then
+            echo "mode=${{ github.event.inputs.mode }}" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event.schedule }}" = "35 7,9,11,13,15,17,19 * * 1-5" ]; then
+            echo "mode=scalp" >> "$GITHUB_OUTPUT"
+          else
+            echo "mode=swing" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Run council layer
         env:
           TELEGRAM_TOKEN:    ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID:  ${{ secrets.TELEGRAM_CHAT_ID }}
           TWELVEDATA_KEY:    ${{ secrets.TWELVEDATA_KEY }}
           OLLAMA_API_KEY:    ${{ secrets.OLLAMA_API_KEY }}
-        run: python main.py --layer council --council-mode ${{ github.event.inputs.mode || 'scalp' }}
+        run: python main.py --layer council --council-mode ${{ steps.pick_mode.outputs.mode }}
 
       - name: Commit dashboard + state
         run: |
           git config user.name  "trading-bot"
           git config user.email "bot@users.noreply.github.com"
           git add data/ docs/ || true
-          git diff --staged --quiet || git commit -m "chore: update dashboard + state [skip ci]"
-          git push || true
+          if git diff --staged --quiet; then
+            echo "nothing to commit"
+          else
+            git commit -m "chore: update dashboard + state [skip ci]"
+            for i in 1 2 3; do
+              git pull --rebase --autostash origin main && git push && break
+              echo "push attempt $i failed, retrying..."
+              sleep $((RANDOM % 10 + 5))
+            done
+          fi

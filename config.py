@@ -47,6 +47,14 @@ COUNCIL_SWING_MIN_CONF = 0.68
 COUNCIL_SCALP_MIN_RR   = 1.2
 COUNCIL_SWING_MIN_RR   = 1.8
 
+# ── News agent (red-folder USD pre/post alerts) ───────────────────────────────
+NEWS_PRE_ALERT_MIN    = 15   # send the "coming up" alert this many minutes before release
+NEWS_PRE_ALERT_WINDOW = 6    # tolerance window (minutes) around that mark, matched to the 5-min poll cadence
+NEWS_WATCH_CURRENCIES = ["USD"]   # extend later, e.g. ["USD", "EUR"]
+
+# ── Tracer / live position updater ────────────────────────────────────────────
+TRACER_MILESTONES = [0.5, 0.75, 1.0]   # fraction of the way to TP1/SL that triggers a Telegram nudge
+
 CORRELATION_GROUPS = [
     {"EURUSD", "GBPUSD"},
     {"SPX500", "US100"},

@@ -4,8 +4,10 @@ Unified data layer.
   TwelveData  → 15m / 1h / 4h intraday bars (scalp/swing/council/forecast)
   yfinance    → 1d / 1w  daily/weekly bars   (forecast higher TF + COT charts)
   OKX         → BTC/ETH spot OHLCV           (Binance/Bybit blocked on GitHub Actions)
-  insider-week→ COT Index 0-100              (weekly)
-  CFTC API   → exact spec net + 20-wk %ile  (swing_bot quality)
+  CFTC API    → COT Index 0-100 (official)  + exact spec net + 20-wk %ile
+                (insider-week.com scraping was removed 2026-07 — that site
+                 restructured its URLs and every endpoint started 404ing;
+                 CFTC's own public Socrata API is the primary source now)
 """
 
 import time
@@ -13,7 +15,7 @@ import re
 import requests
 import pandas as pd
 import numpy as np
-from config import TWELVEDATA_KEY, MARKETS, COT_LOOKBACK
+from config import TWELVEDATA_KEY, MARKETS, COT_LOOKBACK, COT_EXTREME_LONG, COT_EXTREME_SHORT
 
 # ── TwelveData ────────────────────────────────────────────────────────────────
 
@@ -118,51 +120,72 @@ _IW_HEADERS = {
     "User-Agent": "Mozilla/5.0 (compatible; TradingBot/1.0)",
 }
 
-def _fetch_iw_asset(iw_path: str, lookback: int = COT_LOOKBACK) -> dict | None:
-    url = f"https://insider-week.com/en/commitment-of-traders/{iw_path}/"
+# ── COT Index (0-100), official CFTC source ──────────────────────────────────
+# Replaces the old insider-week.com scrape (site restructured, all URLs 404 now).
+# Same min-max-normalized 0-100 index style, same signal thresholds, same
+# return shape ({"net","change","cot_index","signal","date"}) — so
+# forecast_engine.py / swing_engine.py / telegram.py need no changes.
+
+_cot_index_cache = {"ts": None, "data": {}}
+_COT_CACHE_TTL_MIN = 180   # COT reports only update weekly — no need to refetch often
+
+
+def _fetch_cftc_index(cot_name: str, lookback: int = COT_LOOKBACK) -> dict | None:
+    url = "https://publicreporting.cftc.gov/resource/6dca-aqww.json"
+    params = {
+        "$limit":  lookback + 5,
+        "$order":  "report_date_as_yyyy_mm_dd DESC",
+        "$where":  f"market_and_exchange_names = '{cot_name}'",
+        "$select": "report_date_as_yyyy_mm_dd,noncomm_positions_long_all,noncomm_positions_short_all",
+    }
     try:
-        resp = requests.get(url, headers=_IW_HEADERS, timeout=20)
-        resp.raise_for_status()
-        m = re.search(r"var\s+dataGraph\s*=\s*(\[.*?\]);", resp.text, re.DOTALL)
-        if not m:
+        r = requests.get(url, params=params, timeout=20)
+        r.raise_for_status()
+        raw = r.json()
+        if not raw:
             return None
-        entries_raw = re.findall(r"\{[^}]+\}", m.group(1))
-        entries = []
-        for e in entries_raw:
-            dm = re.search(r"new Date\((\d+),(\d+),(\d+)\)", e)
-            nm = re.search(r"NonCommercial:\s*(-?\d+)", e)
-            if dm and nm:
-                d = pd.Timestamp(int(dm[1]), int(dm[2]) + 1, int(dm[3]))
-                entries.append({"date": d.strftime("%Y-%m-%d"), "net": int(nm[1])})
-        if not entries:
+        df = pd.DataFrame(raw)
+        df["report_date"] = pd.to_datetime(df["report_date_as_yyyy_mm_dd"], utc=True)
+        df = df.sort_values("report_date")
+        df["noncomm_positions_long_all"]  = pd.to_numeric(df["noncomm_positions_long_all"],  errors="coerce")
+        df["noncomm_positions_short_all"] = pd.to_numeric(df["noncomm_positions_short_all"], errors="coerce")
+        df["spec_net"] = df["noncomm_positions_long_all"] - df["noncomm_positions_short_all"]
+        nets = df["spec_net"].dropna().tolist()
+        if not nets:
             return None
-        entries.sort(key=lambda x: x["date"])
-        nets = [e["net"] for e in entries[-lookback:]]
         latest_net = nets[-1]
         prev_net   = nets[-2] if len(nets) >= 2 else nets[-1]
         mn, mx = min(nets), max(nets)
         idx = round((latest_net - mn) / (mx - mn) * 100) if mx != mn else 50
-        signal = ("BULLISH" if idx <= 25 else "BEARISH" if idx >= 75 else "NEUTRAL")
+        signal = ("BULLISH" if idx <= COT_EXTREME_SHORT else
+                  "BEARISH" if idx >= COT_EXTREME_LONG else "NEUTRAL")
         return {
-            "net":       latest_net,
-            "change":    latest_net - prev_net,
-            "cot_index": idx,
+            "net":       int(latest_net),
+            "change":    int(latest_net - prev_net),
+            "cot_index": int(idx),
             "signal":    signal,
-            "date":      entries[-1]["date"],
+            "date":      str(df["report_date"].iloc[-1].date()),
         }
     except Exception as e:
-        print(f"  [IW] {iw_path} failed: {e}")
+        print(f"  [CFTC-index] {cot_name} failed: {e}")
         return None
 
 
 def fetch_all_cot() -> dict:
+    """Fetch the COT index for every configured market, cached for
+    _COT_CACHE_TTL_MIN minutes so a caller that loops per-asset (like the
+    forecast layer) doesn't re-hit the CFTC API once per asset per run."""
+    global _cot_index_cache
+    now = pd.Timestamp.now(tz="UTC")
+    if _cot_index_cache["ts"] and (now - _cot_index_cache["ts"]) < pd.Timedelta(minutes=_COT_CACHE_TTL_MIN):
+        return _cot_index_cache["data"]
+
     results = {}
     for market, cfg in MARKETS.items():
-        path = cfg.get("iw_path")
-        if path:
-            results[market] = _fetch_iw_asset(path)
-        else:
-            results[market] = None
+        cot_name = cfg.get("cot_name")
+        results[market] = _fetch_cftc_index(cot_name) if cot_name else None
+
+    _cot_index_cache = {"ts": now, "data": results}
     return results
 
 
@@ -212,29 +235,62 @@ def fetch_cftc_cot(asset: str) -> dict:
 
 # ── Macro context (shared across layers) ─────────────────────────────────────
 
-_news_cache = None
-_dxy_cache  = None
+_news_cache     = None
+_news_raw_cache = None
+_dxy_cache      = None
 
 
-def fetch_news_events() -> list:
-    global _news_cache
-    if _news_cache is not None:
-        return _news_cache
+def _fetch_ff_calendar_raw() -> list:
+    """Raw ForexFactory 'this week' calendar feed, all impact levels, all
+    fields (title/country/date/impact/forecast/previous/actual). Cached
+    in-process — every caller (news gate, dollar bias, news agent) shares
+    one HTTP call per run instead of each fetching it separately."""
+    global _news_raw_cache
+    if _news_raw_cache is not None:
+        return _news_raw_cache
     try:
         r = requests.get("https://nfs.faireconomy.media/ff_calendar_thisweek.json",
                          headers={"User-Agent": "Mozilla/5.0"}, timeout=15)
         r.raise_for_status()
-        _news_cache = [
-            {"currency": e.get("country", "").upper(),
-             "title":    e.get("title", ""),
-             "time":     pd.Timestamp(e.get("date")).tz_convert("UTC")}
-            for e in r.json()
-            if str(e.get("impact", "")).lower() == "high"
-        ]
-        print(f"  [NEWS] {len(_news_cache)} high-impact events loaded")
+        _news_raw_cache = r.json()
+        print(f"  [NEWS] {len(_news_raw_cache)} calendar events loaded")
     except Exception as e:
         print(f"  [NEWS] unavailable ({e})")
-        _news_cache = []
+        _news_raw_cache = []
+    return _news_raw_cache
+
+
+def fetch_news_events_raw() -> list:
+    """All calendar events (any impact) with forecast/previous/actual kept,
+    for the news agent's pre/post alerts."""
+    out = []
+    for e in _fetch_ff_calendar_raw():
+        try:
+            t = pd.Timestamp(e.get("date")).tz_convert("UTC")
+        except Exception:
+            continue
+        out.append({
+            "currency": e.get("country", "").upper(),
+            "title":    e.get("title", ""),
+            "impact":   str(e.get("impact", "")).lower(),
+            "time":     t,
+            "forecast": e.get("forecast"),
+            "previous": e.get("previous"),
+            "actual":   e.get("actual"),
+        })
+    return out
+
+
+def fetch_news_events() -> list:
+    """High-impact events only, minimal fields — used by the news-block gate
+    and dollar-bias helper below."""
+    global _news_cache
+    if _news_cache is not None:
+        return _news_cache
+    _news_cache = [
+        {"currency": e["currency"], "title": e["title"], "time": e["time"]}
+        for e in fetch_news_events_raw() if e["impact"] == "high"
+    ]
     return _news_cache
 
 

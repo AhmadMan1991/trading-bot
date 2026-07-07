@@ -11,15 +11,40 @@ real trades or connect to a broker.** You decide whether to act on a signal.
 
 | Layer | What it does | Schedule |
 |---|---|---|
-| `forecast` | Daily/weekly bias + BS_OB_RJB_FVG pattern detection + forward-path chart (target zone / invalidation) | daily 06:00 UTC + Sun 20:00 |
-| `scalp` | 15m dual REV/CON scoring across 9 markets, with a trade-setup chart (entry/SL/TP overlay) per signal | hourly, 07–20 UTC weekdays |
-| `swing` | 1h/4h LLM swing plan + COT contrarian gate | every 3h weekdays |
-| `council` | 7-agent LLM debate (Trend/PriceAction/Institutional/Quant/SMC/Tracer/Performance) → Chair verdict | every 2h weekdays |
+| `forecast` | Daily/weekly bias + BS_OB_RJB_FVG pattern detection + forward-path chart (target zone / invalidation) | 05:55 UTC weekdays + Sun 20:00 (weekly outlook) |
+| `scalp` | 15m dual REV/CON scoring across 9 markets, with a trade-setup chart (entry/SL/TP overlay) per signal | every 15 min, 07–20 UTC weekdays (:01/:16/:31/:46) |
+| `swing` | 1h/4h LLM swing plan + COT contrarian gate — the "4h analysis" | every 4h, offset :10 |
+| `council` (scalp mode) | 7-agent LLM debate (Trend/PriceAction/Institutional/Quant/SMC/Tracer/Performance) → Chair verdict | every 2h, 07–19 UTC, offset :35 |
+| `council` (swing mode) | same 7-agent debate on the 1h timeframe — the "H1 forecast" pulse | hourly, 07–20 UTC, offset :50 |
+| `news` | Red-folder USD news pre/post alerts (see below) | every 5 min, 06–22 UTC weekdays |
+| `tracer` | Live open-position progress updates (see below) | every 15 min, 07–20 UTC weekdays (:05/:20/:35/:50) |
+| `cot_weekly` | Standalone COT positioning map, once a week | Friday 19:45 UTC |
+| `daily_brief` | Arabic executive-summary brief across all configured markets (see below) | 06:15 UTC weekdays |
 | `btc_deep` | Standalone deep BTC pipeline (Wyckoff spring, absorption, stealth accumulation, derivatives trap, sniper score, 4-layer risk engine) — ported from the old `ai-trading-bot` repo, kept as its own layer since it's a much deeper/heavier analysis than the other layers | every 3h |
 | `performance` | Resolves open signals (TP1/TP2/STOP/EXPIRED), posts a scorecard, refreshes dashboard stats | daily 22:00 UTC |
 | `backtest` | Walk-forward simulation using the live scoring functions | manual only |
 
-Run everything once: `python main.py` (runs forecast → scalp → swing → council → performance).
+Run everything once: `python main.py` (runs forecast → scalp → swing → council → performance — the lightweight `news`/`tracer`/`cot_weekly` layers are meant to run on their own schedules, not as part of the full cycle).
+
+### Why not literally "every minute"?
+
+Two real constraints shaped the schedule above, worth knowing before you tighten it further:
+
+1. **GitHub Actions' `schedule` trigger isn't built for sub-5-minute cadences.** GitHub explicitly doesn't guarantee scheduled workflows fire at the exact minute — during busy periods (like the top of the hour, when everyone's cron fires) runs get queued and can slip by several minutes. Below ~5 minutes, this stops being reliable.
+2. **`scalp` reads 15-minute candles.** Scanning it every minute wouldn't catch anything a 15-minute-aligned scan misses — the underlying data only changes every 15 minutes. So `scalp` runs on `:01/:16/:31/:46`, one run per candle close, which *is* "catch every scalp chance" for a 15m strategy. Running it every minute would just burn Actions minutes and TwelveData API calls for zero extra signal coverage.
+3. **Free-tier Actions minutes are finite.** A private repo gets 2,000 min/month free. A workflow that ran continuously every minute for the ~13h session window, 5 days/week, would alone blow past that budget several times over. The schedule above (15-min scalp, hourly h1, 4h swing, 5-min news checks) is designed to stay comfortably inside the free tier while still being responsive to anything that actually needs faster polling (news timing, live position tracking).
+
+If you ever do want true sub-minute, tick-level responsiveness (not candle-based), that needs a different architecture entirely — a small always-on process (a cheap VPS, or even your own Mac left running) subscribed to a live price/tick feed, not a scheduled CI job. Happy to help build that separately if you want it, but it's a different kind of system than "run a script every N minutes."
+
+### New agents
+
+- **`news_agent.py`** — watches the ForexFactory high-impact ("red folder") calendar for USD events. ~15 minutes before a watched release it sends the previous reading + forecast/consensus so you know what "beat" vs "miss" means for that number. Once the feed populates the actual value, it sends a second message comparing previous/forecast/actual and a beat/miss read on typical USD bias — noting that this also tends to push XAU and equity indices the opposite way. That correlation is a historical tendency, not a rule (risk sentiment and positioning can override it), and the code says so in the message. Extend `NEWS_WATCH_CURRENCIES` in `config.py` to watch other currencies too.
+- **`daily_brief.py`** — an Arabic-language executive daily brief, built natively from data this system already computes (weekly/daily bias, COT signal, and any signal fired in the last 24h combine into a -4..+4 score per asset). This is a from-scratch equivalent of a format from a separate bot you run elsewhere (not one of the merged repos) — it does not pull any data from that other bot, it recomputes the same *kind* of report from this system's own markets (so the asset list differs slightly — this system covers the 9 configured in `config.py`, not that bot's exact list). The executive-summary paragraph is LLM-written (Ollama) from the computed score table so the narrative reflects real numbers rather than being freeform. Shows up as its own RTL section on the dashboard.
+- **`tracer_agent.py`** — runs far more often than the daily `performance` layer. For every currently open position it checks live price, computes progress toward TP1 vs SL as a percentage, updates the dashboard continuously, and sends one Telegram nudge the first time a position crosses 50%/75%/100% of the way to target (not every run — that would spam the channel). The daily `performance` layer is still the authoritative TP1/TP2/STOP/EXPIRED resolver; tracer is just a faster live view on top of it.
+
+### Keeping frequent workflows from stepping on each other
+
+With this many workflows now committing to the repo, the "Commit dashboard + state" step in every workflow does `git pull --rebase --autostash` before pushing, and retries a few times with a short random delay if another run's push landed first. This handles the occasional collision between, say, `tracer` and `news_agent` firing in the same 5-minute slot — without it, one of the two pushes would just silently fail.
 
 ## What changed in this merge
 
@@ -113,6 +138,10 @@ python3 main.py --layer forecast
 python3 main.py --layer scalp
 python3 main.py --layer swing
 python3 main.py --layer council --council-mode swing
+python3 main.py --layer news          # USD red-folder pre/post alerts
+python3 main.py --layer tracer        # live open-position progress nudges
+python3 main.py --layer cot_weekly    # standalone COT positioning map
+python3 main.py --layer daily_brief   # Arabic executive daily brief
 python3 main.py --layer btc_deep
 python3 main.py --layer performance
 python3 main.py --layer backtest --asset EURUSD --bars 2000

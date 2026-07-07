@@ -1211,7 +1211,13 @@ RULES:
 - SNIPER: only if sig_sniper is True (multi-confluence score ≥7)
 - DERIVATIVES_TRAP: only if sig_derivatives_trap is True
 - HIGH_PROBABILITY/APEX_PICK: only if 5+ factors align
-- NO_SIGNAL: if mixed evidence or R:R < 1.5
+- MOMENTUM: if none of the named patterns fired but price has moved >= 2% over
+  the recent lookback with above-average volume/ATR expansion, that is itself
+  a valid reason to call SCALP_LONG/SCALP_SHORT (move within the last few 15m
+  bars) or SWING_LONG/SWING_SHORT (multi-hour move) at moderate confidence
+  (0.45-0.60) — don't default to NO_SIGNAL just because the move doesn't match
+  a specific named institutional pattern.
+- NO_SIGNAL: only if evidence is genuinely mixed (price flat/choppy) or R:R < 1.2
 - SCALP timeframe: use for 15m signals (hold minutes to 2h)
 - SWING timeframe: use for 1h signals (hold 1-7 days)
 - Stop loss must be at a structural level
@@ -1619,7 +1625,14 @@ APEX_PICK|SNIPER|WYCKOFF_SPRING|MM_ABSORPTION|SILENT_INSTITUTIONAL|LIQUIDITY_ABS
 
 RULES:
 - Strong agreement (2-3 agents same direction) → pick matching signal label
-- Disagreement → NO_SIGNAL unless one agent has confidence > 0.8
+- Partial agreement (2 of 3 lean the same way, one neutral) → follow the
+  majority at reduced confidence (0.45-0.60) rather than defaulting to NO_SIGNAL
+- Full disagreement (agents actively conflict, e.g. one LONG one SHORT) →
+  NO_SIGNAL unless one agent has confidence > 0.65
+- If the TA agent reports a clear momentum move (price >= 2% over the recent
+  lookback) and nothing directly contradicts it, that alone can justify a
+  signal at reduced confidence — a real move with no named pattern is still
+  more informative than silence
 - Keep reasoning under 80 words
 
 OUTPUT (valid JSON only):
@@ -1951,8 +1964,8 @@ import random
 ACCOUNT_SIZE_USD       = 1000.0   # total capital in USD
 TARGET_VOL_ANNUAL      = 0.15     # 15% annualised portfolio volatility target
 MAX_POSITION_SIZE_USD  = 300.0    # hard cap regardless of formula output
-MIN_CONFIDENCE         = 0.50     # agent must be >= 50% confident
-MIN_RISK_REWARD        = 1.5      # R:R must be >= 1.5
+MIN_CONFIDENCE         = 0.40     # agent must be >= 40% confident (was 0.50 — too strict, blocked real moves)
+MIN_RISK_REWARD        = 1.3      # R:R must be >= 1.3 (was 1.5)
 CVAR_LIMIT_PCT         = 0.02     # block if tail loss > 2% of equity
 DAILY_LOSS_LIMIT_PCT   = 0.03     # hard circuit breaker at -3% daily
 MONTE_CARLO_PATHS      = 10_000   # simulations for CVaR calculation

@@ -2,13 +2,15 @@ name: Swing Scanner
 
 on:
   schedule:
-    # Every 3 hours Mon-Fri (06/09/12/15/18/21 UTC)
-    - cron: '0 6,9,12,15,18,21 * * 1-5'
+    # "4 hours analysis" — every 4h, offset :10 so it never lands on scalp's
+    # :01/:16/:31/:46 marks or council's :20/:35 marks below.
+    - cron: '10 0,4,8,12,16,20 * * 1-5'
   workflow_dispatch:
 
 jobs:
   swing:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -32,5 +34,13 @@ jobs:
           git config user.name  "trading-bot"
           git config user.email "bot@users.noreply.github.com"
           git add data/ docs/ || true
-          git diff --staged --quiet || git commit -m "chore: update dashboard + state [skip ci]"
-          git push || true
+          if git diff --staged --quiet; then
+            echo "nothing to commit"
+          else
+            git commit -m "chore: update dashboard + state [skip ci]"
+            for i in 1 2 3; do
+              git pull --rebase --autostash origin main && git push && break
+              echo "push attempt $i failed, retrying..."
+              sleep $((RANDOM % 10 + 5))
+            done
+          fi

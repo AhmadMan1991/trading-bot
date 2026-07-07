@@ -1,0 +1,29 @@
+name: Weekly COT Report
+
+on:
+  schedule:
+    # Friday 19:45 UTC — after CFTC's Friday afternoon publish (data as of
+    # the prior Tuesday). Standalone from the daily forecast layer, so you
+    # get exactly one "here's institutional positioning this week" message.
+    - cron: '45 19 * * 5'
+  workflow_dispatch:
+
+jobs:
+  cot_weekly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run weekly COT report
+        env:
+          TELEGRAM_TOKEN:    ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID:  ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python main.py --layer cot_weekly
