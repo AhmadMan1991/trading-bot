@@ -1,10 +1,16 @@
-name: BTC Deep Pipeline
+name: BTC Deep Pipeline (legacy, manual only)
 
+# Superseded by deep_pipeline.py, which generalizes this same TA/Sentiment/
+# Synthesis/4-layer-risk engine to all 9 configured assets and runs as step 7
+# of pipeline.yml's sequential chain (see scalp.yml for the full note on why
+# there's no schedule here anymore). This BTC-only version is kept only for
+# manual side-by-side comparison against the generalized version — use
+# "Run workflow" in the Actions tab.
 on:
-  schedule:
-    # Every 3 hours
-    - cron: "0 0,3,6,9,12,15,18,21 * * *"
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   btc_deep:

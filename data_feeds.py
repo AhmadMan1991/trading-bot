@@ -171,10 +171,59 @@ def _fetch_cftc_index(cot_name: str, lookback: int = COT_LOOKBACK) -> dict | Non
         return None
 
 
+# Fallback only (per project decision: official CFTC first, insider-week as
+# backup) -- insider-week.com restructured its site; this is the *current*
+# URL pattern (/en/cot/{path}/?all_data=ok), not the old /en/commitment-of-
+# traders/{path}/ path that started 404ing. Only covers markets that have an
+# equivalent on that site -- no AUD/WTI in this system, so those are skipped.
+_IW_PATHS = {
+    "EURUSD": "euro-fx", "GBPUSD": "british-pound", "USDJPY": "japanese-yen",
+    "DXY": "dollar-index", "XAUUSD": "gold", "BTCUSD": "bitcoin",
+}
+
+
+def _fetch_iw_fallback(asset: str, lookback: int = COT_LOOKBACK) -> dict | None:
+    path = _IW_PATHS.get(asset)
+    if not path:
+        return None
+    try:
+        r = requests.get(f"https://insider-week.com/en/cot/{path}/?all_data=ok",
+                         headers={"Accept-Language": "en-US,en;q=0.9",
+                                  "User-Agent": "Mozilla/5.0"}, timeout=20)
+        r.raise_for_status()
+        m = re.search(r"var\s+dataGraph\s*=\s*(\[.*?\]);", r.text, re.DOTALL)
+        if not m:
+            return None
+        entries_raw = re.findall(r"\{[^}]+\}", m.group(1))
+        entries = []
+        for e in entries_raw:
+            dm = re.search(r"new Date\((\d+),(\d+),(\d+)\)", e)
+            nm = re.search(r"NonCommercial:\s*(-?\d+)", e)
+            if dm and nm:
+                d = pd.Timestamp(int(dm[1]), int(dm[2]) + 1, int(dm[3]))
+                entries.append({"date": d.strftime("%Y-%m-%d"), "net": int(nm[1])})
+        if not entries:
+            return None
+        entries.sort(key=lambda x: x["date"])
+        nets = [e["net"] for e in entries[-lookback:]]
+        latest_net, prev_net = nets[-1], (nets[-2] if len(nets) >= 2 else nets[-1])
+        mn, mx = min(nets), max(nets)
+        idx = round((latest_net - mn) / (mx - mn) * 100) if mx != mn else 50
+        signal = ("BULLISH" if idx <= COT_EXTREME_SHORT else
+                  "BEARISH" if idx >= COT_EXTREME_LONG else "NEUTRAL")
+        return {"net": latest_net, "change": latest_net - prev_net, "cot_index": idx,
+                "signal": signal, "date": entries[-1]["date"], "source": "insider-week (fallback)"}
+    except Exception as e:
+        print(f"  [IW-fallback] {asset} failed: {e}")
+        return None
+
+
 def fetch_all_cot() -> dict:
-    """Fetch the COT index for every configured market, cached for
-    _COT_CACHE_TTL_MIN minutes so a caller that loops per-asset (like the
-    forecast layer) doesn't re-hit the CFTC API once per asset per run."""
+    """Fetch the COT index for every configured market: official CFTC first,
+    insider-week.com as a fallback if CFTC has no data for that market this
+    run. Cached for _COT_CACHE_TTL_MIN minutes so a caller that loops
+    per-asset (like the forecast layer) doesn't re-hit either source once
+    per asset per run."""
     global _cot_index_cache
     now = pd.Timestamp.now(tz="UTC")
     if _cot_index_cache["ts"] and (now - _cot_index_cache["ts"]) < pd.Timedelta(minutes=_COT_CACHE_TTL_MIN):
@@ -183,7 +232,12 @@ def fetch_all_cot() -> dict:
     results = {}
     for market, cfg in MARKETS.items():
         cot_name = cfg.get("cot_name")
-        results[market] = _fetch_cftc_index(cot_name) if cot_name else None
+        result = _fetch_cftc_index(cot_name) if cot_name else None
+        if result is None:
+            result = _fetch_iw_fallback(market)
+        else:
+            result["source"] = "CFTC (official)"
+        results[market] = result
 
     _cot_index_cache = {"ts": now, "data": results}
     return results

@@ -1,11 +1,12 @@
-name: Swing Scanner
+name: Swing Scanner (manual — standalone step test)
 
+# Superseded by pipeline.yml (see scalp.yml for the full note). No schedule
+# here anymore — use "Run workflow" in the Actions tab to test in isolation.
 on:
-  schedule:
-    # "4 hours analysis" — every 4h, offset :10 so it never lands on scalp's
-    # :01/:16/:31/:46 marks or council's :20/:35 marks below.
-    - cron: '10 0,4,8,12,16,20 * * 1-5'
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   swing:

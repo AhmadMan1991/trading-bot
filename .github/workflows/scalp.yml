@@ -1,12 +1,16 @@
-name: Scalp Scanner
+name: Scalp Scanner (manual — standalone step test)
 
+# Superseded by pipeline.yml, which runs this step as part of the full
+# sequential chain (COT -> Macro -> Forecast -> Swing -> Scalp -> Council ->
+# Deep Pipeline -> Performance) every 2h, 07-19 UTC weekdays. No schedule
+# here anymore — running this on its own cron too would double-fire scalp
+# signals alongside pipeline.yml. Use "Run workflow" in the Actions tab to
+# test this step in isolation.
 on:
-  schedule:
-    # Every 15 minutes, 07-20 UTC Mon-Fri — matched to the 15m candle scalp_engine
-    # actually trades on. Scanning faster than the candle it reads doesn't catch
-    # anything extra, it just burns Actions minutes and API calls.
-    - cron: '1,16,31,46 7-20 * * 1-5'
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   scalp:

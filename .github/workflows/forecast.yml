@@ -1,12 +1,12 @@
-name: Forecast & COT
+name: Forecast & COT (manual — standalone step test)
 
+# Superseded by pipeline.yml (see scalp.yml for the full note). No schedule
+# here anymore — use "Run workflow" in the Actions tab to test in isolation.
 on:
-  schedule:
-    # Daily at 06:00 UTC Mon-Fri
-    - cron: '55 5 * * 1-5'   # 05:55 UTC, ahead of the 06:xx hour
-    # Also Sunday 20:00 UTC (weekly preview)
-    - cron: '0 20 * * 0'
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   forecast:

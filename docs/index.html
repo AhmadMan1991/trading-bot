@@ -53,6 +53,9 @@
   .card{
     background:var(--panel); border:1px solid var(--border); border-radius:10px; overflow:hidden;
   }
+  .card.sniper{
+    border:1px solid #d4a017; box-shadow:0 0 0 1px rgba(212,160,23,.35), 0 0 16px rgba(212,160,23,.15);
+  }
   .card img{width:100%; display:block; background:#000;}
   .card-body{padding:14px 16px;}
   .card-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
@@ -63,6 +66,17 @@
   .badge.long, .badge.bullish, .badge.up{background:rgba(38,166,65,.18); color:var(--green);}
   .badge.short, .badge.bearish, .badge.down{background:rgba(248,81,73,.18); color:var(--red);}
   .badge.neutral, .badge.none{background:rgba(139,148,158,.18); color:var(--dim);}
+  .signal-label{
+    display:inline-block; margin-bottom:6px; padding:2px 8px; border-radius:4px;
+    font-size:11px; font-weight:700; letter-spacing:.03em; text-transform:uppercase;
+    background:rgba(139,148,158,.14); color:var(--dim);
+  }
+  .signal-label.sniper{background:rgba(212,160,23,.22); color:#d4a017;}
+  .macro-card{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:16px 18px; font-size:14px; line-height:1.6; white-space:pre-wrap;
+  }
+  .macro-card .macro-meta{color:var(--dim); font-size:12px; margin-bottom:8px;}
   .levels{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; font-size:12px; margin:10px 0;}
   .levels div{background:var(--panel2); border-radius:6px; padding:6px; text-align:center;}
   .levels .k{color:var(--dim); display:block; font-size:10px; text-transform:uppercase;}
@@ -106,6 +120,11 @@
     <div class="daily-brief" dir="rtl" id="dailyBrief"></div>
   </section>
 
+  <section id="macroSection" style="display:none;">
+    <h2>🌐 Macro Context (Gemini live search + Ollama synthesis)</h2>
+    <div class="macro-card" id="macro"></div>
+  </section>
+
   <section>
     <h2>Forecast — Setup / Bias per Asset</h2>
     <div class="cards" id="forecasts"><div class="empty">No forecast data yet — runs daily via the Forecast workflow.</div></div>
@@ -119,6 +138,8 @@
       <div class="tab" data-layer="swing">Swing</div>
       <div class="tab" data-layer="council_scalp">Council (scalp)</div>
       <div class="tab" data-layer="council_swing">Council (swing)</div>
+      <div class="tab" data-layer="deep_pipeline">Deep Pipeline</div>
+      <div class="tab" data-layer="sniper">🎯 Sniper only</div>
     </div>
     <div class="cards" id="signals"><div class="empty">No signals fired yet.</div></div>
   </section>
@@ -167,9 +188,21 @@ function render(){
 
   renderStats();
   renderDailyBrief();
+  renderMacro();
   renderForecasts();
   renderSignals();
   renderOpenPositions();
+}
+
+function renderMacro(){
+  const macro = DATA.macro;
+  const section = document.getElementById("macroSection");
+  if (!macro || !macro.synthesis){ section.style.display = "none"; return; }
+  section.style.display = "";
+  document.getElementById("macro").innerHTML = `
+    <div class="macro-meta">${macro.timestamp ? new Date(macro.timestamp).toLocaleString() : ""}</div>
+    ${macro.synthesis}
+  `;
 }
 
 function renderDailyBrief(){
@@ -243,7 +276,9 @@ function renderForecasts(){
 function renderSignals(){
   const el = document.getElementById("signals");
   let items = DATA.signals || [];
-  if (activeLayer !== "all"){
+  if (activeLayer === "sniper"){
+    items = items.filter(s => s.sniper === true);
+  } else if (activeLayer !== "all"){
     items = items.filter(s => s.layer === activeLayer);
   }
   if (!items.length){
@@ -251,9 +286,10 @@ function renderSignals(){
     return;
   }
   el.innerHTML = items.map(s => `
-    <div class="card">
+    <div class="card${s.sniper ? ' sniper' : ''}">
       ${s.chart ? `<img src="${s.chart}" loading="lazy">` : ""}
       <div class="card-body">
+        ${s.signal_label ? `<span class="signal-label${s.sniper ? ' sniper' : ''}">${s.sniper ? '🎯 ' : ''}${s.signal_label}</span>` : ""}
         <div class="card-top">
           <span class="asset">${s.asset} <span style="color:var(--dim); font-weight:400; font-size:11px;">· ${s.layer}</span></span>
           <span class="badge ${badgeClass(s.direction)}">${s.direction || "–"}</span>

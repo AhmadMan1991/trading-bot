@@ -1,10 +1,15 @@
-name: Performance Tracker
+name: Performance Tracker (manual — standalone step test)
 
+# Superseded by pipeline.yml, which now runs this as step 8 (last) of every
+# 2h chain run, 07-19 UTC weekdays — a shorter, more frequent audit cadence
+# than the old once-daily 22:00 UTC run, so open TP1/TP2/STOP resolution
+# gets checked more often, not less. No schedule here anymore — use
+# "Run workflow" in the Actions tab to test in isolation.
 on:
-  schedule:
-    # Daily at 22:00 UTC
-    - cron: '0 22 * * *'
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   performance:

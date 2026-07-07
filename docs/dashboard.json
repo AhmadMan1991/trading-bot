@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-07 10:24:51.080278+00:00",
+  "updated_at": "2026-07-07 12:41:02.404634+00:00",
   "signals": [
     {
       "layer": "scalp",
@@ -156,15 +156,15 @@
   "open_positions": [],
   "daily_brief": {
     "date": "2026-07-07",
-    "summary": "\u0645\u0644\u062e\u0635 \u0627\u062e\u062a\u0628\u0627\u0631 \u062a\u0644\u0642\u0627\u0626\u064a. \u26a0\ufe0f \u0627\u0644\u062e\u0637\u0631 \u0627\u0644\u0623\u0643\u0628\u0631: \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0642\u062a\u0635\u0627\u062f\u064a\u0629 \u0642\u0627\u062f\u0645\u0629.",
+    "summary": "ملخص اختبار تلقائي. ⚠️ الخطر الأكبر: بيانات اقتصادية قادمة.",
     "scores": [
       {
         "asset": "XAUUSD",
-        "emoji": "\ud83e\udd47",
+        "emoji": "🥇",
         "score": 3,
-        "signal": "\ud83d\udfe2\ud83d\udfe2",
+        "signal": "🟢🟢",
         "confidence": "medium",
-        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
+        "confidence_ar": "متوسطة",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -172,11 +172,11 @@
       },
       {
         "asset": "EURUSD",
-        "emoji": "\ud83c\uddea\ud83c\uddfa",
+        "emoji": "🇪🇺",
         "score": 2,
-        "signal": "\ud83d\udfe2",
+        "signal": "🟢",
         "confidence": "medium",
-        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
+        "confidence_ar": "متوسطة",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -184,11 +184,11 @@
       },
       {
         "asset": "GBPUSD",
-        "emoji": "\ud83c\uddec\ud83c\udde7",
+        "emoji": "🇬🇧",
         "score": 2,
-        "signal": "\ud83d\udfe2",
+        "signal": "🟢",
         "confidence": "medium",
-        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
+        "confidence_ar": "متوسطة",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -196,11 +196,11 @@
       },
       {
         "asset": "USDJPY",
-        "emoji": "\ud83c\uddef\ud83c\uddf5",
+        "emoji": "🇯🇵",
         "score": 2,
-        "signal": "\ud83d\udfe2",
+        "signal": "🟢",
         "confidence": "medium",
-        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
+        "confidence_ar": "متوسطة",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -208,11 +208,11 @@
       },
       {
         "asset": "DXY",
-        "emoji": "\ud83d\udcb5",
+        "emoji": "💵",
         "score": 2,
-        "signal": "\ud83d\udfe2",
+        "signal": "🟢",
         "confidence": "medium",
-        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
+        "confidence_ar": "متوسطة",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -220,11 +220,11 @@
       },
       {
         "asset": "SPX500",
-        "emoji": "\ud83d\udcc8",
+        "emoji": "📈",
         "score": 2,
-        "signal": "\ud83d\udfe2",
+        "signal": "🟢",
         "confidence": "medium",
-        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
+        "confidence_ar": "متوسطة",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -232,11 +232,11 @@
       },
       {
         "asset": "US100",
-        "emoji": "\ud83d\udcbb",
+        "emoji": "💻",
         "score": 2,
-        "signal": "\ud83d\udfe2",
+        "signal": "🟢",
         "confidence": "medium",
-        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
+        "confidence_ar": "متوسطة",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -244,11 +244,11 @@
       },
       {
         "asset": "BTCUSD",
-        "emoji": "\u20bf",
+        "emoji": "₿",
         "score": 2,
-        "signal": "\ud83d\udfe2",
+        "signal": "🟢",
         "confidence": "medium",
-        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
+        "confidence_ar": "متوسطة",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -256,11 +256,11 @@
       },
       {
         "asset": "ETHUSD",
-        "emoji": "\ud83d\udca0",
+        "emoji": "💠",
         "score": 2,
-        "signal": "\ud83d\udfe2",
+        "signal": "🟢",
         "confidence": "medium",
-        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
+        "confidence_ar": "متوسطة",
         "bias": "BULLISH (weekly) / NEUTRAL (daily)",
         "price": 104.32585137385747,
         "cot_signal": "NEUTRAL",
@@ -270,28 +270,28 @@
     "actions": [
       {
         "asset": "XAUUSD",
-        "direction_ar": "\u0635\u0639\u0648\u062f",
-        "action_ar": "\u0645\u0631\u0627\u0642\u0628\u0629 \u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u062f\u0639\u0645 \u0644\u0644\u062f\u062e\u0648\u0644 LONG"
+        "direction_ar": "صعود",
+        "action_ar": "مراقبة مناطق الدعم للدخول LONG"
       },
       {
         "asset": "EURUSD",
-        "direction_ar": "\u0635\u0639\u0648\u062f",
-        "action_ar": "\u0645\u0631\u0627\u0642\u0628\u0629 \u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u062f\u0639\u0645 \u0644\u0644\u062f\u062e\u0648\u0644 LONG"
+        "direction_ar": "صعود",
+        "action_ar": "مراقبة مناطق الدعم للدخول LONG"
       },
       {
         "asset": "GBPUSD",
-        "direction_ar": "\u0635\u0639\u0648\u062f",
-        "action_ar": "\u0645\u0631\u0627\u0642\u0628\u0629 \u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u062f\u0639\u0645 \u0644\u0644\u062f\u062e\u0648\u0644 LONG"
+        "direction_ar": "صعود",
+        "action_ar": "مراقبة مناطق الدعم للدخول LONG"
       },
       {
         "asset": "USDJPY",
-        "direction_ar": "\u0635\u0639\u0648\u062f",
-        "action_ar": "\u0645\u0631\u0627\u0642\u0628\u0629 \u0645\u0646\u0627\u0637\u0642 \u0627\u0644\u062f\u0639\u0645 \u0644\u0644\u062f\u062e\u0648\u0644 LONG"
+        "direction_ar": "صعود",
+        "action_ar": "مراقبة مناطق الدعم للدخول LONG"
       },
       {
         "asset": "DXY",
-        "direction_ar": "\u0635\u0639\u0648\u062f",
-        "action_ar": "\u0645\u0624\u0634\u0631 \u062a\u0623\u0643\u064a\u062f \u2014 \u0644\u0627 \u064a\u064f\u062a\u062f\u0627\u0648\u0644 \u0645\u0628\u0627\u0634\u0631\u0629"
+        "direction_ar": "صعود",
+        "action_ar": "مؤشر تأكيد — لا يُتداول مباشرة"
       }
     ]
   }

@@ -1,11 +1,22 @@
-name: Council (7-Agent) (manual — standalone step test)
+name: Sequential Pipeline
 
-# Superseded by pipeline.yml (see scalp.yml for the full note). No schedule
-# here anymore — use "Run workflow" in the Actions tab to test in isolation.
 on:
+  schedule:
+    # Every 2h during sessions, 07-19 UTC weekdays. Runs the FULL chain as one
+    # job so every step genuinely sees the previous step's fresh output:
+    #   COT -> Macro (Gemini) -> Forecast -> Swing -> Scalp -> Council
+    #   -> Deep Pipeline (9 assets) -> Performance (audits the run)
+    # This replaces scalp.yml / swing.yml / council.yml / forecast.yml /
+    # btc_deep.yml / performance.yml running as separate, independently
+    # scheduled workflows — those are kept as manual-only (workflow_dispatch)
+    # for standalone testing of a single step, but no longer fire on a cron
+    # of their own, so there's exactly one scheduler touching the repo at
+    # a time (the project's own past incident with two schedulers double-
+    # firing signals is exactly what this avoids).
+    - cron: '0 7,9,11,13,15,17,19 * * 1-5'
   workflow_dispatch:
     inputs:
-      mode:
+      council-mode:
         description: 'Council mode: scalp or swing'
         required: false
         default: 'scalp'
@@ -14,9 +25,9 @@ permissions:
   contents: write
 
 jobs:
-  council:
+  pipeline:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 55
     steps:
       - uses: actions/checkout@v4
 
@@ -27,17 +38,14 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Determine mode from input
-        id: pick_mode
-        run: echo "mode=${{ github.event.inputs.mode || 'scalp' }}" >> "$GITHUB_OUTPUT"
-
-      - name: Run council layer
+      - name: Run full sequential pipeline
         env:
           TELEGRAM_TOKEN:    ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID:  ${{ secrets.TELEGRAM_CHAT_ID }}
           TWELVEDATA_KEY:    ${{ secrets.TWELVEDATA_KEY }}
           OLLAMA_API_KEY:    ${{ secrets.OLLAMA_API_KEY }}
-        run: python main.py --layer council --council-mode ${{ steps.pick_mode.outputs.mode }}
+          GEMINI_API_KEY:    ${{ secrets.GEMINI_API_KEY }}
+        run: python main.py --council-mode ${{ github.event.inputs.council-mode || 'scalp' }}
 
       - name: Commit dashboard + state
         run: |
@@ -47,7 +55,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "nothing to commit"
           else
-            git commit -m "chore: update dashboard + state [skip ci]"
+            git commit -m "chore: pipeline run [skip ci]"
             for i in 1 2 3; do
               git pull --rebase --autostash origin main && git push && break
               echo "push attempt $i failed, retrying..."

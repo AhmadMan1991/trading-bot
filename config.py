@@ -12,6 +12,10 @@ OLLAMA_KEY       = os.environ.get("OLLAMA_API_KEY", "")
 OLLAMA_URL       = "https://ollama.com/api/chat"
 OLLAMA_MODEL     = "gpt-oss:20b-cloud"
 
+GEMINI_API_KEY   = os.environ.get("GEMINI_API_KEY", "")
+GEMINI_MODEL     = "gemini-2.5-flash"
+GEMINI_URL       = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
+
 _missing = [n for n, v in [("TELEGRAM_TOKEN", TELEGRAM_TOKEN), ("TWELVEDATA_KEY", TWELVEDATA_KEY)] if not v]
 if _missing:
     print(f"  [config] WARNING: missing env secrets: {', '.join(_missing)} "

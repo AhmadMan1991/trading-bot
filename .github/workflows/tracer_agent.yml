@@ -7,6 +7,9 @@ on:
     - cron: '5,20,35,50 7-20 * * 1-5'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   tracer:
     runs-on: ubuntu-latest
