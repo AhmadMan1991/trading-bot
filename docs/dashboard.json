@@ -1,6 +1,19 @@
 {
-  "updated_at": "2026-07-07 18:30:24.896057+00:00",
+  "updated_at": "2026-07-07 19:39:19.470921+00:00",
   "signals": [
+    {
+      "layer": "swing",
+      "asset": "US100",
+      "direction": "LONG",
+      "entry": 706.3,
+      "stop": 690.0,
+      "tp1": 740.0,
+      "tp2": 745.4,
+      "score_or_conf": 0.7,
+      "timestamp": "2026-07-07 19:34:40.904013+00:00",
+      "chart": "charts/swing_US100_20260707T193440Z.png",
+      "caption": "US100 \u2014 LONG swing setup (conf 70%)"
+    },
     {
       "layer": "scalp",
       "asset": "ETHUSD",
@@ -32,170 +45,186 @@
     {
       "asset": "ETHUSD",
       "bias": "BEARISH (weekly) / NEUTRAL (daily)",
-      "price": 1771.1099853515625,
+      "price": 1779.8399658203125,
       "forecast": {
         "direction": "DOWN",
         "target_zone": [
           1510.505859,
-          1549.5964779527344
+          1550.905975023047
         ],
         "invalidation": 1829.513672
       },
-      "timestamp": "2026-07-07 13:31:22.415457+00:00",
+      "timestamp": "2026-07-07 19:26:15.728363+00:00",
       "chart": "charts/forecast_ETHUSD.png"
     },
     {
       "asset": "BTCUSD",
-      "bias": "BEARISH",
-      "price": 63096.8515625,
+      "bias": "BEARISH (weekly) / NEUTRAL (daily)",
+      "price": 63532.0390625,
       "forecast": {
         "direction": "DOWN",
         "target_zone": [
           57747.765625,
-          58550.128515625
+          58615.406640625
         ],
         "invalidation": 65544.0
       },
-      "timestamp": "2026-07-07 13:31:21.234794+00:00",
+      "timestamp": "2026-07-07 19:26:14.823659+00:00",
       "chart": "charts/forecast_BTCUSD.png"
     },
     {
       "asset": "US100",
       "bias": "BULLISH (weekly) / NEUTRAL (daily)",
-      "price": 29382.27734375,
+      "price": 29063.755859375,
       "forecast": {
         "direction": "UP",
         "target_zone": [
-          30453.5263667625,
+          30405.74814410625,
           30642.570312
         ],
         "invalidation": 28196.900391
       },
-      "timestamp": "2026-07-07 13:31:20.174566+00:00",
+      "timestamp": "2026-07-07 19:26:12.632856+00:00",
       "chart": "charts/forecast_US100.png"
     },
     {
       "asset": "SPX500",
       "bias": "BEARISH (weekly) / BULLISH (daily)",
-      "price": 7529.6201171875,
+      "price": 7494.35009765625,
       "forecast": {
         "direction": "UP",
         "target_zone": [
-          7570.674951278125,
+          7565.384448348437,
           7577.919922
         ],
         "invalidation": 7237.850098
       },
-      "timestamp": "2026-07-07 13:31:19.201467+00:00",
+      "timestamp": "2026-07-07 19:26:11.479085+00:00",
       "chart": "charts/forecast_SPX500.png"
     },
     {
       "asset": "XAUUSD",
       "bias": "BULLISH (weekly) / BEARISH (daily)",
-      "price": 4182.5,
+      "price": 4108.2998046875,
       "forecast": {
         "direction": "UP",
         "target_zone": [
-          4347.825,
+          4336.694970703125,
           4377.0
         ],
         "invalidation": 3962.5
       },
-      "timestamp": "2026-07-07 13:31:17.945348+00:00",
+      "timestamp": "2026-07-07 19:26:10.259725+00:00",
       "chart": "charts/forecast_XAUUSD.png"
     },
     {
       "asset": "DXY",
       "bias": "BEARISH (weekly) / BULLISH (daily)",
-      "price": 100.9219970703125,
+      "price": 101.11000061035156,
       "forecast": {
         "direction": "UP",
         "target_zone": [
-          101.66830211054688,
+          101.69650264155274,
           101.800003
         ],
         "invalidation": 99.379997
       },
-      "timestamp": "2026-07-07 13:31:14.493432+00:00",
+      "timestamp": "2026-07-07 19:26:09.354121+00:00",
       "chart": "charts/forecast_DXY.png"
     },
     {
       "asset": "USDJPY",
       "bias": "BULLISH",
-      "price": 161.89100646972656,
+      "price": 162.0919952392578,
       "forecast": {
         "direction": "UP",
         "target_zone": [
-          162.69425012045897,
+          162.72439843588867,
           162.835999
         ],
         "invalidation": 159.886993
       },
-      "timestamp": "2026-07-07 13:31:13.348562+00:00",
+      "timestamp": "2026-07-07 19:26:08.272914+00:00",
       "chart": "charts/forecast_USDJPY.png"
     },
     {
       "asset": "GBPUSD",
       "bias": "BULLISH (weekly) / NEUTRAL (daily)",
-      "price": 1.338114857673645,
+      "price": 1.335505723953247,
       "forecast": {
         "direction": "UP",
         "target_zone": [
-          1.3449124286510468,
+          1.344521058592987,
           1.346112
         ],
         "invalidation": 1.314302
       },
-      "timestamp": "2026-07-07 13:31:12.348107+00:00",
+      "timestamp": "2026-07-07 19:26:07.305742+00:00",
       "chart": "charts/forecast_GBPUSD.png"
     },
     {
       "asset": "EURUSD",
       "bias": "BULLISH (weekly) / BEARISH (daily)",
-      "price": 1.1439030170440674,
+      "price": 1.1415525674819946,
       "forecast": {
         "direction": "UP",
         "target_zone": [
-          1.15949795255661,
+          1.1591453851222993,
           1.16225
         ],
         "invalidation": 1.132541
       },
-      "timestamp": "2026-07-07 13:31:11.391864+00:00",
+      "timestamp": "2026-07-07 19:26:06.144213+00:00",
       "chart": "charts/forecast_EURUSD.png"
     }
   ],
-  "performance": {},
+  "performance": {
+    "total": 1,
+    "wins": 0,
+    "losses": 1,
+    "expired": 0,
+    "win_rate": 0.0,
+    "total_r": -1.0,
+    "avg_r": -1.0
+  },
   "open_positions": [
     {
-      "direction": "SHORT",
-      "score": 7,
-      "setup_type": "CON",
-      "rev_long": 1,
-      "rev_short": 1,
-      "con_long": 1,
-      "con_short": 7,
-      "factors": [
-        "MACD bearish cross",
-        "EMA9 < EMA20",
-        "Below EMA50",
-        "Lower high structure",
-        "Volume 1.9x \u2014 participation",
-        "MACD histogram falling"
+      "verdict": "LONG",
+      "confidence": 0.7,
+      "entry": 706.3,
+      "stop_loss": 690.0,
+      "target_1": 740.0,
+      "target_2": 745.4,
+      "risk_reward": 2.07,
+      "hold_hours": 6,
+      "cot_bias": "BULLISH",
+      "key_reasons": [
+        "COT spec net <25th percentile \u2192 bullish contrarian signal",
+        "4H EMA stack bullish and 4H swing high provides strong target",
+        "Risk\u2011reward >1.8 with entry at 0.5 ATR below current price"
       ],
-      "entry": 1770.92,
-      "stop": 1779.75,
-      "tp1": 1760.05,
-      "tp2": 1753.25,
-      "rr": 1.23,
-      "rsi": 41.3,
-      "atr": 6.795741592103999,
-      "price": 1770.92,
-      "asset": "ETHUSD",
-      "timestamp": "2026-07-07 13:38:22.182100+00:00",
-      "opened_at": "2026-07-07 13:38:44.612294+00:00",
-      "live_price": 1800.92,
-      "progress_pct": -3.398
+      "reasoning": "COT indicates a bullish contrarian bias while 4H trend is bullish. 1H bearish EMA stack conflicts, but COT overrides per rules. Entry at 0.5 ATR below current price (706.3) with SL at nearest 4H swing low (\u2248690). Targets set at 4H swing high (740) and upper 4H range (745.4) giving R:R ~2.1. Hold for ~6 hours until target reached.",
+      "asset": "US100",
+      "timestamp": "2026-07-07 19:26:15.732930+00:00",
+      "cot_iw": {
+        "net": -7604,
+        "change": 1540,
+        "cot_index": 13,
+        "signal": "BULLISH",
+        "date": "2026-06-30",
+        "source": "CFTC (official)"
+      },
+      "cot_cftc": {
+        "spec_net": -7604,
+        "comm_net": 2252,
+        "pct_rank_20w": 0.2,
+        "report_date": "2026-06-30"
+      },
+      "direction": "LONG",
+      "stop": 690.0,
+      "tp1": 740.0,
+      "tp2": 745.4,
+      "opened_at": "2026-07-07 19:34:40.904788+00:00"
     }
   ],
   "daily_brief": {
@@ -338,5 +367,134 @@
         "action_ar": "\u0641\u0631\u0635\u0629 SHORT \u0639\u0646\u062f \u0627\u0644\u0645\u0642\u0627\u0648\u0645\u0629"
       }
     ]
-  }
+  },
+  "cot": {
+    "data": {
+      "EURUSD": {
+        "net": 1099,
+        "change": -29059,
+        "cot_index": 5,
+        "signal": "BULLISH",
+        "date": "2026-06-30",
+        "source": "CFTC (official)"
+      },
+      "GBPUSD": {
+        "net": -102147,
+        "change": 3572,
+        "cot_index": 4,
+        "signal": "BULLISH",
+        "date": "2026-06-30",
+        "source": "CFTC (official)"
+      },
+      "USDJPY": {
+        "net": -155092,
+        "change": -8988,
+        "cot_index": 0,
+        "signal": "BULLISH",
+        "date": "2026-06-30",
+        "source": "CFTC (official)"
+      },
+      "DXY": {
+        "net": 34571,
+        "change": -2290,
+        "cot_index": 84,
+        "signal": "BEARISH",
+        "date": "2022-02-01",
+        "source": "CFTC (official)"
+      },
+      "XAUUSD": {
+        "net": 194019,
+        "change": 12680,
+        "cot_index": 41,
+        "signal": "NEUTRAL",
+        "date": "2026-06-30",
+        "source": "CFTC (official)"
+      },
+      "SPX500": {
+        "net": -37592,
+        "change": -2144,
+        "cot_index": 99,
+        "signal": "BEARISH",
+        "date": "2026-06-30",
+        "source": "CFTC (official)"
+      },
+      "US100": {
+        "net": -7604,
+        "change": 1540,
+        "cot_index": 13,
+        "signal": "BULLISH",
+        "date": "2026-06-30",
+        "source": "CFTC (official)"
+      },
+      "BTCUSD": null,
+      "ETHUSD": null
+    },
+    "summary": "7/9 markets reporting. 4 bullish, 2 bearish, 1 neutral. Most extreme: USDJPY at 0/100 (crowded short).",
+    "timestamp": "2026-07-07 19:25:49.431548+00:00"
+  },
+  "cot_history": [
+    {
+      "date": "2026-07-07",
+      "data": {
+        "EURUSD": {
+          "net": 1099,
+          "change": -29059,
+          "cot_index": 5,
+          "signal": "BULLISH",
+          "date": "2026-06-30",
+          "source": "CFTC (official)"
+        },
+        "GBPUSD": {
+          "net": -102147,
+          "change": 3572,
+          "cot_index": 4,
+          "signal": "BULLISH",
+          "date": "2026-06-30",
+          "source": "CFTC (official)"
+        },
+        "USDJPY": {
+          "net": -155092,
+          "change": -8988,
+          "cot_index": 0,
+          "signal": "BULLISH",
+          "date": "2026-06-30",
+          "source": "CFTC (official)"
+        },
+        "DXY": {
+          "net": 34571,
+          "change": -2290,
+          "cot_index": 84,
+          "signal": "BEARISH",
+          "date": "2022-02-01",
+          "source": "CFTC (official)"
+        },
+        "XAUUSD": {
+          "net": 194019,
+          "change": 12680,
+          "cot_index": 41,
+          "signal": "NEUTRAL",
+          "date": "2026-06-30",
+          "source": "CFTC (official)"
+        },
+        "SPX500": {
+          "net": -37592,
+          "change": -2144,
+          "cot_index": 99,
+          "signal": "BEARISH",
+          "date": "2026-06-30",
+          "source": "CFTC (official)"
+        },
+        "US100": {
+          "net": -7604,
+          "change": 1540,
+          "cot_index": 13,
+          "signal": "BULLISH",
+          "date": "2026-06-30",
+          "source": "CFTC (official)"
+        },
+        "BTCUSD": null,
+        "ETHUSD": null
+      }
+    }
+  ]
 }
