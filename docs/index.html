@@ -668,6 +668,11 @@ function _newsStatus(ev, now){
   }
   if (!ev.time) return `<span class="badge unknown">–</span>`;
   const mins = Math.round((new Date(ev.time).getTime() - now) / 60000);
+  // Past release with no numeric actual yet — some events (FOMC Minutes,
+  // speeches, testimony) never get one at all, so don't show "awaiting
+  // data" forever; flip to a settled "released" badge after a short grace
+  // window instead (matches NEWS_POST_GRACE_MIN on the agent side).
+  if (mins < -15) return `<span class="badge neutral">RELEASED</span>`;
   if (mins < 0) return `<span class="badge neutral">awaiting data…</span>`;
   if (mins <= 15) return `<span class="badge short">⏰ in ${mins}m</span>`;
   const label = mins >= 60 ? `in ${Math.round(mins / 60)}h` : `in ${mins}m`;

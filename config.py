@@ -57,6 +57,11 @@ COT_LOOKBACK      = 25
 NEWS_PRE_ALERT_MIN    = 15   # send the "coming up" alert this many minutes before release
 NEWS_PRE_ALERT_WINDOW = 6    # tolerance window (minutes) around that mark, matched to the 5-min poll cadence
 NEWS_WATCH_CURRENCIES = ["USD"]   # extend later, e.g. ["USD", "EUR"]
+NEWS_POST_GRACE_MIN   = 15   # if "actual" still hasn't populated this many minutes after
+                              # release, send a fallback "released, no numeric print" alert
+                              # instead of waiting forever — covers qualitative events (FOMC
+                              # Minutes, speeches, testimony) that never get a numeric actual,
+                              # and numeric releases where the free calendar feed lags/never fills it in
 
 # ── Tracer / live position updater ────────────────────────────────────────────
 TRACER_MILESTONES = [0.5, 0.75, 1.0]   # fraction of the way to TP1/SL that triggers a Telegram nudge

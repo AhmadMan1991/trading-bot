@@ -24,7 +24,8 @@ import json
 from pathlib import Path
 import pandas as pd
 
-from config import NEWS_PRE_ALERT_MIN, NEWS_PRE_ALERT_WINDOW, NEWS_WATCH_CURRENCIES
+from config import (NEWS_PRE_ALERT_MIN, NEWS_PRE_ALERT_WINDOW, NEWS_WATCH_CURRENCIES,
+                    NEWS_POST_GRACE_MIN)
 from data_feeds import fetch_news_events_raw
 import telegram
 
@@ -116,12 +117,29 @@ def run_news_agent() -> None:
 
         # POST-ALERT: once actual is populated and release time has passed
         actual = ev.get("actual")
-        if (actual not in (None, "", "N/A") and mins_until <= 0
-                and eid not in state["post_sent"]):
+        has_actual = actual not in (None, "", "N/A")
+        if has_actual and mins_until <= 0 and eid not in state["post_sent"]:
             telegram.send_text(telegram.format_news_post(ev, _bias_read(ev.get("forecast"), actual)))
             state["post_sent"].append(eid)
             sent += 1
             print(f"  📰 post-alert sent: {ev.get('title')} ({currency}) actual={actual}")
+
+        # POST-ALERT FALLBACK: some releases never get a numeric "actual" —
+        # qualitative/event-type items like FOMC Minutes, speeches, or
+        # testimony, plus any numeric print the free calendar feed is slow
+        # to fill in. Without this, those events sat as "awaiting data"
+        # forever and nothing was ever sent. After a grace period past
+        # release with still no actual, send one fallback alert instead of
+        # silently waiting.
+        elif (not has_actual and mins_until <= -NEWS_POST_GRACE_MIN
+                and eid not in state["post_sent"]):
+            telegram.send_text(telegram.format_news_post(
+                ev, "No numeric print for this release (event-type release, "
+                    "e.g. minutes/speech/testimony, or the feed hasn't filled it in) — "
+                    "check the source directly if it matters for your read."))
+            state["post_sent"].append(eid)
+            sent += 1
+            print(f"  📰 post-alert (no-data fallback) sent: {ev.get('title')} ({currency})")
 
     _save_state(state)
     print(f"  {sent} news alert(s) sent this run" if sent else "  no news alerts due this run")
