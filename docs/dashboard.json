@@ -1,46 +1,6 @@
 {
   "updated_at": "2026-07-08 12:13:02.141183+00:00",
-  "signals": [
-    {
-      "layer": "swing",
-      "asset": "US100",
-      "direction": "LONG",
-      "entry": 706.3,
-      "stop": 690.0,
-      "tp1": 740.0,
-      "tp2": 745.4,
-      "score_or_conf": 0.7,
-      "timestamp": "2026-07-07 19:34:40.904013+00:00",
-      "chart": "charts/swing_US100_20260707T193440Z.png",
-      "caption": "US100 \u2014 LONG swing setup (conf 70%)"
-    },
-    {
-      "layer": "scalp",
-      "asset": "ETHUSD",
-      "direction": "SHORT",
-      "entry": 1770.92,
-      "stop": 1779.75,
-      "tp1": 1760.05,
-      "tp2": 1753.25,
-      "score_or_conf": 7,
-      "timestamp": "2026-07-07 13:38:44.611720+00:00",
-      "chart": "charts/scalp_ETHUSD_20260707T133844Z.png",
-      "caption": "ETHUSD \u2014 SHORT scalp setup (score 7/9)"
-    },
-    {
-      "layer": "scalp",
-      "asset": "XAUUSD",
-      "direction": "LONG",
-      "entry": 0,
-      "stop": 0,
-      "tp1": 0,
-      "tp2": 0,
-      "score_or_conf": 0,
-      "timestamp": "2026-07-06 19:50:21.602331+00:00",
-      "chart": null,
-      "note": "unit test"
-    }
-  ],
+  "signals": [],
   "forecasts": [
     {
       "asset": "XAUUSD",
@@ -63,149 +23,29 @@
       },
       "timestamp": "2026-07-08 12:12:57.197057+00:00",
       "chart": null
-    },
-    {
-      "asset": "ETHUSD",
-      "bias": "BEARISH (weekly) / NEUTRAL (daily)",
-      "price": 1779.8399658203125,
-      "forecast": {
-        "direction": "DOWN",
-        "target_zone": [
-          1510.505859,
-          1550.905975023047
-        ],
-        "invalidation": 1829.513672
-      },
-      "timestamp": "2026-07-07 19:26:15.728363+00:00",
-      "chart": "charts/forecast_ETHUSD.png"
-    },
-    {
-      "asset": "BTCUSD",
-      "bias": "BEARISH (weekly) / NEUTRAL (daily)",
-      "price": 63532.0390625,
-      "forecast": {
-        "direction": "DOWN",
-        "target_zone": [
-          57747.765625,
-          58615.406640625
-        ],
-        "invalidation": 65544.0
-      },
-      "timestamp": "2026-07-07 19:26:14.823659+00:00",
-      "chart": "charts/forecast_BTCUSD.png"
-    },
-    {
-      "asset": "US100",
-      "bias": "BULLISH (weekly) / NEUTRAL (daily)",
-      "price": 29063.755859375,
-      "forecast": {
-        "direction": "UP",
-        "target_zone": [
-          30405.74814410625,
-          30642.570312
-        ],
-        "invalidation": 28196.900391
-      },
-      "timestamp": "2026-07-07 19:26:12.632856+00:00",
-      "chart": "charts/forecast_US100.png"
-    },
-    {
-      "asset": "SPX500",
-      "bias": "BEARISH (weekly) / BULLISH (daily)",
-      "price": 7494.35009765625,
-      "forecast": {
-        "direction": "UP",
-        "target_zone": [
-          7565.384448348437,
-          7577.919922
-        ],
-        "invalidation": 7237.850098
-      },
-      "timestamp": "2026-07-07 19:26:11.479085+00:00",
-      "chart": "charts/forecast_SPX500.png"
-    },
-    {
-      "asset": "DXY",
-      "bias": "BEARISH (weekly) / BULLISH (daily)",
-      "price": 101.11000061035156,
-      "forecast": {
-        "direction": "UP",
-        "target_zone": [
-          101.69650264155274,
-          101.800003
-        ],
-        "invalidation": 99.379997
-      },
-      "timestamp": "2026-07-07 19:26:09.354121+00:00",
-      "chart": "charts/forecast_DXY.png"
-    },
-    {
-      "asset": "USDJPY",
-      "bias": "BULLISH",
-      "price": 162.0919952392578,
-      "forecast": {
-        "direction": "UP",
-        "target_zone": [
-          162.72439843588867,
-          162.835999
-        ],
-        "invalidation": 159.886993
-      },
-      "timestamp": "2026-07-07 19:26:08.272914+00:00",
-      "chart": "charts/forecast_USDJPY.png"
-    },
-    {
-      "asset": "GBPUSD",
-      "bias": "BULLISH (weekly) / NEUTRAL (daily)",
-      "price": 1.335505723953247,
-      "forecast": {
-        "direction": "UP",
-        "target_zone": [
-          1.344521058592987,
-          1.346112
-        ],
-        "invalidation": 1.314302
-      },
-      "timestamp": "2026-07-07 19:26:07.305742+00:00",
-      "chart": "charts/forecast_GBPUSD.png"
-    },
-    {
-      "asset": "EURUSD",
-      "bias": "BULLISH (weekly) / BEARISH (daily)",
-      "price": 1.1415525674819946,
-      "forecast": {
-        "direction": "UP",
-        "target_zone": [
-          1.1591453851222993,
-          1.16225
-        ],
-        "invalidation": 1.132541
-      },
-      "timestamp": "2026-07-07 19:26:06.144213+00:00",
-      "chart": "charts/forecast_EURUSD.png"
     }
   ],
   "performance": {
-    "total": 2,
+    "total": 0,
     "wins": 0,
-    "losses": 1,
-    "expired": 1,
+    "losses": 0,
+    "expired": 0,
     "win_rate": 0.0,
-    "total_r": -1.0,
-    "avg_r": -0.5
+    "total_r": 0.0,
+    "avg_r": 0.0
   },
   "open_positions": [],
   "daily_brief": {
     "date": "2026-07-08",
-    "summary": "\u0627\u0644\u0630\u0647\u0628 (XAUUSD) \u064a\u064f\u0638\u0647\u0631 \u0627\u0646\u062d\u064a\u0627\u0632\u064b\u0627 \u0635\u0639\u0648\u062f\u064a\u064b\u0627 \u062e\u0641\u064a\u0641\u064b\u0627 \u0645\u0639 \u062f\u0631\u062c\u0629 +1\u060c \u0645\u0627 \u064a\u0639\u0643\u0633 \u0625\u0642\u0628\u0627\u0644\u064b\u0627 \u0645\u062a\u0632\u0627\u064a\u062f\u064b\u0627 \u0639\u0644\u0649 \u0627\u0644\u0623\u0635\u0648\u0644 \u0627\u0644\u0630\u0647\u0628\u064a\u0629.  \n\u0627\u0644\u0645\u0624\u0634\u0631 COT \u064a\u0628\u0642\u0649 \u0645\u062d\u0627\u064a\u062f\u064b\u0627\u060c \u0645\u0645\u0627 \u064a\u0634\u064a\u0631 \u0625\u0644\u0649 \u0639\u062f\u0645 \u0648\u062c\u0648\u062f \u062a\u062d\u0648\u0644\u0627\u062a \u062d\u0627\u062f\u0629 \u0641\u064a \u0645\u0631\u0627\u0643\u0632 \u0627\u0644\u0645\u062a\u062f\u0627\u0648\u0644\u064a\u0646.  \n\u064a\u0646\u0628\u063a\u064a \u0645\u0631\u0627\u0642\u0628\u0629 XAUUSD \u0639\u0646 \u0643\u062b\u0628\u060c \u0625\u0630 \u0642\u062f \u064a\u0633\u062a\u0645\u0631 \u0641\u064a \u0627\u0644\u0635\u0639\u0648\u062f \u0625\u0630\u0627 \u0627\u0633\u062a\u0645\u0631 \u0627\u0644\u0637\u0644\u0628 \u0641\u064a \u0627\u0644\u0627\u0631\u062a\u0641\u0627\u0639.  \n\u26a0\ufe0f \u0627\u0644\u062e\u0637\u0631 \u0627\u0644\u0623\u0643\u0628\u0631: \u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0627\u0642\u062a\u0635\u0627\u062f\u064a\u0629 \u0627\u0644\u0642\u0627\u062f\u0645\u0629 \u0642\u062f \u062a\u0624\u062b\u0631 \u0639\u0644\u0649 \u0627\u0644\u0630\u0647\u0628.",
+    "summary": "الذهب (XAUUSD) يُظهر انحيازًا صعوديًا خفيفًا مع درجة +1، ما يعكس إقبالًا متزايدًا على الأصول الذهبية.  \nالمؤشر COT يبقى محايدًا، مما يشير إلى عدم وجود تحولات حادة في مراكز المتداولين.  \nينبغي مراقبة XAUUSD عن كثب، إذ قد يستمر في الصعود إذا استمر الطلب في الارتفاع.  \n⚠️ الخطر الأكبر: البيانات الاقتصادية القادمة قد تؤثر على الذهب.",
     "scores": [
       {
         "asset": "XAUUSD",
-        "emoji": "\ud83e\udd47",
+        "emoji": "🥇",
         "score": 1,
-        "signal": "\ud83d\udfe2",
+        "signal": "🟢",
         "confidence": "medium",
-        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
+        "confidence_ar": "متوسطة",
         "bias": "BULLISH",
         "price": 4064.34683,
         "cot_signal": "NEUTRAL"
@@ -214,8 +54,8 @@
     "actions": [
       {
         "asset": "XAUUSD",
-        "direction_ar": "\u0635\u0639\u0648\u062f",
-        "action_ar": "\u0645\u062a\u0627\u0628\u0639\u0629 \u0627\u0644\u062c\u0644\u0633\u0629 \u0627\u0644\u0642\u0627\u062f\u0645\u0629 (London/NY killzone)"
+        "direction_ar": "صعود",
+        "action_ar": "متابعة الجلسة القادمة (London/NY killzone)"
       }
     ]
   },
@@ -237,38 +77,6 @@
     {
       "date": "2026-07-07",
       "data": {
-        "EURUSD": {
-          "net": 1099,
-          "change": -29059,
-          "cot_index": 5,
-          "signal": "BULLISH",
-          "date": "2026-06-30",
-          "source": "CFTC (official)"
-        },
-        "GBPUSD": {
-          "net": -102147,
-          "change": 3572,
-          "cot_index": 4,
-          "signal": "BULLISH",
-          "date": "2026-06-30",
-          "source": "CFTC (official)"
-        },
-        "USDJPY": {
-          "net": -155092,
-          "change": -8988,
-          "cot_index": 0,
-          "signal": "BULLISH",
-          "date": "2026-06-30",
-          "source": "CFTC (official)"
-        },
-        "DXY": {
-          "net": 34571,
-          "change": -2290,
-          "cot_index": 84,
-          "signal": "BEARISH",
-          "date": "2022-02-01",
-          "source": "CFTC (official)"
-        },
         "XAUUSD": {
           "net": 194019,
           "change": 12680,
@@ -276,25 +84,7 @@
           "signal": "NEUTRAL",
           "date": "2026-06-30",
           "source": "CFTC (official)"
-        },
-        "SPX500": {
-          "net": -37592,
-          "change": -2144,
-          "cot_index": 99,
-          "signal": "BEARISH",
-          "date": "2026-06-30",
-          "source": "CFTC (official)"
-        },
-        "US100": {
-          "net": -7604,
-          "change": 1540,
-          "cot_index": 13,
-          "signal": "BULLISH",
-          "date": "2026-06-30",
-          "source": "CFTC (official)"
-        },
-        "BTCUSD": null,
-        "ETHUSD": null
+        }
       }
     },
     {
