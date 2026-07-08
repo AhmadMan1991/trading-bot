@@ -392,6 +392,46 @@ def format_tracer_update(pos: dict, progress_pct: float, current_price: float) -
     )
 
 
+def format_gold_signal(sig: dict) -> str:
+    """Formatter for gold_engine.py's scalp/swing signals. Uses the same
+    signal taxonomy (SNIPER etc.) as before, with Sniper getting the same
+    louder treatment it's had throughout this project."""
+    from gold_engine import SIGNAL_TAXONOMY
+    dec = 2
+    label = sig.get("signal_label", "NO_SIGNAL")
+    emoji, name, desc = SIGNAL_TAXONOMY.get(label, ("📊", label, ""))
+    is_sniper = label == "SNIPER"
+    direction = sig.get("direction", "?")
+    arrow = "🟢" if direction == "LONG" else "🔴"
+    conf = sig.get("confidence", 0)
+    rr = sig.get("risk_reward", 0)
+    layer = sig.get("layer", "gold").replace("gold_", "").upper()
+    session = sig.get("session", "")
+    factors = "\n".join(f"  • {f}" for f in sig.get("factors", [])[:6])
+
+    header = f"🎯🎯🎯 <b>SNIPER SETUP</b> 🎯🎯🎯" if is_sniper else f"{emoji} <b>{name}</b>"
+    lines = [
+        header,
+        f"<i>{desc}</i>" if desc else "",
+        "━━━━━━━━━━━━━━━━━━━━━",
+        f"{arrow} <b>GOLD {direction}</b> — {layer}  · conf {conf:.0%}  · {session}",
+        f"Entry:  <code>{sig.get('entry', 0):.{dec}f}</code>",
+        f"Stop:   <code>{sig.get('stop_loss', 0):.{dec}f}</code>",
+        f"TP1:    <code>{sig.get('target_1', 0):.{dec}f}</code>  (1:{rr:.1f})",
+        f"TP2:    <code>{sig.get('target_2', 0):.{dec}f}</code>",
+        "━━━━━━━━━━━━━━━━━━━━━",
+        factors,
+        "",
+        f"<i>{sig.get('reasoning', '')[:300]}</i>",
+    ]
+    if is_sniper:
+        lines.append("\n🎯 <b>Extra focus:</b> highest-conviction confluence this "
+                      "engine detects — session sweep + structure + COT all aligned.")
+    if DASHBOARD_URL:
+        lines.append(f'\n🔗 <a href="{DASHBOARD_URL}/">Full dashboard</a>')
+    return "\n".join(l for l in lines if l is not None)
+
+
 def format_forecast_new(fc: dict) -> str:
     asset = fc["asset"]
     bias  = fc.get("bias", "N/A")

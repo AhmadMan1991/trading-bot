@@ -3,7 +3,7 @@ name: Tracer (Live Position Updates)
 on:
   schedule:
     # Every 15 minutes during session hours — offset :05/:20/:35/:50 so it
-    # doesn't collide with scalp (:01/16/31/46) or council (:35/:50).
+    # doesn't collide with pipeline.yml's :00/:30 gold-chain runs.
     - cron: '5,20,35,50 7-20 * * 1-5'
   workflow_dispatch:
 

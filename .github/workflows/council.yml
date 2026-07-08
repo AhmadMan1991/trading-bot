@@ -1,56 +1,21 @@
-name: Council (7-Agent) (manual — standalone step test)
+name: "[DEPRECATED] Council (7-Agent)"
 
-# Superseded by pipeline.yml (see scalp.yml for the full note). No schedule
-# here anymore — use "Run workflow" in the Actions tab to test in isolation.
+# council.py was removed entirely in the gold-only rebuild, by design: its
+# multi-agent voting/veto model was diagnosed as a cause of the debate-gated
+# NO_TRADE deadlock. gold_engine.py's additive confluence scoring has no
+# direct replacement job — it's just part of gold_scalp/gold_swing in
+# pipeline.yml. Manual-only no-op, kept only so the Actions tab explains why
+# the old council job disappeared. Delete this file yourself whenever
+# convenient.
 on:
   workflow_dispatch:
-    inputs:
-      mode:
-        description: 'Council mode: scalp or swing'
-        required: false
-        default: 'scalp'
-
-permissions:
-  contents: write
 
 jobs:
-  council:
+  deprecated:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Determine mode from input
-        id: pick_mode
-        run: echo "mode=${{ github.event.inputs.mode || 'scalp' }}" >> "$GITHUB_OUTPUT"
-
-      - name: Run council layer
-        env:
-          TELEGRAM_TOKEN:    ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID:  ${{ secrets.TELEGRAM_CHAT_ID }}
-          TWELVEDATA_KEY:    ${{ secrets.TWELVEDATA_KEY }}
-          OLLAMA_API_KEY:    ${{ secrets.OLLAMA_API_KEY }}
-        run: python main.py --layer council --council-mode ${{ steps.pick_mode.outputs.mode }}
-
-      - name: Commit dashboard + state
+      - name: Explain deprecation
         run: |
-          git config user.name  "trading-bot"
-          git config user.email "bot@users.noreply.github.com"
-          git add data/ docs/ || true
-          if git diff --staged --quiet; then
-            echo "nothing to commit"
-          else
-            git commit -m "chore: update dashboard + state [skip ci]"
-            for i in 1 2 3; do
-              git pull --rebase --autostash origin main && git push && break
-              echo "push attempt $i failed, retrying..."
-              sleep $((RANDOM % 10 + 5))
-            done
-          fi
+          echo "council.yml is deprecated. council.py's multi-agent voting"
+          echo "was replaced by gold_engine.py's additive confluence scoring"
+          echo "(no separate council step — see pipeline.yml)."

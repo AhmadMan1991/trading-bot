@@ -143,12 +143,12 @@ def performance_summary() -> dict:
     }
 
 
-def run_performance_check() -> None:
+def run_performance_check() -> list[dict]:
     print("  📊 Resolving open signals...")
     resolved = resolve_open_signals()
     if not resolved:
         print("  ✅ No signals resolved (all still open or none logged)")
-        return
+        return []
 
     for r in resolved:
         icon = "✅" if r.get("outcome") in ("TP1","TP2") else "❌" if r.get("outcome")=="STOPPED" else "⏱"
@@ -169,3 +169,4 @@ def run_performance_check() -> None:
         text += f"{icon} {r['asset']} {r.get('direction','?')} {r['outcome']} {r.get('outcome_r',0):+.1f}R\n"
     telegram.send_text(text)
     print(f"  📨 Summary sent to Telegram")
+    return resolved

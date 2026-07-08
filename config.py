@@ -1,4 +1,11 @@
-"""Central configuration — unified across all layers (scalp/swing/council/forecast)."""
+"""Central configuration — gold-only (XAUUSD) ICT/SMC engine.
+
+Rebuilt from a 9-asset, 5-competing-engine system (scalp_engine + swing_engine
++ council + forecast_engine + btc_deep_pipeline, each with their own scoring
+method) down to ONE deterministic engine (gold_engine.py) focused entirely on
+XAUUSD, because running five different methods in parallel on nine assets was
+producing exactly the kind of cross-engine disagreement (and debate-gated
+NO_TRADE deadlock) that made signals rare and inconsistent."""
 
 import os
 
@@ -35,9 +42,6 @@ if _missing:
 # ── Account & Risk ────────────────────────────────────────────────────────────
 ACCOUNT_SIZE  = float(os.environ.get("ACCOUNT_SIZE") or 1000)
 RISK_PCT      = 0.01
-ATR_SL_MULT   = 1.5
-ATR_TP1_MULT  = 2.5
-ATR_TP2_MULT  = 4.0
 
 # ── Indicators ────────────────────────────────────────────────────────────────
 EMA_FAST = 20; EMA_MID = 50; EMA_SLOW = 200
@@ -49,19 +53,6 @@ COT_EXTREME_LONG  = 75
 COT_EXTREME_SHORT = 25
 COT_LOOKBACK      = 25
 
-# ── Signal thresholds ─────────────────────────────────────────────────────────
-SIGNAL_MIN_SCORE       = 6
-SCALP_MIN_SCORE        = 7
-SCALP_COOLDOWN_HOURS   = 4
-NEWS_BUFFER_MIN        = 45
-ML_CONF_BAND           = 0.60
-COUNCIL_MIN_AGREE      = 4
-COUNCIL_COOLDOWN_H     = 3
-COUNCIL_SCALP_MIN_CONF = 0.65
-COUNCIL_SWING_MIN_CONF = 0.68
-COUNCIL_SCALP_MIN_RR   = 1.2
-COUNCIL_SWING_MIN_RR   = 1.8
-
 # ── News agent (red-folder USD pre/post alerts) ───────────────────────────────
 NEWS_PRE_ALERT_MIN    = 15   # send the "coming up" alert this many minutes before release
 NEWS_PRE_ALERT_WINDOW = 6    # tolerance window (minutes) around that mark, matched to the 5-min poll cadence
@@ -70,97 +61,46 @@ NEWS_WATCH_CURRENCIES = ["USD"]   # extend later, e.g. ["USD", "EUR"]
 # ── Tracer / live position updater ────────────────────────────────────────────
 TRACER_MILESTONES = [0.5, 0.75, 1.0]   # fraction of the way to TP1/SL that triggers a Telegram nudge
 
-CORRELATION_GROUPS = [
-    {"EURUSD", "GBPUSD"},
-    {"SPX500", "US100"},
-    {"BTCUSD", "ETHUSD"},
-]
-
 # ── Markets ───────────────────────────────────────────────────────────────────
+# Gold only. dollar_bias() in data_feeds.py still reads a raw EUR/USD quote
+# for USD-direction context — that's a background input, not a second traded
+# market, so it doesn't need its own MARKETS entry.
 MARKETS = {
-    "EURUSD": {
-        "td": "EUR/USD", "yf": "EURUSD=X", "iw_path": "euro-fx",
-        "cot_name": "EURO FX - CHICAGO MERCANTILE EXCHANGE",
-        "asset_class": "forex", "pip_digits": 5, "pip_usd": 0.10,
-        "sessions_utc": [(7, 17)], "rsi_os": 35, "rsi_ob": 65,
-        "min_score": 6, "atr_sl": 1.0, "atr_tp1": 1.2, "atr_tp2": 2.0,
-        "long_bias": 0, "decimals": 5, "emoji": "🇪🇺",
-        "correlates": ["GBPUSD", "DXY"],
-    },
-    "GBPUSD": {
-        "td": "GBP/USD", "yf": "GBPUSD=X", "iw_path": "british-pound",
-        "cot_name": "BRITISH POUND - CHICAGO MERCANTILE EXCHANGE",
-        "asset_class": "forex", "pip_digits": 5, "pip_usd": 0.10,
-        "sessions_utc": [(7, 16)], "rsi_os": 30, "rsi_ob": 70,
-        "min_score": 7, "atr_sl": 1.3, "atr_tp1": 1.5, "atr_tp2": 2.4,
-        "long_bias": 0, "decimals": 5, "emoji": "🇬🇧",
-        "correlates": ["EURUSD"],
-    },
-    "USDJPY": {
-        "td": "USD/JPY", "yf": "JPY=X", "iw_path": "japanese-yen",
-        "cot_name": "JAPANESE YEN - CHICAGO MERCANTILE EXCHANGE",
-        "asset_class": "forex", "pip_digits": 3, "pip_usd": 0.10,
-        "sessions_utc": [(0, 9), (12, 21)], "rsi_os": 30, "rsi_ob": 70,
-        "min_score": 6, "atr_sl": 1.2, "atr_tp1": 1.5, "atr_tp2": 2.5,
-        "long_bias": 0, "decimals": 3, "emoji": "🇯🇵",
-        "correlates": [],
-    },
-    "DXY": {
-        "td": "UUP", "yf": "DX-Y.NYB", "iw_path": "dollar-index",
-        "cot_name": "U.S. DOLLAR INDEX - ICE FUTURES U.S.",
-        "asset_class": "index", "pip_digits": 3, "pip_usd": None,
-        "scalp_skip": True,   # not directly tradeable; used as macro bias only
-        "sessions_utc": [(7, 21)], "rsi_os": 35, "rsi_ob": 65,
-        "min_score": 6, "atr_sl": 1.2, "atr_tp1": 1.5, "atr_tp2": 2.5,
-        "long_bias": 0, "decimals": 3, "emoji": "💵",
-        "correlates": ["EURUSD", "GBPUSD"],
-    },
     "XAUUSD": {
         "td": "XAU/USD", "yf": "GC=F", "iw_path": "gold",
         "cot_name": "GOLD - COMMODITY EXCHANGE INC.",
         "asset_class": "commodity", "pip_digits": 2, "pip_usd": None,
         "sessions_utc": [(7, 21)], "rsi_os": 30, "rsi_ob": 70,
-        "min_score": 7, "atr_sl": 1.2, "atr_tp1": 1.5, "atr_tp2": 2.5,
-        "long_bias": 0, "decimals": 2, "emoji": "🥇",
-        "correlates": ["DXY"],
-    },
-    "SPX500": {
-        "td": "SPY", "yf": "^GSPC", "iw_path": "s&p-500",        # SPY proxy for 15m/1h
-        "cot_name": "E-MINI S&P 500 - CHICAGO MERCANTILE EXCHANGE",
-        "asset_class": "index", "pip_digits": 1, "pip_usd": None,
-        "sessions_utc": [(13, 20)], "rsi_os": 40, "rsi_ob": 75,
-        "min_score": 6, "atr_sl": 1.0, "atr_tp1": 1.3, "atr_tp2": 2.0,
-        "long_bias": 1, "decimals": 1, "emoji": "📈",
-        "correlates": ["US100"],
-    },
-    "US100": {
-        "td": "QQQ", "yf": "^NDX", "iw_path": "nasdaq-e-mini",   # QQQ proxy
-        "cot_name": "NASDAQ MINI - CHICAGO MERCANTILE EXCHANGE",
-        "asset_class": "index", "pip_digits": 1, "pip_usd": None,
-        "sessions_utc": [(13, 20)], "rsi_os": 40, "rsi_ob": 75,
-        "min_score": 6, "atr_sl": 1.1, "atr_tp1": 1.4, "atr_tp2": 2.2,
-        "long_bias": 1, "decimals": 1, "emoji": "💻",
-        "correlates": ["SPX500"],
-    },
-    "BTCUSD": {
-        "td": "BTC/USD", "yf": "BTC-USD", "iw_path": "bitcoin",
-        "cot_name": None,
-        "asset_class": "crypto", "pip_digits": 2, "pip_usd": None,
-        "sessions_utc": [(0, 24)], "rsi_os": 30, "rsi_ob": 70,
-        "min_score": 7, "atr_sl": 1.3, "atr_tp1": 1.6, "atr_tp2": 2.6,
-        "long_bias": 0, "decimals": 2, "emoji": "₿",
-        "correlates": ["ETHUSD"],
-    },
-    "ETHUSD": {
-        "td": "ETH/USD", "yf": "ETH-USD", "iw_path": "ethereum",
-        "cot_name": "ETHER - CHICAGO MERCANTILE EXCHANGE",
-        "asset_class": "crypto", "pip_digits": 2, "pip_usd": None,
-        "sessions_utc": [(0, 24)], "rsi_os": 30, "rsi_ob": 70,
-        "min_score": 7, "atr_sl": 1.3, "atr_tp1": 1.6, "atr_tp2": 2.6,
-        "long_bias": 0, "decimals": 2, "emoji": "💠",
-        "correlates": ["BTCUSD"],
+        "decimals": 2, "emoji": "🥇",
     },
 }
 
-# Council operates on a subset (BTC + XAU + EUR — deep COT + vol)
-COUNCIL_ASSETS = ["BTCUSD", "XAUUSD", "EURUSD"]
+# ── Gold engine — ICT/SMC concepts ────────────────────────────────────────────
+# One deterministic engine, not a multi-agent debate: confluence of these
+# factors produces a confidence score directly, so there's no "agents
+# disagree -> NO_TRADE" deadlock possible.
+GOLD_SESSIONS_UTC = [
+    (7, 10, "London Killzone"),
+    (12, 16, "NY Killzone + Overlap"),
+]   # highest-liquidity windows — outside these, the scalp scan doesn't run.
+    # Adjust if you trade a different session focus.
+
+GOLD_JUDAS_WINDOW_MIN   = 60     # first N minutes of a session — actively watched
+                                  # for a sweep-then-reverse (the "Judas Swing"),
+                                  # not filtered out, since that reversal IS the setup
+GOLD_IMPULSE_ATR_MULT   = 1.5    # a move counts as "impulsive" (order-block-forming)
+                                  # if its range exceeds this many x current ATR
+GOLD_SWEEP_LOOKBACK     = 20     # bars searched for the swing high/low being swept
+GOLD_STRUCTURE_LOOKBACK = 40     # bars used for H4/H1 higher-high/lower-low structure
+
+GOLD_ATR_STOP_BUFFER    = 0.5    # stop = swept structural level +/- this x ATR
+GOLD_TP1_RR             = 2.0    # target 1, expressed as risk:reward multiple
+GOLD_TP2_RR             = 3.0    # target 2
+
+GOLD_MIN_CONFIDENCE     = 0.55   # minimum confluence score to fire a signal
+GOLD_SCALP_COOLDOWN_MIN = 30     # don't re-fire a scalp signal within this many minutes
+GOLD_SWING_COOLDOWN_H   = 6      # don't re-fire a swing signal within this many hours
+
+GOLD_DAILY_LOSS_LIMIT_PCT = 0.03   # stop trading for the rest of the day after
+                                    # losing this % of account equity
+GOLD_MAX_TRADES_PER_DAY   = 3      # hard cap on fired signals/day regardless of setups

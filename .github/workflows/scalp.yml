@@ -1,51 +1,21 @@
-name: Scalp Scanner (manual — standalone step test)
+name: "[DEPRECATED] Scalp Scanner"
 
-# Superseded by pipeline.yml, which runs this step as part of the full
-# sequential chain (COT -> Macro -> Forecast -> Swing -> Scalp -> Council ->
-# Deep Pipeline -> Performance) every 2h, 07-19 UTC weekdays. No schedule
-# here anymore — running this on its own cron too would double-fire scalp
-# signals alongside pipeline.yml. Use "Run workflow" in the Actions tab to
-# test this step in isolation.
+# scalp_engine.py was deprecated in the gold-only rebuild — its scalp scan
+# logic was replaced by gold_engine.run_gold_scalp(), which now runs as part
+# of pipeline.yml's chain. This workflow is a manual-only no-op kept so the
+# Actions tab still shows why the old scalp job disappeared. Delete this
+# file yourself whenever convenient — the sandbox that authored these
+# changes can't delete files in your local project folder.
 on:
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 jobs:
-  scalp:
+  deprecated:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Run scalp layer
-        env:
-          TELEGRAM_TOKEN:    ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID:  ${{ secrets.TELEGRAM_CHAT_ID }}
-          TWELVEDATA_KEY:    ${{ secrets.TWELVEDATA_KEY }}
-          OLLAMA_API_KEY:    ${{ secrets.OLLAMA_API_KEY }}
-        run: python main.py --layer scalp
-
-      - name: Commit dashboard + state
+      - name: Explain deprecation
         run: |
-          git config user.name  "trading-bot"
-          git config user.email "bot@users.noreply.github.com"
-          git add data/ docs/ || true
-          if git diff --staged --quiet; then
-            echo "nothing to commit"
-          else
-            git commit -m "chore: update dashboard + state [skip ci]"
-            for i in 1 2 3; do
-              git pull --rebase --autostash origin main && git push && break
-              echo "push attempt $i failed, retrying..."
-              sleep $((RANDOM % 10 + 5))
-            done
-          fi
+          echo "scalp.yml is deprecated. scalp_engine.py was replaced by"
+          echo "gold_engine.run_gold_scalp(), which runs inside pipeline.yml."
+          echo "Use 'Run workflow' on the Gold Pipeline workflow instead, or"
+          echo "run 'python main.py --layer gold_scalp' locally."

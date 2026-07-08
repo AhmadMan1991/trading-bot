@@ -1,15 +1,19 @@
 """
-Daily brief — Arabic-language executive summary across all configured markets.
+Daily brief — Arabic-language executive summary, gold-only.
 
 Native equivalent of a format you already use in a separate bot: an executive
 summary paragraph, a per-asset scored table (-4..+4, mapped to a signal
-emoji + confidence level), a signal legend, and a ranked action list.
+emoji + confidence level), a signal legend, and a ranked action list. Since
+the gold-only rebuild, "per-asset" is just XAUUSD — the table still renders
+as a table (of one row) so the Telegram format and dashboard.json shape
+don't need to change.
 
-Unlike that separate bot, this one is built entirely from data this merged
-system already computes — it doesn't call any new external data source:
+Rebuilt from forecast_engine.compute_forecast() (deprecated along with the
+rest of the old 9-asset architecture) onto gold_engine's own structure
+reads, so this doesn't depend on a deprecated module:
 
-  score = weekly_bias(+-2) + daily_bias(+-1) + COT signal(+-1)
-          + latest fired scalp/swing/council signal in the last 24h(+-1)
+  score = H4 structure bias(+-2) + H1 structure bias(+-1) + COT signal(+-1)
+          + latest fired gold_scalp/gold_swing signal in the last 24h(+-1)
 
 That combination can range roughly -5..+5; displayed clipped to -4..+4 to
 match the template. The executive-summary paragraph is LLM-written (Ollama)
@@ -17,7 +21,6 @@ from the computed table so the narrative actually reflects the numbers,
 rather than being freeform/unfounded commentary.
 """
 
-import json
 import time
 from pathlib import Path
 
@@ -25,7 +28,9 @@ import requests
 import pandas as pd
 
 from config import MARKETS, OLLAMA_URL, OLLAMA_MODEL, OLLAMA_KEY
-from forecast_engine import compute_forecast
+from gold_engine import structure_bias
+from data_feeds import fetch_intraday, fetch_all_cot
+from indicators import add_base
 import dashboard_export as dash
 import telegram
 
@@ -72,28 +77,36 @@ def _recent_signal_direction(asset: str, dashboard: dict, hours: int = 24) -> in
 
 
 def compute_asset_scores(assets: list | None = None) -> list[dict]:
-    assets = assets or list(MARKETS.keys())
+    assets = assets or list(MARKETS.keys())   # gold-only config -> just XAUUSD
     dashboard = dash._load()
+    cot_map = fetch_all_cot()
     rows = []
 
     for asset in assets:
         cfg = MARKETS[asset]
         try:
-            fc = compute_forecast(asset)
+            df_h4 = fetch_intraday(asset, "4h", 150)
+            df_h1 = fetch_intraday(asset, "1h", 150)
+            if df_h4 is None or len(df_h4) < 60 or df_h1 is None or len(df_h1) < 60:
+                print(f"  ⚠ {asset}: insufficient data for daily brief")
+                continue
+            h4_bias = structure_bias(add_base(df_h4))
+            h1_bias = structure_bias(add_base(df_h1))
+            price = float(df_h1["close"].iloc[-1])
         except Exception as e:
-            print(f"  ⚠ {asset} forecast failed: {e}")
+            print(f"  ⚠ {asset} bias failed: {e}")
             continue
 
-        weekly_pts = _weekly_daily_points(fc.get("weekly_bias")) * 2
-        daily_pts  = _weekly_daily_points(fc.get("daily_bias"))
-        cot        = fc.get("cot_iw") or {}
+        h4_pts     = _weekly_daily_points(h4_bias.get("bias")) * 2
+        h1_pts     = _weekly_daily_points(h1_bias.get("bias"))
+        cot        = cot_map.get(asset) or {}
         cot_pts    = _BIAS_PTS.get(cot.get("signal", "NEUTRAL"), 0)
         recent_pts = _recent_signal_direction(asset, dashboard)
 
-        score = weekly_pts + daily_pts + cot_pts + recent_pts
+        score = h4_pts + h1_pts + cot_pts + recent_pts
         score = max(-4, min(4, score))
 
-        n_components = sum(1 for p in (weekly_pts, daily_pts, cot_pts) if p != 0)
+        n_components = sum(1 for p in (h4_pts, h1_pts, cot_pts) if p != 0)
         confidence = "high" if n_components >= 2 and abs(score) >= 2 else \
                      "medium" if n_components >= 1 else "low"
 
@@ -101,9 +114,8 @@ def compute_asset_scores(assets: list | None = None) -> list[dict]:
             "asset": asset, "emoji": cfg.get("emoji", ""),
             "score": score, "signal": _signal_emoji(score),
             "confidence": confidence, "confidence_ar": _CONF_AR[confidence],
-            "bias": fc.get("bias", "NEUTRAL"), "price": fc.get("price"),
+            "bias": h4_bias.get("bias", "NEUTRAL"), "price": price,
             "cot_signal": cot.get("signal", "NEUTRAL"),
-            "scalp_skip": bool(cfg.get("scalp_skip")),
         })
 
     rows.sort(key=lambda r: abs(r["score"]), reverse=True)
@@ -150,10 +162,9 @@ def generate_executive_summary(scores: list[dict]) -> str:
 
 
 _ACTION_AR = {
-    "confirm_only": "مؤشر تأكيد — لا يُتداول مباشرة",
     "long_watch":   "مراقبة مناطق الدعم للدخول LONG",
     "short_watch":  "فرصة SHORT عند المقاومة",
-    "follow_session": "متابعة الجلسة القادمة",
+    "follow_session": "متابعة الجلسة القادمة (London/NY killzone)",
     "neutral":      "لا توجد فرصة واضحة حاليًا",
 }
 
@@ -161,9 +172,7 @@ _ACTION_AR = {
 def build_action_list(scores: list[dict], top_n: int = 5) -> list[dict]:
     actions = []
     for r in scores[:top_n]:
-        if r["scalp_skip"]:
-            action = _ACTION_AR["confirm_only"]
-        elif r["score"] >= 2:
+        if r["score"] >= 2:
             action = _ACTION_AR["long_watch"]
         elif r["score"] <= -2:
             action = _ACTION_AR["short_watch"]

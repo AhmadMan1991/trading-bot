@@ -1,10 +1,9 @@
 name: Performance Tracker (manual — standalone step test)
 
-# Superseded by pipeline.yml, which now runs this as step 8 (last) of every
-# 2h chain run, 07-19 UTC weekdays — a shorter, more frequent audit cadence
-# than the old once-daily 22:00 UTC run, so open TP1/TP2/STOP resolution
-# gets checked more often, not less. No schedule here anymore — use
-# "Run workflow" in the Actions tab to test in isolation.
+# Superseded by pipeline.yml, which now runs this as the last step of every
+# 30min gold-chain run, 07-16 UTC weekdays — resolved trades feed straight
+# back into gold_engine's daily-loss circuit breaker. No schedule here
+# anymore — use "Run workflow" in the Actions tab to test in isolation.
 on:
   workflow_dispatch:
 

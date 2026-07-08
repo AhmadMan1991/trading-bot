@@ -1,46 +1,20 @@
-name: Forecast & COT (manual — standalone step test)
+name: "[DEPRECATED] Forecast & COT"
 
-# Superseded by pipeline.yml (see scalp.yml for the full note). No schedule
-# here anymore — use "Run workflow" in the Actions tab to test in isolation.
+# forecast_engine.py was deprecated in the gold-only rebuild — replaced by
+# gold_engine.run_gold_bias(), which now runs as part of pipeline.yml's
+# chain. Manual-only no-op, kept only so the Actions tab explains why the
+# old forecast job disappeared. Delete this file yourself whenever
+# convenient.
 on:
   workflow_dispatch:
 
-permissions:
-  contents: write
-
 jobs:
-  forecast:
+  deprecated:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Run forecast layer
-        env:
-          TELEGRAM_TOKEN:    ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID:  ${{ secrets.TELEGRAM_CHAT_ID }}
-          TWELVEDATA_KEY:    ${{ secrets.TWELVEDATA_KEY }}
-          OLLAMA_API_KEY:    ${{ secrets.OLLAMA_API_KEY }}
-        run: python main.py --layer forecast
-
-      - name: Commit dashboard + state
+      - name: Explain deprecation
         run: |
-          git config user.name  "trading-bot"
-          git config user.email "bot@users.noreply.github.com"
-          git add data/ docs/ || true
-          if git diff --staged --quiet; then
-            echo "nothing to commit"
-          else
-            git commit -m "chore: update dashboard + state [skip ci]"
-            for i in 1 2 3; do
-              git pull --rebase --autostash origin main && git push && break
-              echo "push attempt $i failed, retrying..."
-              sleep $((RANDOM % 10 + 5))
-            done
-          fi
+          echo "forecast.yml is deprecated. forecast_engine.py was replaced"
+          echo "by gold_engine.run_gold_bias(), which runs inside pipeline.yml."
+          echo "Use 'Run workflow' on the Gold Pipeline workflow instead, or"
+          echo "run 'python main.py --layer gold_bias' locally."

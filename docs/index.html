@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trading Bot — Live Dashboard</title>
+<title>Gold Bot — Live Dashboard</title>
 <style>
   :root{
     --bg:#0d1117; --panel:#161b22; --panel2:#1c2128; --border:#21262d;
@@ -111,8 +111,8 @@
 
 <header>
   <div>
-    <h1>📊 Trading Bot — Live Dashboard</h1>
-    <div class="sub">Signals, forecasts, and performance — for monitoring only, no auto-execution</div>
+    <h1>🥇 Gold Bot — Live Dashboard</h1>
+    <div class="sub">XAUUSD ICT/SMC engine — scalp + swing signals, COT, macro, and performance. Monitoring only, no auto-execution.</div>
   </div>
   <div>
     <span class="updated" id="updated">loading…</span>
@@ -146,19 +146,16 @@
   </section>
 
   <section>
-    <h2>Forecast — Setup / Bias per Asset</h2>
-    <div class="cards" id="forecasts"><div class="empty">No forecast data yet — runs daily via the Forecast workflow.</div></div>
+    <h2>🥇 Gold Bias — H4 Structure</h2>
+    <div class="cards" id="forecasts"><div class="empty">No bias data yet — runs every pipeline cycle.</div></div>
   </section>
 
   <section>
     <h2>Latest Trade Setups</h2>
     <div class="tabs" id="signalTabs">
       <div class="tab active" data-layer="all">All</div>
-      <div class="tab" data-layer="scalp">Scalp</div>
-      <div class="tab" data-layer="swing">Swing</div>
-      <div class="tab" data-layer="council_scalp">Council (scalp)</div>
-      <div class="tab" data-layer="council_swing">Council (swing)</div>
-      <div class="tab" data-layer="deep_pipeline">Deep Pipeline</div>
+      <div class="tab" data-layer="gold_scalp">Scalp</div>
+      <div class="tab" data-layer="gold_swing">Swing</div>
       <div class="tab" data-layer="sniper">🎯 Sniper only</div>
     </div>
     <div class="cards" id="signals"><div class="empty">No signals fired yet.</div></div>

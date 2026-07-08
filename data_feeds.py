@@ -21,9 +21,11 @@ from config import TWELVEDATA_KEY, MARKETS, COT_LOOKBACK, COT_EXTREME_LONG, COT_
 
 _TD_BASE = "https://api.twelvedata.com/time_series"
 
-def fetch_td(asset: str, interval: str, bars: int = 300) -> pd.DataFrame | None:
-    """Fetch OHLCV from TwelveData.  interval: '15min' | '1h' | '4h' | '1day'"""
-    symbol = MARKETS[asset]["td"]
+def _fetch_td_raw(symbol: str, interval: str, bars: int = 300, label: str = "") -> pd.DataFrame | None:
+    """Fetch OHLCV from TwelveData by raw symbol string — used by fetch_td()
+    (which looks up the symbol via MARKETS) and by dollar_bias() (which needs
+    a USD-proxy pair for macro context even when that pair isn't itself a
+    configured/traded market)."""
     try:
         r = requests.get(_TD_BASE, params={
             "symbol": symbol, "interval": interval,
@@ -32,7 +34,7 @@ def fetch_td(asset: str, interval: str, bars: int = 300) -> pd.DataFrame | None:
         r.raise_for_status()
         d = r.json()
         if d.get("status") == "error":
-            print(f"  [TD] {asset} {interval}: {d.get('message')}")
+            print(f"  [TD] {label or symbol} {interval}: {d.get('message')}")
             return None
         rows = [{
             "timestamp": pd.Timestamp(v["datetime"], tz="UTC"),
@@ -49,8 +51,13 @@ def fetch_td(asset: str, interval: str, bars: int = 300) -> pd.DataFrame | None:
                   .set_index("timestamp")
                   .sort_index())
     except Exception as e:
-        print(f"  [TD] {asset} {interval} failed: {e}")
+        print(f"  [TD] {label or symbol} {interval} failed: {e}")
         return None
+
+
+def fetch_td(asset: str, interval: str, bars: int = 300) -> pd.DataFrame | None:
+    """Fetch OHLCV from TwelveData.  interval: '15min' | '1h' | '4h' | '1day'"""
+    return _fetch_td_raw(MARKETS[asset]["td"], interval, bars, label=asset)
 
 
 # ── yfinance (daily/weekly) ───────────────────────────────────────────────────
@@ -369,10 +376,13 @@ def news_blocked(asset: str, buffer_min: int = 45) -> str:
 
 
 def dollar_bias() -> str:
+    """USD directional read via EUR/USD (the most liquid DXY-proxy pair) —
+    fetched by raw symbol, not through MARKETS, so this keeps working even
+    in a gold-only config where EURUSD isn't itself a configured market."""
     global _dxy_cache
     if _dxy_cache:
         return _dxy_cache
-    df = fetch_td("EURUSD", "1h", 60)
+    df = _fetch_td_raw("EUR/USD", "1h", 60, label="EURUSD(dxy-proxy)")
     if df is None or len(df) < 25:
         _dxy_cache = "USD_NEUTRAL"
         return _dxy_cache
