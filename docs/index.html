@@ -6,105 +6,160 @@
 <title>Gold Bot — Live Dashboard</title>
 <style>
   :root{
-    --bg:#0d1117; --panel:#161b22; --panel2:#1c2128; --border:#21262d;
-    --text:#e6edf3; --dim:#8b949e; --green:#26a641; --red:#f85149;
-    --yellow:#ffd700; --blue:#58a6ff;
+    --bg:#0a0c11; --panel:#12151d; --panel2:#181c27; --border:#242a3a;
+    --text:#edf1f7; --dim:#8b93a7; --dim2:#5f6779;
+    --green:#22c55e; --green-dim:rgba(34,197,94,.15);
+    --red:#ef4444;   --red-dim:rgba(239,68,68,.15);
+    --gold:#e8b94d;  --gold-dim:rgba(232,185,77,.15); --gold-bright:#f4cd6e;
+    --blue:#5b9bd5;
+    --radius:14px; --radius-sm:9px;
+    --shadow:0 4px 24px rgba(0,0,0,.35);
   }
   *{box-sizing:border-box;}
   body{
-    margin:0; background:var(--bg); color:var(--text);
+    margin:0; background:
+      radial-gradient(circle at 15% 0%, rgba(232,185,77,.06), transparent 45%),
+      radial-gradient(circle at 85% 10%, rgba(91,155,213,.05), transparent 40%),
+      var(--bg);
+    color:var(--text);
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    -webkit-font-smoothing:antialiased;
   }
   header{
-    padding:20px 28px; border-bottom:1px solid var(--border);
-    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    padding:26px 32px; border-bottom:1px solid var(--border);
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;
+    background:linear-gradient(180deg, rgba(232,185,77,.05), transparent);
   }
-  header h1{font-size:20px; margin:0; font-weight:600;}
-  header .sub{color:var(--dim); font-size:13px; margin-top:4px;}
+  header h1{
+    font-size:23px; margin:0; font-weight:800; letter-spacing:-.01em;
+    background:linear-gradient(90deg, var(--gold-bright), #fff6df 60%, var(--gold-bright));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  header .sub{color:var(--dim); font-size:13px; margin-top:6px; max-width:560px; line-height:1.5;}
   .refresh-btn{
     background:var(--panel2); border:1px solid var(--border); color:var(--text);
-    padding:8px 14px; border-radius:6px; cursor:pointer; font-size:13px;
+    padding:9px 16px; border-radius:20px; cursor:pointer; font-size:13px; font-weight:600;
+    transition:all .15s ease; display:inline-flex; align-items:center; gap:6px;
   }
-  .refresh-btn:hover{background:var(--border);}
-  main{padding:24px 28px; max-width:1400px; margin:0 auto;}
+  .refresh-btn:hover{background:var(--gold-dim); border-color:var(--gold); color:var(--gold-bright);}
+  main{padding:28px 32px 60px; max-width:1440px; margin:0 auto;}
+
   .stats-row{
-    display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
-    gap:14px; margin-bottom:28px;
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr));
+    gap:14px; margin-bottom:34px;
   }
   .stat-card{
-    background:var(--panel); border:1px solid var(--border); border-radius:10px;
-    padding:16px; text-align:center;
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+    padding:18px 16px; text-align:center; box-shadow:var(--shadow);
+    border-top:2px solid var(--border);
   }
-  .stat-card .label{color:var(--dim); font-size:12px; text-transform:uppercase; letter-spacing:.04em;}
-  .stat-card .value{font-size:24px; font-weight:700; margin-top:6px;}
+  .stat-card .label{color:var(--dim); font-size:11px; text-transform:uppercase; letter-spacing:.06em; font-weight:600;}
+  .stat-card .value{font-size:26px; font-weight:800; margin-top:8px; letter-spacing:-.01em;}
   .pos{color:var(--green);} .neg{color:var(--red);}
-  section{margin-bottom:36px;}
+
+  section{margin-bottom:40px;}
   section h2{
-    font-size:15px; text-transform:uppercase; letter-spacing:.05em; color:var(--dim);
-    border-bottom:1px solid var(--border); padding-bottom:8px; margin-bottom:16px;
+    font-size:14px; text-transform:uppercase; letter-spacing:.06em; color:var(--dim);
+    border-bottom:1px solid var(--border); padding-bottom:10px; margin-bottom:18px;
+    font-weight:700; display:flex; align-items:center; gap:8px;
   }
-  .tabs{display:flex; gap:8px; margin-bottom:16px;}
+  section h2 .updated-mini{margin-left:auto; font-size:11px; text-transform:none; letter-spacing:0; color:var(--dim2); font-weight:400;}
+
+  .tabs{display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap;}
   .tab{
     background:var(--panel); border:1px solid var(--border); color:var(--dim);
-    padding:6px 14px; border-radius:20px; cursor:pointer; font-size:13px;
+    padding:7px 16px; border-radius:20px; cursor:pointer; font-size:13px; font-weight:600;
+    transition:all .15s ease;
   }
-  .tab.active{background:var(--blue); color:#00121f; font-weight:600; border-color:var(--blue);}
+  .tab:hover{border-color:var(--gold);}
+  .tab.active{background:var(--gold); color:#1a1200; font-weight:700; border-color:var(--gold);}
+
   .cards{display:grid; grid-template-columns:repeat(auto-fill, minmax(360px,1fr)); gap:18px;}
   .card{
-    background:var(--panel); border:1px solid var(--border); border-radius:10px; overflow:hidden;
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+    overflow:hidden; box-shadow:var(--shadow); transition:transform .15s ease, border-color .15s ease;
   }
+  .card:hover{border-color:#333b50;}
   .card.sniper{
-    border:1px solid #d4a017; box-shadow:0 0 0 1px rgba(212,160,23,.35), 0 0 16px rgba(212,160,23,.15);
+    border:1px solid var(--gold); box-shadow:0 0 0 1px rgba(232,185,77,.4), 0 0 22px rgba(232,185,77,.18);
   }
   .card img{width:100%; display:block; background:#000;}
-  .card-body{padding:14px 16px;}
-  .card-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;}
+  .card-body{padding:16px 18px;}
+  .card-top{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;}
   .asset{font-weight:700; font-size:15px;}
-  .badge{
-    padding:3px 10px; border-radius:5px; font-size:12px; font-weight:700;
+  .badge{padding:3px 11px; border-radius:6px; font-size:11px; font-weight:800; letter-spacing:.02em;}
+  .badge.long, .badge.bullish, .badge.up{background:var(--green-dim); color:var(--green);}
+  .badge.short, .badge.bearish, .badge.down{background:var(--red-dim); color:var(--red);}
+  .badge.neutral, .badge.none, .badge.ranging{background:rgba(139,148,158,.16); color:var(--dim);}
+  .badge.unknown{background:rgba(139,148,158,.1); color:var(--dim2);}
+
+  .tf-pill{
+    display:inline-block; padding:2px 10px; border-radius:20px; font-size:11px; font-weight:800;
+    letter-spacing:.03em; border:1px solid var(--gold); color:var(--gold-bright); background:var(--gold-dim);
   }
-  .badge.long, .badge.bullish, .badge.up{background:rgba(38,166,65,.18); color:var(--green);}
-  .badge.short, .badge.bearish, .badge.down{background:rgba(248,81,73,.18); color:var(--red);}
-  .badge.neutral, .badge.none{background:rgba(139,148,158,.18); color:var(--dim);}
+
   .signal-label{
-    display:inline-block; margin-bottom:6px; padding:2px 8px; border-radius:4px;
-    font-size:11px; font-weight:700; letter-spacing:.03em; text-transform:uppercase;
+    display:inline-block; margin-bottom:8px; padding:3px 9px; border-radius:5px;
+    font-size:11px; font-weight:800; letter-spacing:.03em; text-transform:uppercase;
     background:rgba(139,148,158,.14); color:var(--dim);
   }
-  .signal-label.sniper{background:rgba(212,160,23,.22); color:#d4a017;}
+  .signal-label.sniper{background:var(--gold-dim); color:var(--gold-bright);}
+
   .macro-card{
-    background:var(--panel); border:1px solid var(--border); border-radius:10px;
-    padding:16px 18px; font-size:14px; line-height:1.6; white-space:pre-wrap;
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+    padding:18px 20px; font-size:14px; line-height:1.7; white-space:pre-wrap; box-shadow:var(--shadow);
   }
-  .macro-card .macro-meta{color:var(--dim); font-size:12px; margin-bottom:8px;}
-  .levels{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; font-size:12px; margin:10px 0;}
-  .levels div{background:var(--panel2); border-radius:6px; padding:6px; text-align:center;}
-  .levels .k{color:var(--dim); display:block; font-size:10px; text-transform:uppercase;}
-  .meta{color:var(--dim); font-size:12px; display:flex; justify-content:space-between; margin-top:8px;}
+  .macro-card .macro-meta{color:var(--dim); font-size:12px; margin-bottom:10px;}
+
+  .levels{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; font-size:12px; margin:12px 0;}
+  .levels.cols-5{grid-template-columns:repeat(5,1fr);}
+  .levels.cols-6{grid-template-columns:repeat(3,1fr);}
+  .levels div{background:var(--panel2); border-radius:8px; padding:8px 4px; text-align:center;}
+  .levels .k{color:var(--dim); display:block; font-size:9px; text-transform:uppercase; letter-spacing:.04em; margin-bottom:2px;}
+  .levels .v{font-weight:700; font-size:13px;}
+
+  .reasons{font-size:12px; color:var(--dim); line-height:1.7; margin-top:6px;}
+  .meta{color:var(--dim2); font-size:11.5px; display:flex; justify-content:space-between; margin-top:10px;}
+
   table{width:100%; border-collapse:collapse; font-size:13px;}
-  th, td{padding:9px 12px; text-align:left; border-bottom:1px solid var(--border);}
-  th{color:var(--dim); font-weight:600; font-size:11px; text-transform:uppercase;}
-  .cot-summary{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:14px 18px; font-size:14px; margin-bottom:16px;}
+  th, td{padding:10px 12px; text-align:left; border-bottom:1px solid var(--border);}
+  th{color:var(--dim); font-weight:700; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em;}
+  tbody tr:hover{background:var(--panel2);}
+
+  .cot-summary{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:16px 20px; font-size:14px; margin-bottom:18px; box-shadow:var(--shadow);}
   .cot-idx-bar{display:inline-flex; align-items:center; gap:8px; min-width:140px;}
   .cot-idx-track{width:80px; height:8px; border-radius:4px; background:var(--panel2); overflow:hidden; flex-shrink:0;}
   .cot-idx-fill{height:100%; border-radius:4px;}
   .cot-controls{display:flex; align-items:center; gap:10px; margin:20px 0 12px;}
   .cot-controls select{
     background:var(--panel); color:var(--text); border:1px solid var(--border);
-    padding:6px 10px; border-radius:6px; font-size:13px;
+    padding:7px 12px; border-radius:8px; font-size:13px;
   }
-  .empty{color:var(--dim); font-size:13px; padding:20px; text-align:center; background:var(--panel); border-radius:10px; border:1px dashed var(--border);}
+  .empty{color:var(--dim); font-size:13px; padding:24px; text-align:center; background:var(--panel); border-radius:var(--radius); border:1px dashed var(--border);}
   .updated{color:var(--dim); font-size:12px;}
-  .daily-brief{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:20px 24px; font-size:14px; line-height:1.9;}
+  .daily-brief{background:var(--panel); border:1px solid var(--border); border-radius:var(--radius); padding:22px 26px; font-size:14px; line-height:1.9; box-shadow:var(--shadow);}
   .daily-brief .db-summary{margin-bottom:16px;}
   .daily-brief .db-date{color:var(--dim); font-size:12px; margin-bottom:10px;}
-  .daily-brief .db-row{display:flex; align-items:center; gap:10px; padding:6px 0; border-bottom:1px solid var(--border);}
+  .daily-brief .db-row{display:flex; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid var(--border);}
   .daily-brief .db-row:last-child{border-bottom:none;}
   .daily-brief .db-asset{font-weight:700; min-width:90px;}
   .daily-brief .db-score{min-width:40px; text-align:center;}
   .daily-brief .db-conf{color:var(--dim); font-size:12px;}
   .daily-brief h3{font-size:13px; color:var(--dim); text-transform:none; margin:18px 0 8px;}
   .daily-brief .db-action{padding:4px 0;}
+
+  .scenario-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(420px,1fr)); gap:20px;}
+  .scenario-card{
+    background:var(--panel); border:1px solid var(--border); border-radius:var(--radius);
+    overflow:hidden; box-shadow:var(--shadow);
+  }
+  .scenario-card img{width:100%; display:block; background:#000;}
+  .scenario-head{
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    padding:14px 18px 0;
+  }
+  .scenario-body{padding:14px 18px 18px;}
+  .scenario-price{font-size:19px; font-weight:800; margin:8px 0 2px;}
 </style>
 </head>
 <body>
@@ -112,7 +167,7 @@
 <header>
   <div>
     <h1>🥇 Gold Bot — Live Dashboard</h1>
-    <div class="sub">XAUUSD ICT/SMC engine — scalp + swing signals, COT, macro, and performance. Monitoring only, no auto-execution.</div>
+    <div class="sub">XAUUSD ICT/SMC engine — scalp + swing signals, 1H/4H/Daily/Weekly scenarios, COT, macro, and performance. Monitoring only, no auto-execution.</div>
   </div>
   <div>
     <span class="updated" id="updated">loading…</span>
@@ -130,7 +185,7 @@
   </section>
 
   <section id="macroSection" style="display:none;">
-    <h2>🌐 Macro Context (Gemini live search + Ollama synthesis)</h2>
+    <h2>🌐 Macro Context <span style="font-weight:400; text-transform:none; letter-spacing:0;">(Gemini live search + Ollama synthesis)</span></h2>
     <div class="macro-card" id="macro"></div>
   </section>
 
@@ -143,6 +198,11 @@
       <select id="cotAssetSelect"></select>
     </div>
     <div id="cotHistoryTable"></div>
+  </section>
+
+  <section>
+    <h2>📐 Gold Scenarios — 1H / 4H / Daily / Weekly</h2>
+    <div class="scenario-grid" id="scenarios"><div class="empty">No scenario data yet — runs every pipeline cycle.</div></div>
   </section>
 
   <section>
@@ -196,6 +256,8 @@ function badgeClass(dir){
   dir = (dir || "").toUpperCase();
   if (["LONG","BUY","BULLISH","UP"].includes(dir)) return "long";
   if (["SHORT","SELL","BEARISH","DOWN"].includes(dir)) return "short";
+  if (dir === "RANGING") return "ranging";
+  if (dir === "UNKNOWN") return "unknown";
   return "neutral";
 }
 
@@ -208,13 +270,14 @@ function render(){
   renderDailyBrief();
   renderMacro();
   renderCot();
+  renderScenarios();
   renderForecasts();
   renderSignals();
   renderOpenPositions();
 }
 
 function cotBar(idx){
-  const color = idx >= 75 ? "var(--red)" : idx <= 25 ? "var(--green)" : "var(--yellow)";
+  const color = idx >= 75 ? "var(--red)" : idx <= 25 ? "var(--green)" : "var(--gold)";
   return `<span class="cot-idx-bar">
     <span class="cot-idx-track"><span class="cot-idx-fill" style="width:${idx}%; background:${color};"></span></span>
     <span>${idx}/100</span>
@@ -369,6 +432,45 @@ function renderStats(){
   `;
 }
 
+const SCENARIO_ORDER = ["1H", "4H", "Daily", "Weekly"];
+
+function renderScenarios(){
+  const el = document.getElementById("scenarios");
+  const scenarios = DATA.scenarios || {};
+  const labels = Object.keys(scenarios).length
+    ? SCENARIO_ORDER.filter(l => scenarios[l])
+    : [];
+  if (!labels.length){
+    el.innerHTML = `<div class="empty">No scenario data yet — runs every pipeline cycle.</div>`;
+    return;
+  }
+  el.innerHTML = labels.map(label => {
+    const s = scenarios[label];
+    const reasons = (s.reasons || []).slice(0, 4).map(r => `• ${r}`).join("<br>");
+    return `
+      <div class="scenario-card">
+        ${s.chart ? `<img src="${s.chart}?ts=${Date.now()}" loading="lazy">` : ""}
+        <div class="scenario-head">
+          <span class="tf-pill">${label}</span>
+          <span class="badge ${badgeClass(s.bias)}">${s.bias || "UNKNOWN"}</span>
+        </div>
+        <div class="scenario-body">
+          ${s.price !== undefined ? `<div class="scenario-price">${fmtNum(s.price)}</div>` : ""}
+          <div class="levels cols-6">
+            <div><span class="k">EMA20</span><span class="v">${fmtNum(s.ema20)}</span></div>
+            <div><span class="k">EMA50</span><span class="v">${fmtNum(s.ema50)}</span></div>
+            <div><span class="k">EMA200</span><span class="v">${fmtNum(s.ema200)}</span></div>
+            <div><span class="k">Support</span><span class="v pos">${fmtNum(s.support)}</span></div>
+            <div><span class="k">Resistance</span><span class="v neg">${fmtNum(s.resistance)}</span></div>
+            <div><span class="k">Updated</span><span class="v" style="font-size:10.5px; font-weight:600;">${s.updated_at ? new Date(s.updated_at).toLocaleTimeString() : "–"}</span></div>
+          </div>
+          ${reasons ? `<div class="reasons">${reasons}</div>` : ""}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
 function renderForecasts(){
   const el = document.getElementById("forecasts");
   const items = DATA.forecasts || [];
@@ -382,10 +484,10 @@ function renderForecasts(){
           <span class="badge ${badgeClass(f.bias)}">${f.bias || "N/A"}</span>
         </div>
         <div class="levels">
-          <div><span class="k">Price</span>${fmtNum(f.price)}</div>
-          <div><span class="k">Target</span>${(f.forecast && f.forecast.target_zone) ? f.forecast.target_zone.map(fmtNum).join(" – ") : "–"}</div>
-          <div><span class="k">Invalid</span>${fmtNum(f.forecast && f.forecast.invalidation)}</div>
-          <div><span class="k">Dir</span>${(f.forecast && f.forecast.direction) || "–"}</div>
+          <div><span class="k">Price</span><span class="v">${fmtNum(f.price)}</span></div>
+          <div><span class="k">Target</span><span class="v">${(f.forecast && f.forecast.target_zone) ? f.forecast.target_zone.map(fmtNum).join(" – ") : "–"}</span></div>
+          <div><span class="k">Invalid</span><span class="v">${fmtNum(f.forecast && f.forecast.invalidation)}</span></div>
+          <div><span class="k">Dir</span><span class="v">${(f.forecast && f.forecast.direction) || "–"}</span></div>
         </div>
         <div class="meta"><span>forecast</span><span>${f.timestamp ? new Date(f.timestamp).toLocaleString() : ""}</span></div>
       </div>
@@ -414,11 +516,12 @@ function renderSignals(){
           <span class="asset">${s.asset} <span style="color:var(--dim); font-weight:400; font-size:11px;">· ${s.layer}</span></span>
           <span class="badge ${badgeClass(s.direction)}">${s.direction || "–"}</span>
         </div>
-        <div class="levels">
-          <div><span class="k">Entry</span>${fmtNum(s.entry)}</div>
-          <div><span class="k">Stop</span>${fmtNum(s.stop)}</div>
-          <div><span class="k">TP1</span>${fmtNum(s.tp1)}</div>
-          <div><span class="k">TP2</span>${fmtNum(s.tp2)}</div>
+        <div class="levels cols-5">
+          <div><span class="k">Entry</span><span class="v">${fmtNum(s.entry)}</span></div>
+          <div><span class="k">Stop</span><span class="v">${fmtNum(s.stop)}</span></div>
+          <div><span class="k">TP1</span><span class="v pos">${fmtNum(s.tp1)}</span></div>
+          <div><span class="k">TP2</span><span class="v pos">${fmtNum(s.tp2)}</span></div>
+          <div><span class="k">TP3</span><span class="v pos">${fmtNum(s.tp3)}</span></div>
         </div>
         <div class="meta">
           <span>${typeof s.score_or_conf === "number" && s.score_or_conf <= 1 ? "conf " + Math.round(s.score_or_conf*100) + "%" : "score " + (s.score_or_conf ?? "–")}</span>
@@ -438,7 +541,7 @@ function renderOpenPositions(){
   }
   el.innerHTML = `
     <table>
-      <thead><tr><th>Asset</th><th>Direction</th><th>Entry</th><th>Stop</th><th>TP1</th><th>TP2</th><th>Opened</th></tr></thead>
+      <thead><tr><th>Asset</th><th>Direction</th><th>Entry</th><th>Stop</th><th>TP1</th><th>TP2</th><th>TP3</th><th>Opened</th></tr></thead>
       <tbody>
         ${items.map(p => `
           <tr>
@@ -448,6 +551,7 @@ function renderOpenPositions(){
             <td>${fmtNum(p.stop ?? p.stop_loss)}</td>
             <td>${fmtNum(p.tp1 ?? p.target_1)}</td>
             <td>${fmtNum(p.tp2 ?? p.target_2)}</td>
+            <td>${fmtNum(p.tp3 ?? p.target_3)}</td>
             <td>${p.opened_at ? new Date(p.opened_at).toLocaleString() : "–"}</td>
           </tr>
         `).join("")}

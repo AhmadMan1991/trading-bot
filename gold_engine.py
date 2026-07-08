@@ -40,11 +40,20 @@ from config import (
     MARKETS, OLLAMA_URL, OLLAMA_MODEL, OLLAMA_KEY, ACCOUNT_SIZE, RISK_PCT,
     GOLD_SESSIONS_UTC, GOLD_JUDAS_WINDOW_MIN, GOLD_IMPULSE_ATR_MULT,
     GOLD_SWEEP_LOOKBACK, GOLD_STRUCTURE_LOOKBACK, GOLD_ATR_STOP_BUFFER,
-    GOLD_TP1_RR, GOLD_TP2_RR, GOLD_MIN_CONFIDENCE, GOLD_SCALP_COOLDOWN_MIN,
+    GOLD_TP1_RR, GOLD_TP2_RR, GOLD_TP3_RR, GOLD_MIN_CONFIDENCE, GOLD_SCALP_COOLDOWN_MIN,
     GOLD_SWING_COOLDOWN_H, GOLD_DAILY_LOSS_LIMIT_PCT, GOLD_MAX_TRADES_PER_DAY,
 )
 from indicators import add_base
 from data_feeds import fetch_intraday, fetch_all_cot, news_blocked, dollar_bias
+
+# Multi-timeframe scenario snapshots for the dashboard (1H/4H/Daily/Weekly) —
+# purely informational top-down context, doesn't feed the scalp/swing decision.
+SCENARIO_TIMEFRAMES = [
+    ("1h",   "1H",     200),
+    ("4h",   "4H",     200),
+    ("1day", "Daily",  250),
+    ("1week","Weekly", 150),
+]
 
 DATA_ROOT = Path(__file__).parent / "data"
 STATE_FILE = DATA_ROOT / "gold_engine_state.json"
@@ -379,9 +388,9 @@ def evaluate_setup(df_ltf: pd.DataFrame, df_htf: pd.DataFrame, cot: dict | None,
                 "factors": ["Invalid stop distance"]}
 
     if trade_direction == "LONG":
-        tp1, tp2 = price + risk * GOLD_TP1_RR, price + risk * GOLD_TP2_RR
+        tp1, tp2, tp3 = price + risk * GOLD_TP1_RR, price + risk * GOLD_TP2_RR, price + risk * GOLD_TP3_RR
     else:
-        tp1, tp2 = price - risk * GOLD_TP1_RR, price - risk * GOLD_TP2_RR
+        tp1, tp2, tp3 = price - risk * GOLD_TP1_RR, price - risk * GOLD_TP2_RR, price - risk * GOLD_TP3_RR
 
     if confidence >= 0.85:
         label = "SNIPER"
@@ -395,7 +404,7 @@ def evaluate_setup(df_ltf: pd.DataFrame, df_htf: pd.DataFrame, cot: dict | None,
     return {
         "direction": trade_direction, "signal_label": label, "confidence": round(confidence, 2),
         "entry": round(price, 2), "stop_loss": round(stop, 2),
-        "target_1": round(tp1, 2), "target_2": round(tp2, 2),
+        "target_1": round(tp1, 2), "target_2": round(tp2, 2), "target_3": round(tp3, 2),
         "risk_reward": GOLD_TP1_RR, "factors": factors,
         "reasoning": "" if skip_reasoning else _llm_reasoning(trade_direction, factors),
     }
@@ -404,6 +413,47 @@ def evaluate_setup(df_ltf: pd.DataFrame, df_htf: pd.DataFrame, cot: dict | None,
 # =============================================================================
 # ENTRY POINTS
 # =============================================================================
+
+def run_gold_scenarios() -> dict:
+    """Multi-timeframe structural snapshot for the dashboard: 1H, 4H, Daily,
+    and Weekly bias, EMA stack, and nearest support/resistance for each —
+    plus a chart per timeframe. Purely informational top-down context; it
+    doesn't feed the scalp/swing decision (that stays H4-for-bias per
+    run_gold_bias(), same as before). Chart generation happens here (not
+    left to main.py) since each timeframe needs its own fetch+indicators
+    pass anyway."""
+    from charts import generate_scenario_chart
+
+    scenarios = {}
+    for interval, label, bars in SCENARIO_TIMEFRAMES:
+        df = fetch_intraday(ASSET, interval, bars)
+        if df is None or len(df) < 60:
+            scenarios[label] = {"bias": "UNKNOWN", "reasons": ["insufficient data"],
+                                 "timeframe": label, "chart_png": None}
+            print(f"  🥇 Scenario {label}: ⚠ insufficient data")
+            continue
+        df = add_base(df)
+        bias = structure_bias(df)
+        last = df.iloc[-1]
+        bias.update({
+            "timeframe": label,
+            "price":      round(float(last["close"]), 2),
+            "ema20":      round(float(last["ema20"]), 2),
+            "ema50":      round(float(last["ema50"]), 2),
+            "ema200":     round(float(last["ema200"]), 2),
+            "support":    round(float(last["support"]), 2) if pd.notna(last.get("support")) else None,
+            "resistance": round(float(last["resistance"]), 2) if pd.notna(last.get("resistance")) else None,
+            "updated_at": str(pd.Timestamp.now(tz="UTC")),
+        })
+        try:
+            bias["chart_png"] = generate_scenario_chart(ASSET, label, df, bias)
+        except Exception as e:
+            print(f"  🥇 Scenario {label}: ⚠ chart failed: {e}")
+            bias["chart_png"] = None
+        print(f"  🥇 Scenario {label}: {bias['bias']}  ({bias['price']})")
+        scenarios[label] = bias
+    return scenarios
+
 
 def run_gold_bias() -> dict:
     """H4 structure + COT — standalone context, also feeds scalp/swing."""

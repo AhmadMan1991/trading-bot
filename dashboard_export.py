@@ -28,7 +28,8 @@ def _load() -> dict:
         except Exception:
             pass
     return {"updated_at": None, "signals": [], "forecasts": [],
-            "performance": {}, "open_positions": [], "cot_history": []}
+            "performance": {}, "open_positions": [], "cot_history": [],
+            "scenarios": {}}
 
 
 def _save(d: dict) -> None:
@@ -39,8 +40,11 @@ def _save(d: dict) -> None:
 
 
 def record_signal(layer: str, asset: str, direction: str, entry, stop, tp1, tp2,
-                   score_or_conf, chart_png: bytes | None, extra: dict | None = None) -> None:
-    """Record a fired scalp/swing/council signal + its setup chart."""
+                   score_or_conf, chart_png: bytes | None, extra: dict | None = None,
+                   tp3=None) -> None:
+    """Record a fired scalp/swing signal + its setup chart. tp3 is optional
+    (kept as a kwarg with a default so older call sites without a third
+    target don't need updating)."""
     d = _load()
     chart_rel = None
     if chart_png:
@@ -51,7 +55,7 @@ def record_signal(layer: str, asset: str, direction: str, entry, stop, tp1, tp2,
 
     entry_rec = {
         "layer": layer, "asset": asset, "direction": direction,
-        "entry": entry, "stop": stop, "tp1": tp1, "tp2": tp2,
+        "entry": entry, "stop": stop, "tp1": tp1, "tp2": tp2, "tp3": tp3,
         "score_or_conf": score_or_conf,
         "timestamp": str(pd.Timestamp.now(tz="UTC")),
         "chart": chart_rel,
@@ -95,6 +99,29 @@ def record_macro(synthesis: str) -> None:
         return
     d = _load()
     d["macro"] = {"synthesis": synthesis, "timestamp": str(pd.Timestamp.now(tz="UTC"))}
+    _save(d)
+
+
+def record_scenarios(scenarios: dict) -> None:
+    """Record the 1H/4H/Daily/Weekly structural snapshot
+    (gold_engine.run_gold_scenarios()) + each timeframe's chart. One slot
+    per timeframe, overwritten every run — a current snapshot, not a
+    history log (unlike COT, structure bias doesn't need a trend-over-time
+    view; each run's read stands on its own)."""
+    d = _load()
+    out = {}
+    for label, info in scenarios.items():
+        info = dict(info)
+        chart_png = info.pop("chart_png", None)
+        chart_rel = None
+        if chart_png:
+            CHARTS_ROOT.mkdir(exist_ok=True, parents=True)
+            fname = f"scenario_{label}.png"   # overwrite — always latest per timeframe
+            (CHARTS_ROOT / fname).write_bytes(chart_png)
+            chart_rel = f"charts/{fname}"
+        info["chart"] = chart_rel
+        out[label] = info
+    d["scenarios"] = out
     _save(d)
 
 

@@ -96,6 +96,7 @@ GOLD_STRUCTURE_LOOKBACK = 40     # bars used for H4/H1 higher-high/lower-low str
 GOLD_ATR_STOP_BUFFER    = 0.5    # stop = swept structural level +/- this x ATR
 GOLD_TP1_RR             = 2.0    # target 1, expressed as risk:reward multiple
 GOLD_TP2_RR             = 3.0    # target 2
+GOLD_TP3_RR             = 4.0    # target 3 — runner, for trends that keep extending
 
 GOLD_MIN_CONFIDENCE     = 0.55   # minimum confluence score to fire a signal
 GOLD_SCALP_COOLDOWN_MIN = 30     # don't re-fire a scalp signal within this many minutes

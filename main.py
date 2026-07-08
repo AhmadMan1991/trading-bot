@@ -61,6 +61,7 @@ def _send_gold_chart(interval: str, sig: dict, caption: str, layer: str = ""):
             stop=sig.get("stop_loss"),
             tp1=sig.get("target_1"),
             tp2=sig.get("target_2"),
+            tp3=sig.get("target_3"),
             score_or_conf=sig.get("confidence"),
             chart_png=chart_png,
             extra={"caption": caption, "signal_label": sig.get("signal_label"),
@@ -100,19 +101,31 @@ def run_macro_layer():
 def run_gold_bias_layer():
     """Step 3 — H4/H1 structural bias for XAUUSD (EMA stack + swing
     structure). Informs scalp/swing but doesn't gate them — it's context,
-    surfaced on its own so you can see it even when no trade fires."""
-    print("\n═══ STEP 3 — GOLD BIAS ═══")
-    from gold_engine import run_gold_bias
+    surfaced on its own so you can see it even when no trade fires.
+
+    Also computes the 1H/4H/Daily/Weekly scenario snapshots for the
+    dashboard (gold_engine.run_gold_scenarios()) — a wider top-down picture
+    than the single H4 read, purely informational, doesn't affect the
+    scalp/swing decision."""
+    print("\n═══ STEP 3 — GOLD BIAS & SCENARIOS ═══")
+    from gold_engine import run_gold_bias, run_gold_scenarios
     import dashboard_export as dash
     bias = run_gold_bias()
     if bias:
         b = bias.get("bias", "NEUTRAL")
         reasons = ", ".join(bias.get("reasons", [])[:3])
-        telegram.send_text(f"🥇 <b>Gold Bias</b>: {b}\n<i>{reasons}</i>")
+        telegram.send_text(f"🥇 <b>Gold Bias (H4)</b>: {b}\n<i>{reasons}</i>")
         try:
             dash.record_forecast(ASSET, b, None, bias, None)
         except Exception as e:
             print(f"    ⚠ dashboard export failed: {e}")
+
+    scenarios = run_gold_scenarios()
+    try:
+        dash.record_scenarios(scenarios)
+    except Exception as e:
+        print(f"    ⚠ scenario dashboard export failed: {e}")
+
     return bias
 
 
@@ -126,6 +139,7 @@ def run_gold_scalp_layer(cot_map=None):
     signals = run_gold_scalp(cot_map)
     print(f"\n  Fired: {len(signals)} gold scalp signal(s)")
     for sig in signals:
+        telegram.send_text(telegram.format_gold_signal_short(sig))
         telegram.send_text(telegram.format_gold_signal(sig))
         _send_gold_chart("15min", sig,
                           f"XAUUSD — {sig.get('direction')} scalp ({sig.get('signal_label')}, "
@@ -135,7 +149,8 @@ def run_gold_scalp_layer(cot_map=None):
                           "entry": sig.get("entry", 0),
                           "stop": sig.get("stop_loss", 0),
                           "tp1": sig.get("target_1", 0),
-                          "tp2": sig.get("target_2", 0)})
+                          "tp2": sig.get("target_2", 0),
+                          "tp3": sig.get("target_3", 0)})
     if not signals:
         print("  (no session sweep setup — or outside killzone/cooldown/risk-limit)")
     return signals
@@ -150,6 +165,7 @@ def run_gold_swing_layer(cot_map=None):
     signals = run_gold_swing(cot_map)
     print(f"\n  Fired: {len(signals)} gold swing signal(s)")
     for sig in signals:
+        telegram.send_text(telegram.format_gold_signal_short(sig))
         telegram.send_text(telegram.format_gold_signal(sig))
         _send_gold_chart("1h", sig,
                           f"XAUUSD — {sig.get('direction')} swing ({sig.get('signal_label')}, "
@@ -159,7 +175,8 @@ def run_gold_swing_layer(cot_map=None):
                           "entry": sig.get("entry", 0),
                           "stop": sig.get("stop_loss", 0),
                           "tp1": sig.get("target_1", 0),
-                          "tp2": sig.get("target_2", 0)})
+                          "tp2": sig.get("target_2", 0),
+                          "tp3": sig.get("target_3", 0)})
     if not signals:
         print("  (no multi-day structure setup — or cooldown/risk-limit/news block)")
     return signals

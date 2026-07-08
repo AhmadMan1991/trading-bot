@@ -392,6 +392,33 @@ def format_tracer_update(pos: dict, progress_pct: float, current_price: float) -
     )
 
 
+_GOLD_TF_SHORT = {"gold_scalp": "M15", "gold_swing": "H1"}
+
+
+def format_gold_signal_short(sig: dict) -> str:
+    """Compact summary card — just the trade numbers, no factors/reasoning/
+    dashboard link. Sent as the primary alert; format_gold_signal() below
+    follows immediately after as a detailed second message for anyone who
+    wants the full confluence breakdown."""
+    direction = sig.get("direction", "?")
+    arrow = "🟢" if direction == "LONG" else "🔴" if direction == "SHORT" else "⚪"
+    dec = 2
+    rr = sig.get("risk_reward", 0)
+    tf = _GOLD_TF_SHORT.get(sig.get("layer", ""), sig.get("timeframe", "-"))
+    lines = [
+        f"{arrow} <b>{direction} SIGNAL</b> — XAUUSD",
+        "━━━━━━━━━━━━━━━━━━",
+        f"📍 Entry  <code>{sig.get('entry', 0):.{dec}f}</code>",
+        f"🛡 SL     <code>{sig.get('stop_loss', 0):.{dec}f}</code>",
+        f"🎯 TP1    <code>{sig.get('target_1', 0):.{dec}f}</code>",
+        f"🎯 TP2    <code>{sig.get('target_2', 0):.{dec}f}</code>",
+        f"🎯 TP3    <code>{sig.get('target_3', 0):.{dec}f}</code>",
+        f"📊 RR     1 : {rr:.1f}",
+        f"⏱ TF     {tf}",
+    ]
+    return "\n".join(lines)
+
+
 def format_gold_signal(sig: dict) -> str:
     """Formatter for gold_engine.py's scalp/swing signals. Uses the same
     signal taxonomy (SNIPER etc.) as before, with Sniper getting the same
@@ -419,6 +446,7 @@ def format_gold_signal(sig: dict) -> str:
         f"Stop:   <code>{sig.get('stop_loss', 0):.{dec}f}</code>",
         f"TP1:    <code>{sig.get('target_1', 0):.{dec}f}</code>  (1:{rr:.1f})",
         f"TP2:    <code>{sig.get('target_2', 0):.{dec}f}</code>",
+        f"TP3:    <code>{sig.get('target_3', 0):.{dec}f}</code>",
         "━━━━━━━━━━━━━━━━━━━━━",
         factors,
         "",

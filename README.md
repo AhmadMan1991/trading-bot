@@ -90,7 +90,8 @@ higher-conviction" callout) and its own dashboard filter tab.
 - **ATR-based structural stops** — `swept_level ± ATR × GOLD_ATR_STOP_BUFFER`,
   not a fixed pip count.
 - **Fixed R:R targets** — TP1 at `GOLD_TP1_RR` (2.0), TP2 at `GOLD_TP2_RR`
-  (3.0), expressed as risk multiples.
+  (3.0), TP3 at `GOLD_TP3_RR` (4.0, a runner target for trends that keep
+  extending), all expressed as risk multiples.
 - **Daily loss circuit breaker** — stops firing new signals for the rest of
   the day after losing `GOLD_DAILY_LOSS_LIMIT_PCT` (3%) of equity;
   `data/gold_risk_state.json` tracks this, updated by the performance layer
@@ -101,6 +102,14 @@ higher-conviction" callout) and its own dashboard filter tab.
   (6h) between re-fires, tracked in `data/gold_engine_state.json`.
 
 All of these are tunable constants in `config.py`.
+
+### Telegram format
+
+Each fired signal sends two messages: a compact summary card first
+(direction, entry, SL, TP1-3, R:R, entry timeframe — nothing else), then a
+detailed follow-up with the signal taxonomy label, confidence, the factor
+list behind the call, and a dashboard link. `telegram.format_gold_signal_short()`
+/ `format_gold_signal()` respectively.
 
 ### COT sourcing
 
@@ -128,11 +137,14 @@ pattern (`/en/cot/{path}/?all_data=ok`).
 ## Dashboard
 
 `docs/index.html`: Arabic daily brief, Macro Context card, COT — Institutional
-Positioning (snapshot + ~90-day weekly history), a Gold Bias card (H4
-structure), latest trade setups filterable by Scalp/Swing/🎯 Sniper only
-(Sniper cards get a gold highlight), performance stats, and open positions.
+Positioning (snapshot + ~90-day weekly history), a **Gold Scenarios** section
+(1H / 4H / Daily / Weekly cards — each with its own chart, bias, EMA20/50/200,
+and nearest support/resistance, via `gold_engine.run_gold_scenarios()`), a
+Gold Bias card (H4 structure), latest trade setups filterable by
+Scalp/Swing/🎯 Sniper only (Sniper cards get a gold highlight, TP1-3 shown),
+performance stats, and open positions.
 Reads `docs/dashboard.json`, updated automatically by `dashboard_export.py`
-whenever a step fires a signal, bias read, macro synthesis, COT snapshot, or
+whenever a step fires a signal, bias read, scenario snapshot, macro synthesis, COT snapshot, or
 resolves a trade.
 
 **Hosted on GitHub Pages.** Telegram messages link straight to it. One-time

@@ -211,3 +211,45 @@ def generate_chart(market: str, df: pd.DataFrame, signal: dict,
     plt.close(fig)
     buf.seek(0)
     return buf.read()
+
+
+def generate_scenario_chart(market: str, timeframe_label: str, df: pd.DataFrame, bias: dict) -> bytes:
+    """Lightweight candlestick + EMA + support/resistance snapshot for the
+    multi-timeframe dashboard scenarios (1H/4H/Daily/Weekly). No trade levels
+    (entry/SL/TP) — this is a structural read, not a fired signal, so
+    generate_chart() (built around a signal dict) doesn't fit here."""
+    _style()
+    fig = plt.figure(figsize=(9, 5), facecolor=BG)
+    gs = gridspec.GridSpec(1, 1, top=0.90, bottom=0.12, left=0.09, right=0.97)
+    ax0 = fig.add_subplot(gs[0])
+    _candlesticks(ax0, df)
+
+    x = np.arange(len(df))
+    ax0.plot(x, df[f"ema{EMA_FAST}"], color=YELLOW, linewidth=1.0, label=f"EMA{EMA_FAST}")
+    ax0.plot(x, df[f"ema{EMA_MID}"],  color=BLUE,   linewidth=1.2, label=f"EMA{EMA_MID}")
+    ax0.plot(x, df[f"ema{EMA_SLOW}"], color=PURPLE, linewidth=1.4, label=f"EMA{EMA_SLOW}")
+
+    if "support" in df.columns and pd.notna(df["support"].iloc[-1]):
+        ax0.axhline(df["support"].iloc[-1], color=GREEN, linestyle=":", linewidth=1.2,
+                    alpha=0.7, label="Support")
+    if "resistance" in df.columns and pd.notna(df["resistance"].iloc[-1]):
+        ax0.axhline(df["resistance"].iloc[-1], color=RED, linestyle=":", linewidth=1.2,
+                    alpha=0.7, label="Resistance")
+
+    leg = ax0.legend(loc="upper left", fontsize=7, framealpha=0.3,
+                     facecolor=PANEL, edgecolor=GREY)
+    for t in leg.get_texts():
+        t.set_color(WHITE)
+
+    bias_label = bias.get("bias", "RANGING")
+    dir_color = GREEN if bias_label == "BULLISH" else RED if bias_label == "BEARISH" else DIM
+    ax0.set_title(
+        f"  {market}  ·  {timeframe_label}  ·  {bias_label}",
+        loc="left", color=dir_color, fontsize=11, fontweight="bold"
+    )
+
+    buf = io.BytesIO()
+    plt.savefig(buf, format="png", dpi=120, bbox_inches="tight", facecolor=BG)
+    plt.close(fig)
+    buf.seek(0)
+    return buf.read()
