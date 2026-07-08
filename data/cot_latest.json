@@ -1,38 +1,6 @@
 {
-  "updated_at": "2026-07-07 19:25:49.430892+00:00",
+  "updated_at": "2026-07-08 11:48:35.247774+00:00",
   "data": {
-    "EURUSD": {
-      "net": 1099,
-      "change": -29059,
-      "cot_index": 5,
-      "signal": "BULLISH",
-      "date": "2026-06-30",
-      "source": "CFTC (official)"
-    },
-    "GBPUSD": {
-      "net": -102147,
-      "change": 3572,
-      "cot_index": 4,
-      "signal": "BULLISH",
-      "date": "2026-06-30",
-      "source": "CFTC (official)"
-    },
-    "USDJPY": {
-      "net": -155092,
-      "change": -8988,
-      "cot_index": 0,
-      "signal": "BULLISH",
-      "date": "2026-06-30",
-      "source": "CFTC (official)"
-    },
-    "DXY": {
-      "net": 34571,
-      "change": -2290,
-      "cot_index": 84,
-      "signal": "BEARISH",
-      "date": "2022-02-01",
-      "source": "CFTC (official)"
-    },
     "XAUUSD": {
       "net": 194019,
       "change": 12680,
@@ -40,24 +8,6 @@
       "signal": "NEUTRAL",
       "date": "2026-06-30",
       "source": "CFTC (official)"
-    },
-    "SPX500": {
-      "net": -37592,
-      "change": -2144,
-      "cot_index": 99,
-      "signal": "BEARISH",
-      "date": "2026-06-30",
-      "source": "CFTC (official)"
-    },
-    "US100": {
-      "net": -7604,
-      "change": 1540,
-      "cot_index": 13,
-      "signal": "BULLISH",
-      "date": "2026-06-30",
-      "source": "CFTC (official)"
-    },
-    "BTCUSD": null,
-    "ETHUSD": null
+    }
   }
 }
