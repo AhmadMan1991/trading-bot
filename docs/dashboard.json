@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-08 12:13:02.141183+00:00",
+  "updated_at": "2026-07-08 12:59:53.294502+00:00",
   "signals": [],
   "forecasts": [
     {
@@ -21,31 +21,31 @@
         },
         "dollar_bias": "USD_STRONG"
       },
-      "timestamp": "2026-07-08 12:12:57.197057+00:00",
+      "timestamp": "2026-07-08 12:59:50.359721+00:00",
       "chart": null
     }
   ],
   "performance": {
-    "total": 0,
+    "total": 2,
     "wins": 0,
-    "losses": 0,
-    "expired": 0,
+    "losses": 1,
+    "expired": 1,
     "win_rate": 0.0,
-    "total_r": 0.0,
-    "avg_r": 0.0
+    "total_r": -1.0,
+    "avg_r": -0.5
   },
   "open_positions": [],
   "daily_brief": {
     "date": "2026-07-08",
-    "summary": "الذهب (XAUUSD) يُظهر انحيازًا صعوديًا خفيفًا مع درجة +1، ما يعكس إقبالًا متزايدًا على الأصول الذهبية.  \nالمؤشر COT يبقى محايدًا، مما يشير إلى عدم وجود تحولات حادة في مراكز المتداولين.  \nينبغي مراقبة XAUUSD عن كثب، إذ قد يستمر في الصعود إذا استمر الطلب في الارتفاع.  \n⚠️ الخطر الأكبر: البيانات الاقتصادية القادمة قد تؤثر على الذهب.",
+    "summary": "\u0627\u0644\u0630\u0647\u0628 (XAUUSD) \u064a\u064f\u0638\u0647\u0631 \u0627\u0646\u062d\u064a\u0627\u0632\u064b\u0627 \u0635\u0639\u0648\u062f\u064a\u064b\u0627 \u062e\u0641\u064a\u0641\u064b\u0627 \u0645\u0639 \u062f\u0631\u062c\u0629 +1\u060c \u0645\u0627 \u064a\u0639\u0643\u0633 \u0625\u0642\u0628\u0627\u0644\u064b\u0627 \u0645\u062a\u0632\u0627\u064a\u062f\u064b\u0627 \u0639\u0644\u0649 \u0627\u0644\u0623\u0635\u0648\u0644 \u0627\u0644\u0630\u0647\u0628\u064a\u0629.  \n\u0627\u0644\u0645\u0624\u0634\u0631 COT \u064a\u0628\u0642\u0649 \u0645\u062d\u0627\u064a\u062f\u064b\u0627\u060c \u0645\u0645\u0627 \u064a\u0634\u064a\u0631 \u0625\u0644\u0649 \u0639\u062f\u0645 \u0648\u062c\u0648\u062f \u062a\u062d\u0648\u0644\u0627\u062a \u062d\u0627\u062f\u0629 \u0641\u064a \u0645\u0631\u0627\u0643\u0632 \u0627\u0644\u0645\u062a\u062f\u0627\u0648\u0644\u064a\u0646.  \n\u064a\u0646\u0628\u063a\u064a \u0645\u0631\u0627\u0642\u0628\u0629 XAUUSD \u0639\u0646 \u0643\u062b\u0628\u060c \u0625\u0630 \u0642\u062f \u064a\u0633\u062a\u0645\u0631 \u0641\u064a \u0627\u0644\u0635\u0639\u0648\u062f \u0625\u0630\u0627 \u0627\u0633\u062a\u0645\u0631 \u0627\u0644\u0637\u0644\u0628 \u0641\u064a \u0627\u0644\u0627\u0631\u062a\u0641\u0627\u0639.  \n\u26a0\ufe0f \u0627\u0644\u062e\u0637\u0631 \u0627\u0644\u0623\u0643\u0628\u0631: \u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0627\u0642\u062a\u0635\u0627\u062f\u064a\u0629 \u0627\u0644\u0642\u0627\u062f\u0645\u0629 \u0642\u062f \u062a\u0624\u062b\u0631 \u0639\u0644\u0649 \u0627\u0644\u0630\u0647\u0628.",
     "scores": [
       {
         "asset": "XAUUSD",
-        "emoji": "🥇",
+        "emoji": "\ud83e\udd47",
         "score": 1,
-        "signal": "🟢",
+        "signal": "\ud83d\udfe2",
         "confidence": "medium",
-        "confidence_ar": "متوسطة",
+        "confidence_ar": "\u0645\u062a\u0648\u0633\u0637\u0629",
         "bias": "BULLISH",
         "price": 4064.34683,
         "cot_signal": "NEUTRAL"
@@ -54,8 +54,8 @@
     "actions": [
       {
         "asset": "XAUUSD",
-        "direction_ar": "صعود",
-        "action_ar": "متابعة الجلسة القادمة (London/NY killzone)"
+        "direction_ar": "\u0635\u0639\u0648\u062f",
+        "action_ar": "\u0645\u062a\u0627\u0628\u0639\u0629 \u0627\u0644\u062c\u0644\u0633\u0629 \u0627\u0644\u0642\u0627\u062f\u0645\u0629 (London/NY killzone)"
       }
     ]
   },
@@ -71,7 +71,7 @@
       }
     },
     "summary": "1/1 markets reporting. 0 bullish, 0 bearish, 1 neutral.",
-    "timestamp": "2026-07-08 12:12:55.511142+00:00"
+    "timestamp": "2026-07-08 12:59:49.136854+00:00"
   },
   "cot_history": [
     {
@@ -105,16 +105,17 @@
     "1H": {
       "bias": "BEARISH",
       "reasons": [
+        "EMA stack bearish (20<50<200)",
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "1H",
-      "price": 4071.4,
-      "ema20": 4098.44,
-      "ema50": 4122.15,
-      "ema200": 4112.57,
+      "price": 4075.86,
       "support": 4041.55,
       "resistance": 4179.38,
-      "updated_at": "2026-07-08 12:12:58.069472+00:00",
+      "external_high": 4202.03,
+      "external_low": 3949.45,
+      "bos": "BEARISH",
+      "updated_at": "2026-07-08 12:59:50.991398+00:00",
       "chart": "charts/scenario_1H.png"
     },
     "4H": {
@@ -123,13 +124,13 @@
         "Structure: higher-highs & higher-lows"
       ],
       "timeframe": "4H",
-      "price": 4071.4,
-      "ema20": 4128.14,
-      "ema50": 4124.96,
-      "ema200": 4183.59,
+      "price": 4075.86,
       "support": 4028.95,
       "resistance": 4202.03,
-      "updated_at": "2026-07-08 12:12:58.898513+00:00",
+      "external_high": 4594.65,
+      "external_low": 3949.45,
+      "bos": null,
+      "updated_at": "2026-07-08 12:59:51.511543+00:00",
       "chart": "charts/scenario_4H.png"
     },
     "Daily": {
@@ -139,13 +140,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Daily",
-      "price": 4071.4,
-      "ema20": 4136.66,
-      "ema50": 4260.46,
-      "ema200": 4468.07,
+      "price": 4075.86,
       "support": 3949.45,
       "resistance": 4547.29,
-      "updated_at": "2026-07-08 12:12:59.759469+00:00",
+      "external_high": 5597.23,
+      "external_low": 3600.0,
+      "bos": null,
+      "updated_at": "2026-07-08 12:59:51.987366+00:00",
       "chart": "charts/scenario_Daily.png"
     },
     "Weekly": {
@@ -154,13 +155,13 @@
         "EMA stack bullish (20>50>200)"
       ],
       "timeframe": "Weekly",
-      "price": 4069.47,
-      "ema20": 4415.98,
-      "ema50": 4232.67,
-      "ema200": 3165.29,
+      "price": 4075.86,
       "support": 3600.0,
       "resistance": 5597.23,
-      "updated_at": "2026-07-08 12:13:00.697145+00:00",
+      "external_high": 5597.23,
+      "external_low": 1804.65,
+      "bos": "BEARISH",
+      "updated_at": "2026-07-08 12:59:52.538252+00:00",
       "chart": "charts/scenario_Weekly.png"
     }
   }
