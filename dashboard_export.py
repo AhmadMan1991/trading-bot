@@ -29,7 +29,7 @@ def _load() -> dict:
             pass
     return {"updated_at": None, "signals": [], "forecasts": [],
             "performance": {}, "open_positions": [], "cot_history": [],
-            "scenarios": {}}
+            "scenarios": {}, "news": {"events": [], "updated_at": None}}
 
 
 def _save(d: dict) -> None:
@@ -122,6 +122,29 @@ def record_scenarios(scenarios: dict) -> None:
         info["chart"] = chart_rel
         out[label] = info
     d["scenarios"] = out
+    _save(d)
+
+
+def record_news(events: list) -> None:
+    """Record the current red-folder (high-impact) USD calendar — called by
+    news_agent.py every ~5min run. Replaces the whole list each time (it's a
+    live calendar snapshot, not a history log); includes both upcoming
+    releases and already-released ones with their actual value, so the
+    dashboard can show recent beat/miss context alongside what's next."""
+    d = _load()
+    out = []
+    for ev in events:
+        t = ev.get("time")
+        out.append({
+            "title":    ev.get("title", ""),
+            "currency": ev.get("currency", ""),
+            "time":     str(t) if t is not None else None,
+            "forecast": ev.get("forecast"),
+            "previous": ev.get("previous"),
+            "actual":   ev.get("actual"),
+        })
+    out.sort(key=lambda e: e["time"] or "")
+    d["news"] = {"events": out, "updated_at": str(pd.Timestamp.now(tz="UTC"))}
     _save(d)
 
 

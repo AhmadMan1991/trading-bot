@@ -84,11 +84,21 @@ def run_news_agent() -> None:
     now = pd.Timestamp.now(tz="UTC")
     state = _load_state()
     sent = 0
+    red_folder = []   # high-impact USD events this week — for the dashboard
 
     for ev in events:
         currency = (ev.get("currency") or "").upper()
-        if currency not in NEWS_WATCH_CURRENCIES:
+        impact   = str(ev.get("impact", "")).lower()
+        # "Red folder" = high-impact only. fetch_news_events_raw() returns
+        # every impact level (unlike fetch_news_events(), which already
+        # filters to high-impact for the news-block gate) — this was
+        # previously un-filtered here, so low/medium-impact USD prints were
+        # triggering alerts too. Restricting to high-impact matches what
+        # this agent has always been documented to watch.
+        if currency not in NEWS_WATCH_CURRENCIES or impact != "high":
             continue
+
+        red_folder.append(ev)
 
         ev_time = ev.get("time")
         if ev_time is None:
@@ -115,3 +125,9 @@ def run_news_agent() -> None:
 
     _save_state(state)
     print(f"  {sent} news alert(s) sent this run" if sent else "  no news alerts due this run")
+
+    try:
+        import dashboard_export as dash
+        dash.record_news(red_folder)
+    except Exception as e:
+        print(f"    ⚠ dashboard export failed: {e}")

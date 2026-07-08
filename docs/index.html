@@ -264,6 +264,7 @@
     <button class="nav-tab" data-panel="signals">⚡ Signals</button>
     <button class="nav-tab" data-panel="positions">📋 Open Positions</button>
     <button class="nav-tab" data-panel="cot">🗺️ COT</button>
+    <button class="nav-tab" data-panel="news">📰 News</button>
     <button class="nav-tab" data-panel="macro">🌐 Macro &amp; Brief</button>
   </nav>
 
@@ -305,6 +306,13 @@
         </div>
         <div id="cotHistoryTable"></div>
       </div>
+    </section>
+  </div>
+
+  <div class="tab-panel" data-tabpanel="news">
+    <section>
+      <h3>🔴 Red Folder — High-Impact USD Calendar</h3>
+      <div class="panel-card" id="newsTable"><div class="empty">No red-folder USD events this week.</div></div>
     </section>
   </div>
 
@@ -367,6 +375,7 @@ function render(){
   renderScenarios();
   renderSignals();
   renderOpenPositions();
+  renderNews();
 }
 
 function renderKpis(){
@@ -638,6 +647,54 @@ function renderOpenPositions(){
             <td class="mono">${fmtNum(p.tp2 ?? p.target_2)}</td>
             <td class="mono">${fmtNum(p.tp3 ?? p.target_3)}</td>
             <td>${p.opened_at ? new Date(p.opened_at).toLocaleString() : "–"}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+function _newsStatus(ev, now){
+  const released = ev.actual !== null && ev.actual !== undefined && ev.actual !== "";
+  if (released){
+    const f = parseFloat(String(ev.forecast).replace(/[^0-9.\-]/g, ""));
+    const a = parseFloat(String(ev.actual).replace(/[^0-9.\-]/g, ""));
+    if (!isNaN(f) && !isNaN(a) && f !== a){
+      return a > f
+        ? `<span class="badge long">BEAT</span>`
+        : `<span class="badge short">MISS</span>`;
+    }
+    return `<span class="badge neutral">RELEASED</span>`;
+  }
+  if (!ev.time) return `<span class="badge unknown">–</span>`;
+  const mins = Math.round((new Date(ev.time).getTime() - now) / 60000);
+  if (mins < 0) return `<span class="badge neutral">awaiting data…</span>`;
+  if (mins <= 15) return `<span class="badge short">⏰ in ${mins}m</span>`;
+  const label = mins >= 60 ? `in ${Math.round(mins / 60)}h` : `in ${mins}m`;
+  return `<span class="badge neutral">${label}</span>`;
+}
+
+function renderNews(){
+  const el = document.getElementById("newsTable");
+  const news = DATA.news || {};
+  const events = news.events || [];
+  if (!events.length){
+    el.innerHTML = `<div class="empty">No red-folder USD events this week.</div>`;
+    return;
+  }
+  const now = Date.now();
+  el.innerHTML = `
+    <table>
+      <thead><tr><th>Event</th><th>Time</th><th>Previous</th><th>Forecast</th><th>Actual</th><th>Status</th></tr></thead>
+      <tbody>
+        ${events.map(e => `
+          <tr>
+            <td>${e.title || "–"} <span style="color:var(--faint); font-size:11px;">(${e.currency || ""})</span></td>
+            <td class="mono">${e.time ? new Date(e.time).toLocaleString() : "–"}</td>
+            <td class="mono">${e.previous ?? "–"}</td>
+            <td class="mono">${e.forecast ?? "–"}</td>
+            <td class="mono">${e.actual ?? "–"}</td>
+            <td>${_newsStatus(e, now)}</td>
           </tr>
         `).join("")}
       </tbody>
