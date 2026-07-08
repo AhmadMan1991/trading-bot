@@ -574,12 +574,12 @@ function renderScenarios(){
         </div>
         <div class="scenario-body">
           ${s.price !== undefined ? `<div class="scenario-price">${fmtNum(s.price)}</div>` : ""}
+          ${s.bos ? `<span class="badge ${badgeClass(s.bos)}" style="margin-bottom:8px; display:inline-block;">BOS: ${s.bos}</span>` : ""}
           <div class="levels cols-6">
-            <div><span class="k">EMA20</span><span class="v">${fmtNum(s.ema20)}</span></div>
-            <div><span class="k">EMA50</span><span class="v">${fmtNum(s.ema50)}</span></div>
-            <div><span class="k">EMA200</span><span class="v">${fmtNum(s.ema200)}</span></div>
             <div><span class="k">Support</span><span class="v pos">${fmtNum(s.support)}</span></div>
             <div><span class="k">Resistance</span><span class="v neg">${fmtNum(s.resistance)}</span></div>
+            <div><span class="k">BSL (ext.)</span><span class="v" style="color:var(--gold-bright);">${fmtNum(s.external_high)}</span></div>
+            <div><span class="k">SSL (ext.)</span><span class="v" style="color:var(--gold-bright);">${fmtNum(s.external_low)}</span></div>
             <div><span class="k">Updated</span><span class="v" style="font-size:10px; font-weight:600;">${s.updated_at ? new Date(s.updated_at).toLocaleTimeString() : "–"}</span></div>
           </div>
           ${reasons ? `<div class="reasons">${reasons}</div>` : ""}

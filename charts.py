@@ -213,43 +213,177 @@ def generate_chart(market: str, df: pd.DataFrame, signal: dict,
     return buf.read()
 
 
-def generate_scenario_chart(market: str, timeframe_label: str, df: pd.DataFrame, bias: dict) -> bytes:
-    """Lightweight candlestick + EMA + support/resistance snapshot for the
-    multi-timeframe dashboard scenarios (1H/4H/Daily/Weekly). No trade levels
-    (entry/SL/TP) — this is a structural read, not a fired signal, so
-    generate_chart() (built around a signal dict) doesn't fit here."""
+def _swing_pivots(df: pd.DataFrame, window: int = 8) -> tuple[list, list]:
+    """Simple fractal-style pivot detector: a bar is a swing high/low if it's
+    the max/min within +/- window bars either side. Only pivots with `window`
+    bars of confirmation on both sides are returned, so the most recent
+    `window` bars never produce one — there isn't enough data yet to know if
+    they'll hold."""
+    h, l = df["high"].values, df["low"].values
+    n = len(df)
+    highs, lows = [], []
+    for i in range(window, n - window):
+        seg_h = h[i - window:i + window + 1]
+        seg_l = l[i - window:i + window + 1]
+        if h[i] == seg_h.max():
+            highs.append(i)
+        if l[i] == seg_l.min():
+            lows.append(i)
+    return highs, lows
+
+
+def _external_bos(df: pd.DataFrame, window: int = 8) -> dict:
+    """Approximate 'external' break-of-structure: find the most recent
+    CONFIRMED major swing pivot (a real fractal, not just a rolling extreme)
+    and check whether the latest close has broken beyond it — that's the
+    break that actually matters structurally, versus a minor internal
+    pullback high/low. Returns {direction, level, idx} — direction is None
+    if no break is currently in effect."""
+    highs, lows = _swing_pivots(df, window)
+    last_close = float(df["close"].iloc[-1])
+    result = {"direction": None, "level": None, "idx": None}
+    if highs:
+        piv_i = highs[-1]
+        piv_level = float(df["high"].iloc[piv_i])
+        if last_close > piv_level:
+            result = {"direction": "BULLISH", "level": piv_level, "idx": piv_i}
+    if lows:
+        piv_i = lows[-1]
+        piv_level = float(df["low"].iloc[piv_i])
+        if last_close < piv_level and (result["direction"] is None or piv_i > result["idx"]):
+            result = {"direction": "BEARISH", "level": piv_level, "idx": piv_i}
+    return result
+
+
+def generate_scenario_chart(market: str, timeframe_label: str, df: pd.DataFrame, bias: dict,
+                            display_bars: int = 100) -> bytes:
+    """ICT/SMC structure snapshot for the dashboard scenarios (1H/4H/Daily/
+    Weekly): thick internal support/resistance, external buyside/sellside
+    liquidity, the most recent order block + fair value gap, an external
+    break-of-structure marker, and the current price clearly tagged.
+    Deliberately no EMAs / no indicator soup — just the price-action
+    structure an ICT read actually uses.
+
+    `df` should have add_base() run on the FULL fetched series already (this
+    function only *displays* the last `display_bars` of it, so support/
+    resistance/ATR-driven detections stay accurate near the left edge
+    instead of being biased by a truncated window)."""
+    from gold_engine import detect_order_blocks, detect_fvg
+
     _style()
-    fig = plt.figure(figsize=(9, 5), facecolor=BG)
-    gs = gridspec.GridSpec(1, 1, top=0.90, bottom=0.12, left=0.09, right=0.97)
+
+    obs  = detect_order_blocks(df)
+    fvgs = detect_fvg(df)
+    bos  = _external_bos(df)
+
+    internal_high = float(df["resistance"].iloc[-1]) if pd.notna(df["resistance"].iloc[-1]) else None
+    internal_low  = float(df["support"].iloc[-1])     if pd.notna(df["support"].iloc[-1])     else None
+
+    # External (buyside/sellside) liquidity — a longer lookback than the
+    # internal range, representing the older highs/lows resting liquidity
+    # sits beyond. Only drawn if meaningfully past the internal level, so it
+    # doesn't just redraw the same line.
+    ext_lookback  = min(len(df), display_bars * 3)
+    external_high = float(df["high"].tail(ext_lookback).max())
+    external_low  = float(df["low"].tail(ext_lookback).min())
+
+    view = df.tail(display_bars).copy()
+    x_of_ts = {ts: i for i, ts in enumerate(view.index)}
+    last_close = float(view["close"].iloc[-1])
+    n = len(view)
+
+    fig = plt.figure(figsize=(12, 6.6), facecolor=BG)
+    gs = gridspec.GridSpec(1, 1, top=0.91, bottom=0.09, left=0.06, right=0.85)
     ax0 = fig.add_subplot(gs[0])
-    _candlesticks(ax0, df)
+    _candlesticks(ax0, view)
 
-    x = np.arange(len(df))
-    ax0.plot(x, df[f"ema{EMA_FAST}"], color=YELLOW, linewidth=1.0, label=f"EMA{EMA_FAST}")
-    ax0.plot(x, df[f"ema{EMA_MID}"],  color=BLUE,   linewidth=1.2, label=f"EMA{EMA_MID}")
-    ax0.plot(x, df[f"ema{EMA_SLOW}"], color=PURPLE, linewidth=1.4, label=f"EMA{EMA_SLOW}")
+    # Label placement rules of thumb used throughout this function:
+    #  - Support/Resistance labels sit at the LEFT edge — the right edge is
+    #    reserved for the current-price tag, so anything else there gets
+    #    crowded whenever price is trading near either level.
+    #  - External liquidity (BSL/SSL) labels are pushed toward the *visible
+    #    price action* rather than toward the axis edge (BSL text sits just
+    #    below its line, SSL just above), since those lines usually sit
+    #    outside the candle range by definition and the space between the
+    #    external line and the nearest candle is otherwise empty.
+    left_x = max(int(n * 0.015), 1)
 
-    if "support" in df.columns and pd.notna(df["support"].iloc[-1]):
-        ax0.axhline(df["support"].iloc[-1], color=GREEN, linestyle=":", linewidth=1.2,
-                    alpha=0.7, label="Support")
-    if "resistance" in df.columns and pd.notna(df["resistance"].iloc[-1]):
-        ax0.axhline(df["resistance"].iloc[-1], color=RED, linestyle=":", linewidth=1.2,
-                    alpha=0.7, label="Resistance")
+    # ── Order block / FVG zones — most recent ONE each, only if in view ────
+    # (showing 2 of each risked their labels overlapping into an unreadable
+    # mess whenever they formed within a few bars of each other, which is
+    # common during a strong trend leg — one clean zone beats two cluttered
+    # ones.)
+    for ob in obs[-1:]:
+        ts = pd.Timestamp(ob["timestamp"])
+        if ts not in x_of_ts:
+            continue
+        xi = x_of_ts[ts]
+        color = GREEN if ob["direction"] == "BULLISH" else RED
+        mid = (ob["low"] + ob["high"]) / 2
+        ax0.axhspan(ob["low"], ob["high"], xmin=max(xi - 0.5, 0) / n, xmax=1.0,
+                    color=color, alpha=0.10, zorder=1)
+        ax0.text(xi, mid, " OB", fontsize=7, color=color, va="center", fontweight="bold", alpha=.9)
 
-    leg = ax0.legend(loc="upper left", fontsize=7, framealpha=0.3,
-                     facecolor=PANEL, edgecolor=GREY)
-    for t in leg.get_texts():
-        t.set_color(WHITE)
+    for fvg in fvgs[-1:]:
+        ts = pd.Timestamp(fvg["timestamp"])
+        if ts not in x_of_ts:
+            continue
+        xi = x_of_ts[ts]
+        color = BLUE if fvg["direction"] == "BULLISH" else PURPLE
+        mid = (fvg["low"] + fvg["high"]) / 2
+        ax0.axhspan(fvg["low"], fvg["high"], xmin=max(xi - 0.5, 0) / n, xmax=1.0,
+                    color=color, alpha=0.14, zorder=1)
+        ax0.text(xi, mid, " FVG", fontsize=7, color=color, va="center", fontweight="bold", alpha=.9)
+
+    # ── Internal support / resistance — thick solid lines ──────────────────
+    if internal_high is not None:
+        ax0.axhline(internal_high, color=RED, linewidth=2.4, alpha=.85, zorder=3)
+        ax0.text(left_x, internal_high, f"Resistance {internal_high:.2f}  ",
+                 fontsize=8, color=RED, va="bottom", ha="left", fontweight="bold")
+    if internal_low is not None:
+        ax0.axhline(internal_low, color=GREEN, linewidth=2.4, alpha=.85, zorder=3)
+        ax0.text(left_x, internal_low, f"Support {internal_low:.2f}  ",
+                 fontsize=8, color=GREEN, va="top", ha="left", fontweight="bold")
+
+    # ── External liquidity (buyside / sellside) — thick dashed lines ───────
+    if internal_high is None or external_high > internal_high * 1.0005:
+        ax0.axhline(external_high, color=YELLOW, linewidth=2.0, linestyle="--", alpha=.85, zorder=3)
+        ax0.text(left_x, external_high, "BSL — external liquidity  ",
+                 fontsize=7.5, color=YELLOW, va="top", ha="left", fontweight="bold")
+    if internal_low is None or external_low < internal_low * 0.9995:
+        ax0.axhline(external_low, color=YELLOW, linewidth=2.0, linestyle="--", alpha=.85, zorder=3)
+        ax0.text(left_x, external_low, "SSL — external liquidity  ",
+                 fontsize=7.5, color=YELLOW, va="bottom", ha="left", fontweight="bold")
+
+    # ── External BOS marker ─────────────────────────────────────────────────
+    if bos["direction"] and bos["idx"] is not None:
+        piv_ts = df.index[bos["idx"]]
+        color = GREEN if bos["direction"] == "BULLISH" else RED
+        if piv_ts in x_of_ts:
+            xi = x_of_ts[piv_ts]
+            marker = "^" if bos["direction"] == "BULLISH" else "v"
+            ax0.scatter([xi], [bos["level"]], marker=marker, color=color, s=90,
+                        zorder=5, edgecolors=WHITE, linewidths=0.6)
+            ax0.text(xi, bos["level"], "  BOS", fontsize=8.5, color=color, fontweight="bold")
+
+    # ── Current price — clear tag on the right edge ─────────────────────────
+    ax0.axhline(last_close, color=WHITE, linewidth=1.3, alpha=.9, zorder=4)
+    ax0.annotate(f" {last_close:.2f} ", xy=(1, last_close), xycoords=("axes fraction", "data"),
+                xytext=(4, 0), textcoords="offset points", va="center", ha="left",
+                fontsize=9.5, fontweight="bold", color="#0d0f13",
+                bbox=dict(boxstyle="round,pad=0.3", facecolor=WHITE, edgecolor="none"),
+                annotation_clip=False)
 
     bias_label = bias.get("bias", "RANGING")
     dir_color = GREEN if bias_label == "BULLISH" else RED if bias_label == "BEARISH" else DIM
+    bos_note = f"  ·  BOS: {bos['direction']}" if bos["direction"] else ""
     ax0.set_title(
-        f"  {market}  ·  {timeframe_label}  ·  {bias_label}",
-        loc="left", color=dir_color, fontsize=11, fontweight="bold"
+        f"  {market}  ·  {timeframe_label}  ·  {bias_label}{bos_note}",
+        loc="left", color=dir_color, fontsize=12, fontweight="bold"
     )
 
     buf = io.BytesIO()
-    plt.savefig(buf, format="png", dpi=120, bbox_inches="tight", facecolor=BG)
+    plt.savefig(buf, format="png", dpi=150, bbox_inches="tight", facecolor=BG)
     plt.close(fig)
     buf.seek(0)
     return buf.read()

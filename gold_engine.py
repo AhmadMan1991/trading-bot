@@ -48,11 +48,16 @@ from data_feeds import fetch_intraday, fetch_all_cot, news_blocked, dollar_bias
 
 # Multi-timeframe scenario snapshots for the dashboard (1H/4H/Daily/Weekly) —
 # purely informational top-down context, doesn't feed the scalp/swing decision.
+# (interval, label, bars fetched, bars actually displayed on the chart) —
+# fetching more than we display keeps support/resistance/ATR/external-
+# liquidity lookbacks accurate near the left edge of the visible window,
+# while the chart itself stays zoomed to something actually readable per
+# timeframe instead of cramming months of daily bars into one image.
 SCENARIO_TIMEFRAMES = [
-    ("1h",   "1H",     200),
-    ("4h",   "4H",     200),
-    ("1day", "Daily",  250),
-    ("1week","Weekly", 150),
+    ("1h",   "1H",     350, 100),
+    ("4h",   "4H",     300, 90),
+    ("1day", "Daily",  300, 90),
+    ("1week","Weekly", 200, 60),
 ]
 
 DATA_ROOT = Path(__file__).parent / "data"
@@ -416,16 +421,23 @@ def evaluate_setup(df_ltf: pd.DataFrame, df_htf: pd.DataFrame, cot: dict | None,
 
 def run_gold_scenarios() -> dict:
     """Multi-timeframe structural snapshot for the dashboard: 1H, 4H, Daily,
-    and Weekly bias, EMA stack, and nearest support/resistance for each —
-    plus a chart per timeframe. Purely informational top-down context; it
-    doesn't feed the scalp/swing decision (that stays H4-for-bias per
+    and Weekly bias, nearest internal support/resistance, external (buyside/
+    sellside) liquidity, and external break-of-structure for each — plus a
+    chart per timeframe. Purely informational top-down context; it doesn't
+    feed the scalp/swing decision (that stays H4-for-bias per
     run_gold_bias(), same as before). Chart generation happens here (not
     left to main.py) since each timeframe needs its own fetch+indicators
-    pass anyway."""
-    from charts import generate_scenario_chart
+    pass anyway.
+
+    No EMA levels here by design — the chart and this card both focus on
+    ICT/SMC structure (support/resistance, external liquidity, BOS) rather
+    than indicator values; EMA stack is still used internally by
+    structure_bias() to *decide* the bias, it's just not surfaced as a
+    separate stat anymore."""
+    from charts import generate_scenario_chart, _external_bos
 
     scenarios = {}
-    for interval, label, bars in SCENARIO_TIMEFRAMES:
+    for interval, label, bars, display_bars in SCENARIO_TIMEFRAMES:
         df = fetch_intraday(ASSET, interval, bars)
         if df is None or len(df) < 60:
             scenarios[label] = {"bias": "UNKNOWN", "reasons": ["insufficient data"],
@@ -435,18 +447,22 @@ def run_gold_scenarios() -> dict:
         df = add_base(df)
         bias = structure_bias(df)
         last = df.iloc[-1]
+
+        ext_lookback = min(len(df), display_bars * 3)
+        bos = _external_bos(df)
+
         bias.update({
             "timeframe": label,
-            "price":      round(float(last["close"]), 2),
-            "ema20":      round(float(last["ema20"]), 2),
-            "ema50":      round(float(last["ema50"]), 2),
-            "ema200":     round(float(last["ema200"]), 2),
-            "support":    round(float(last["support"]), 2) if pd.notna(last.get("support")) else None,
-            "resistance": round(float(last["resistance"]), 2) if pd.notna(last.get("resistance")) else None,
-            "updated_at": str(pd.Timestamp.now(tz="UTC")),
+            "price":         round(float(last["close"]), 2),
+            "support":       round(float(last["support"]), 2) if pd.notna(last.get("support")) else None,
+            "resistance":    round(float(last["resistance"]), 2) if pd.notna(last.get("resistance")) else None,
+            "external_high": round(float(df["high"].tail(ext_lookback).max()), 2),
+            "external_low":  round(float(df["low"].tail(ext_lookback).min()), 2),
+            "bos":           bos["direction"],
+            "updated_at":    str(pd.Timestamp.now(tz="UTC")),
         })
         try:
-            bias["chart_png"] = generate_scenario_chart(ASSET, label, df, bias)
+            bias["chart_png"] = generate_scenario_chart(ASSET, label, df, bias, display_bars=display_bars)
         except Exception as e:
             print(f"  🥇 Scenario {label}: ⚠ chart failed: {e}")
             bias["chart_png"] = None
