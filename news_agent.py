@@ -64,20 +64,22 @@ def _safe_ts(s: str):
 
 
 def _bias_read(forecast, actual) -> str:
-    """Very simple beat/miss -> USD bias -> XAU/indices tendency read."""
+    """Very simple beat/miss -> USD bias -> XAU/indices tendency read.
+    Terminology (Beat/Miss, USD/XAU) stays English, the explanatory note is
+    Arabic per user request."""
     try:
         f = float(str(forecast).replace("%", "").replace("K", "").replace("M", ""))
         a = float(str(actual).replace("%", "").replace("K", "").replace("M", ""))
     except (ValueError, TypeError):
-        return "Could not compare numerically — check the release manually."
+        return "تعذرت المقارنة الرقمية — يُرجى مراجعة الحدث يدويًا."
 
     if a > f:
-        return ("Beat forecast → typically <b>USD-bullish</b> → tends to pressure "
-                "<b>XAU (bearish)</b> and <b>indices (bearish)</b>, all else equal.")
+        return ("تجاوز التوقعات (Beat) ← عادةً <b>USD-bullish</b> ← يميل للضغط على "
+                "<b>XAU (bearish)</b> والمؤشرات (bearish)، مع افتراض ثبات باقي العوامل.")
     if a < f:
-        return ("Missed forecast → typically <b>USD-bearish</b> → tends to support "
-                "<b>XAU (bullish)</b> and <b>indices (bullish)</b>, all else equal.")
-    return "In line with forecast → typically a muted / neutral reaction."
+        return ("قصور عن التوقعات (Miss) ← عادةً <b>USD-bearish</b> ← يميل لدعم "
+                "<b>XAU (bullish)</b> والمؤشرات (bullish)، مع افتراض ثبات باقي العوامل.")
+    return "جاءت القراءة مطابقة للتوقعات (in line) ← عادةً ردة فعل هادئة/محايدة."
 
 
 def run_news_agent() -> None:
@@ -134,9 +136,9 @@ def run_news_agent() -> None:
         elif (not has_actual and mins_until <= -NEWS_POST_GRACE_MIN
                 and eid not in state["post_sent"]):
             telegram.send_text(telegram.format_news_post(
-                ev, "No numeric print for this release (event-type release, "
-                    "e.g. minutes/speech/testimony, or the feed hasn't filled it in) — "
-                    "check the source directly if it matters for your read."))
+                ev, "لا توجد قراءة رقمية لهذا الحدث (حدث نوعي مثل محضر اجتماع/خطاب/شهادة، "
+                    "أو أن المصدر لم يحدّث القيمة الفعلية بعد) — يُرجى المراجعة يدويًا إذا "
+                    "كان هذا الحدث مهمًا لتحليلك."))
             state["post_sent"].append(eid)
             sent += 1
             print(f"  📰 post-alert (no-data fallback) sent: {ev.get('title')} ({currency})")

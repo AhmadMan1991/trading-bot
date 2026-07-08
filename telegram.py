@@ -352,24 +352,29 @@ def format_swing_new(sig: dict) -> str:
 
 
 def format_news_pre(ev: dict) -> str:
+    """Pre-alert — field labels/values stay English (Time/Previous/Forecast,
+    event title, currency code); the explanatory note is Arabic per user request."""
     t = ev["time"]
     return (
-        "<b>🔔 Coming up — red-folder USD event</b>\n"
+        "<b>🔔 حدث اقتصادي مرتقب — USD</b>\n"
         f"━━━━━━━━━━━━━━━━━━━━━\n"
         f"<b>{ev.get('title','?')}</b>  ({ev.get('currency','?')})\n"
         f"Time:      {t.strftime('%H:%M UTC')}  (~15 min)\n"
         f"Previous:  <b>{ev.get('previous') or 'n/a'}</b>\n"
         f"Forecast:  <b>{ev.get('forecast') or 'n/a'}</b>\n"
         f"━━━━━━━━━━━━━━━━━━━━━\n"
-        f"<i>Beat forecast tends to be USD-bullish (XAU/indices bearish); "
-        f"miss tends to be USD-bearish (XAU/indices bullish) — a tendency, not a rule.</i>"
+        f"<i>عادةً ما يكون تجاوز التوقعات (Beat) داعمًا للدولار وضاغطًا على الذهب "
+        f"والمؤشرات، بينما يكون القصور عن التوقعات (Miss) مضعفًا للدولار وداعمًا "
+        f"للذهب والمؤشرات — هذا ميل تاريخي وليس قاعدة ثابتة.</i>"
     )
 
 
 def format_news_post(ev: dict, bias_read: str) -> str:
+    """Post-alert — field labels/values stay English; bias_read (built by
+    news_agent._bias_read) already carries the Arabic explanatory note."""
     t = ev["time"]
     return (
-        "<b>📊 Released — red-folder USD event</b>\n"
+        "<b>📊 صدر الحدث الاقتصادي — USD</b>\n"
         f"━━━━━━━━━━━━━━━━━━━━━\n"
         f"<b>{ev.get('title','?')}</b>  ({ev.get('currency','?')})  · {t.strftime('%H:%M UTC')}\n"
         f"Previous:  <b>{ev.get('previous') or 'n/a'}</b>\n"
