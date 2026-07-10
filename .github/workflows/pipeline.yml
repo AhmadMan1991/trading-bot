@@ -12,7 +12,14 @@ on:
     # This replaces the old 9-asset/5-engine chain (scalp/swing/council/
     # forecast/deep_pipeline) entirely — those files are deprecated stubs,
     # their workflows below are manual-only relics kept for reference.
-    - cron: '*/30 7-16 * * 1-5'
+    #
+    # Offset to :08/:38 instead of :00/:30 — GitHub's own docs warn that
+    # scheduled workflows queued at the top of the hour (and other round
+    # minute marks) get delayed or silently dropped during high platform
+    # load, since that's when the largest number of repos across GitHub
+    # fire their cron jobs. This matches the multi-hour gaps we kept seeing
+    # in the commit history with no code-side explanation.
+    - cron: '8,38 7-16 * * 1-5'
   workflow_dispatch:
 
 permissions:

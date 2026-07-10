@@ -5,7 +5,13 @@ on:
     # Every 5 minutes through both London+NY sessions, Mon-Fri.
     # Each run is a cheap calendar check (no chart rendering, no full market
     # scan), so this cadence is fine cost-wise even though it's frequent.
-    - cron: '*/5 6-22 * * 1-5'
+    #
+    # Offset to :03/:08/:13/... instead of :00/:05/:10/... — GitHub delays
+    # or silently drops scheduled runs queued at round minute marks during
+    # high platform load, since that's when the most repos across GitHub
+    # fire cron jobs simultaneously. This lines up with the multi-hour gaps
+    # we saw with no code-side explanation.
+    - cron: '3-58/5 6-22 * * 1-5'
   workflow_dispatch:
 
 permissions:

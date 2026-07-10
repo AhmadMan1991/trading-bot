@@ -48,8 +48,16 @@ def _load_state() -> dict:
 
 def _save_state(state: dict) -> None:
     DATA_ROOT.mkdir(exist_ok=True)
-    # prune anything older than 2 days so this file doesn't grow forever
-    cutoff = pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=2)
+    # Prune old dedup markers so this file doesn't grow forever. Was 2 days,
+    # keyed off the EVENT's own timestamp — but ForexFactory's "this week"
+    # feed keeps listing an event for the rest of its calendar week, so an
+    # event from early in the week would age out of post_sent/pre_sent
+    # after 2 days while the feed still returned it, making the "already
+    # sent" check go false again and firing the same alert on a ~2-day
+    # repeat loop indefinitely. 9 days safely outlives a full calendar week
+    # either side, so a dedup marker never expires while the feed can still
+    # surface that event.
+    cutoff = pd.Timestamp.now(tz="UTC") - pd.Timedelta(days=9)
     for key in ("pre_sent", "post_sent"):
         state[key] = [e for e in state[key]
                       if _safe_ts(e.split("_")[-1]) is None or _safe_ts(e.split("_")[-1]) > cutoff]
