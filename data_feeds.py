@@ -111,13 +111,35 @@ def fetch_okx(asset: str, interval: str, bars: int = 300) -> pd.DataFrame | None
         return None
 
 
+_intraday_cache: dict[tuple, pd.DataFrame] = {}
+
+
 def fetch_intraday(asset: str, interval: str, bars: int = 300) -> pd.DataFrame | None:
-    """Route to OKX for BTC/ETH, TwelveData for everything else."""
+    """Route to OKX for BTC/ETH, TwelveData for everything else. Cached
+    in-process per (asset, interval) — one gold pipeline run calls this up
+    to 9 times for overlapping data (bias/scenarios/scalp/swing each fetch
+    their own copy of 1h/4h at different bar counts), which was enough to
+    trip TwelveData's per-minute rate limit and 429 partway through a run
+    (swing failing with "insufficient data" wasn't a real lack of setup,
+    just a starved API call). First call for a given (asset, interval)
+    fetches fresh and caches it; a later call in the same run reuses that
+    dataframe (sliced to the smaller bar count it needs) instead of hitting
+    the API again — only re-fetches if the cached copy has fewer bars than
+    now requested."""
+    cached = _intraday_cache.get((asset, interval))
+    if cached is not None and len(cached) >= bars:
+        return cached.tail(bars)
+
     if asset in ("BTCUSD", "ETHUSD"):
         df = fetch_okx(asset, interval, bars)
-        if df is not None:
-            return df
-    return fetch_td(asset, interval, bars)
+        if df is None:
+            df = fetch_td(asset, interval, bars)
+    else:
+        df = fetch_td(asset, interval, bars)
+
+    if df is not None and (cached is None or len(df) > len(cached)):
+        _intraday_cache[(asset, interval)] = df
+    return df
 
 
 # ── Insider-week COT (0-100 Index) ───────────────────────────────────────────
