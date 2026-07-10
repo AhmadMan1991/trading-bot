@@ -72,22 +72,26 @@ def _safe_ts(s: str):
 
 
 def _bias_read(forecast, actual) -> str:
-    """Very simple beat/miss -> USD bias -> XAU/indices tendency read.
-    Terminology (Beat/Miss, USD/XAU) stays English, the explanatory note is
-    Arabic per user request."""
+    """Beat/miss -> USD bias -> XAU tendency read, prefixed with a short,
+    unambiguous PRO GOLD / AGAINST GOLD tag so the takeaway is readable at
+    a glance without parsing the full sentence. Terminology (Beat/Miss,
+    USD/XAU) stays English, tag + note are Arabic per user request."""
     try:
         f = float(str(forecast).replace("%", "").replace("K", "").replace("M", ""))
         a = float(str(actual).replace("%", "").replace("K", "").replace("M", ""))
     except (ValueError, TypeError):
-        return "تعذرت المقارنة الرقمية — يُرجى مراجعة الحدث يدويًا."
+        return "⚪ <b>غير محدد</b>\nتعذرت المقارنة الرقمية — يُرجى مراجعة الحدث يدويًا."
 
     if a > f:
-        return ("تجاوز التوقعات (Beat) ← عادةً <b>USD-bullish</b> ← يميل للضغط على "
-                "<b>XAU (bearish)</b> والمؤشرات (bearish)، مع افتراض ثبات باقي العوامل.")
+        return ("🔴 <b>ضد الذهب (Against Gold)</b>\n"
+                "تجاوز التوقعات (Beat) ← عادةً USD-bullish ← يميل للضغط على "
+                "XAU والمؤشرات، مع افتراض ثبات باقي العوامل.")
     if a < f:
-        return ("قصور عن التوقعات (Miss) ← عادةً <b>USD-bearish</b> ← يميل لدعم "
-                "<b>XAU (bullish)</b> والمؤشرات (bullish)، مع افتراض ثبات باقي العوامل.")
-    return "جاءت القراءة مطابقة للتوقعات (in line) ← عادةً ردة فعل هادئة/محايدة."
+        return ("🟢 <b>لصالح الذهب (Pro Gold)</b>\n"
+                "قصور عن التوقعات (Miss) ← عادةً USD-bearish ← يميل لدعم "
+                "XAU والمؤشرات، مع افتراض ثبات باقي العوامل.")
+    return ("⚪ <b>محايد (Neutral)</b>\n"
+            "جاءت القراءة مطابقة للتوقعات (in line) ← عادةً ردة فعل هادئة/محايدة.")
 
 
 def run_news_agent() -> None:
@@ -144,7 +148,8 @@ def run_news_agent() -> None:
         elif (not has_actual and mins_until <= -NEWS_POST_GRACE_MIN
                 and eid not in state["post_sent"]):
             telegram.send_text(telegram.format_news_post(
-                ev, "لا توجد قراءة رقمية لهذا الحدث (حدث نوعي مثل محضر اجتماع/خطاب/شهادة، "
+                ev, "⚪ <b>غير معروف (Unknown)</b>\n"
+                    "لا توجد قراءة رقمية لهذا الحدث (حدث نوعي مثل محضر اجتماع/خطاب/شهادة، "
                     "أو أن المصدر لم يحدّث القيمة الفعلية بعد) — يُرجى المراجعة يدويًا إذا "
                     "كان هذا الحدث مهمًا لتحليلك."))
             state["post_sent"].append(eid)
