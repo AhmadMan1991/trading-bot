@@ -94,7 +94,9 @@ def run_macro_layer():
     from macro_agent import run_macro_agent
     result = run_macro_agent()
     if result.get("synthesis"):
-        telegram.send_text(f"🌐 <b>Macro Read</b>\n\n{result['synthesis']}")
+        # esc() — free-form LLM text can contain "<"/">"/"&" that breaks
+        # Telegram's HTML parser the same way the EMA-stack reasons did.
+        telegram.send_text(f"🌐 <b>Macro Read</b>\n\n{telegram.esc(result['synthesis'])}")
     return result
 
 
@@ -113,7 +115,10 @@ def run_gold_bias_layer():
     bias = run_gold_bias()
     if bias:
         b = bias.get("bias", "NEUTRAL")
-        reasons = ", ".join(bias.get("reasons", [])[:3])
+        # esc() here — reason strings like "EMA stack bearish (20<50<200)"
+        # were breaking Telegram's HTML parser (it read "<50<200" as an
+        # unclosed tag) and silently dropping this whole message.
+        reasons = ", ".join(telegram.esc(r) for r in bias.get("reasons", [])[:3])
         telegram.send_text(f"🥇 <b>Gold Bias (H4)</b>: {b}\n<i>{reasons}</i>")
         try:
             dash.record_forecast(ASSET, b, None, bias, None)

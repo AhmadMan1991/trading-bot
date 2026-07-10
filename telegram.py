@@ -2,11 +2,25 @@
 Telegram message formatter and sender — multi-layer OODA system.
 """
 
+import html as _html
 import requests
 from config import TELEGRAM_TOKEN, TELEGRAM_CHAT_ID, ACCOUNT_SIZE, RISK_PCT, DASHBOARD_URL
 
 TELEGRAM_BOT_TOKEN = TELEGRAM_TOKEN  # backward-compat alias
 API = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}"
+
+
+def esc(s) -> str:
+    """Escape <, >, & in free-text fields before they're interpolated into an
+    HTML parse_mode Telegram message. Needed because things like the EMA
+    stack reason string "EMA stack bearish (20<50<200)" get read by
+    Telegram's HTML parser as a broken tag ("<50<200") and the ENTIRE
+    message is silently dropped (sendMessage returns 400, nothing shows up
+    in the chat, and the caller only sees a one-line log print). Any
+    dynamic/free-text field going into an HTML message should be wrapped
+    in this — literal <b>/<i>/<code> tags we write ourselves are fine
+    since those aren't passed through esc()."""
+    return _html.escape(str(s), quote=False)
 
 
 def _post(endpoint: str, **kwargs):
@@ -439,7 +453,11 @@ def format_gold_signal(sig: dict) -> str:
     rr = sig.get("risk_reward", 0)
     layer = sig.get("layer", "gold").replace("gold_", "").upper()
     session = sig.get("session", "")
-    factors = "\n".join(f"  • {f}" for f in sig.get("factors", [])[:6])
+    # esc() on free-text engine output (factors/reasoning) — these can end
+    # up containing "<"/">"/"&" (e.g. EMA/price comparisons) which would
+    # otherwise break Telegram's HTML parser and silently drop the message,
+    # same failure mode as the gold-bias broadcast.
+    factors = "\n".join(f"  • {esc(f)}" for f in sig.get("factors", [])[:6])
 
     header = f"🎯🎯🎯 <b>SNIPER SETUP</b> 🎯🎯🎯" if is_sniper else f"{emoji} <b>{name}</b>"
     lines = [
@@ -455,7 +473,7 @@ def format_gold_signal(sig: dict) -> str:
         "━━━━━━━━━━━━━━━━━━━━━",
         factors,
         "",
-        f"<i>{sig.get('reasoning', '')[:300]}</i>",
+        f"<i>{esc(sig.get('reasoning', ''))[:300]}</i>",
     ]
     if is_sniper:
         lines.append("\n🎯 <b>Extra focus:</b> highest-conviction confluence this "
