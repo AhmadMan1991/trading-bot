@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-11 06:37:22.043646+00:00",
+  "updated_at": "2026-07-12 19:29:16.418872+00:00",
   "signals": [],
   "forecasts": [
     {
@@ -195,22 +195,70 @@
   "news": {
     "events": [
       {
-        "title": "ISM Services PMI",
+        "title": "Core CPI m/m",
         "currency": "USD",
-        "time": "2026-07-06 14:00:00+00:00",
-        "forecast": "54.2",
-        "previous": "54.5",
+        "time": "2026-07-14 12:30:00+00:00",
+        "forecast": "0.2%",
+        "previous": "0.2%",
         "actual": null
       },
       {
-        "title": "FOMC Meeting Minutes",
+        "title": "Core CPI y/y",
         "currency": "USD",
-        "time": "2026-07-08 18:00:00+00:00",
+        "time": "2026-07-14 12:30:00+00:00",
+        "forecast": "2.8%",
+        "previous": "2.9%",
+        "actual": null
+      },
+      {
+        "title": "CPI m/m",
+        "currency": "USD",
+        "time": "2026-07-14 12:30:00+00:00",
+        "forecast": "-0.1%",
+        "previous": "0.5%",
+        "actual": null
+      },
+      {
+        "title": "CPI y/y",
+        "currency": "USD",
+        "time": "2026-07-14 12:30:00+00:00",
+        "forecast": "3.8%",
+        "previous": "4.2%",
+        "actual": null
+      },
+      {
+        "title": "Fed Chairman Warsh Testifies",
+        "currency": "USD",
+        "time": "2026-07-14 14:00:00+00:00",
+        "forecast": "",
+        "previous": "",
+        "actual": null
+      },
+      {
+        "title": "Core PPI m/m",
+        "currency": "USD",
+        "time": "2026-07-15 12:30:00+00:00",
+        "forecast": "0.3%",
+        "previous": "0.4%",
+        "actual": null
+      },
+      {
+        "title": "PPI m/m",
+        "currency": "USD",
+        "time": "2026-07-15 12:30:00+00:00",
+        "forecast": "0.0%",
+        "previous": "1.1%",
+        "actual": null
+      },
+      {
+        "title": "Fed Chairman Warsh Testifies",
+        "currency": "USD",
+        "time": "2026-07-15 14:00:00+00:00",
         "forecast": "",
         "previous": "",
         "actual": null
       }
     ],
-    "updated_at": "2026-07-11 06:37:22.043589+00:00"
+    "updated_at": "2026-07-12 19:29:16.418825+00:00"
   }
 }
