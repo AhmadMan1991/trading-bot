@@ -94,6 +94,56 @@ def _bias_read(forecast, actual) -> str:
             "جاءت القراءة مطابقة للتوقعات (in line) ← عادةً ردة فعل هادئة/محايدة.")
 
 
+def run_weekly_preview() -> None:
+    """Sunday-only digest — one quick summary of the coming week's red-folder
+    (high-impact) USD events, sent as a single message ahead of the trading
+    week. Doesn't touch pre_sent/post_sent state or count against the
+    per-event dedup — the normal per-event pre/post-alerts from
+    run_news_agent() still fire independently through the week regardless
+    of whether this preview ran."""
+    events = fetch_news_events_raw()
+    now = pd.Timestamp.now(tz="UTC")
+
+    week_events = [
+        ev for ev in events
+        if (ev.get("currency") or "").upper() in NEWS_WATCH_CURRENCIES
+        and str(ev.get("impact", "")).lower() == "high"
+        and ev.get("time") is not None
+        and ev["time"] >= now
+    ]
+    week_events.sort(key=lambda e: e["time"])
+
+    if not week_events:
+        telegram.send_text(
+            "🗓️ <b>نظرة الأسبوع — USD Red Folder</b>\n"
+            "━━━━━━━━━━━━━━━━━━━━━\n"
+            "لا توجد بيانات دولار عالية الأهمية هذا الأسبوع."
+        )
+        print("  📅 weekly preview sent: no red-folder USD events this week")
+        return
+
+    lines = [
+        "🗓️ <b>نظرة الأسبوع — أهم بيانات الدولار (USD Red Folder)</b>",
+        "━━━━━━━━━━━━━━━━━━━━━",
+    ]
+    for ev in week_events:
+        t = ev["time"]
+        day_str = t.strftime("%a %d/%m")
+        time_str = t.strftime("%H:%M UTC")
+        fc = ev.get("forecast") or "n/a"
+        prev = ev.get("previous") or "n/a"
+        lines.append(f"• {day_str}  {time_str} — <b>{ev.get('title', '?')}</b>  "
+                      f"(prev {prev} / fcst {fc})")
+    lines += [
+        "━━━━━━━━━━━━━━━━━━━━━",
+        f"إجمالي <b>{len(week_events)}</b> حدث عالي الأهمية هذا الأسبوع. سيصلك تنبيه قبل كل "
+        f"حدث بـ{NEWS_PRE_ALERT_MIN} دقيقة، وتحديث فوري بعد صدور البيانات (أو خلال حتى "
+        f"{NEWS_POST_GRACE_MIN} دقيقة إذا لم يصدر رقم فعلي للحدث).",
+    ]
+    telegram.send_text("\n".join(lines))
+    print(f"  📅 weekly preview sent: {len(week_events)} red-folder USD event(s)")
+
+
 def run_news_agent() -> None:
     events = fetch_news_events_raw()
     now = pd.Timestamp.now(tz="UTC")

@@ -232,6 +232,12 @@ def run_news_layer():
     run_news_agent()
 
 
+def run_news_weekly_layer():
+    print("\n═══ WEEKLY NEWS PREVIEW ═══")
+    from news_agent import run_weekly_preview
+    run_weekly_preview()
+
+
 def run_tracer_layer():
     print("\n═══ TRACER LAYER ═══")
     from tracer_agent import run_tracer_agent
@@ -273,8 +279,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Gold-only Sequential Pipeline TradingBot")
     parser.add_argument("--layer", default=None,
                         choices=["cot", "macro", "gold_bias", "gold_scalp", "gold_swing",
-                                 "performance", "news", "tracer", "cot_weekly", "daily_brief",
-                                 "backtest"])
+                                 "performance", "news", "news_weekly", "tracer", "cot_weekly",
+                                 "daily_brief", "backtest"])
     parser.add_argument("--asset",  default=None)   # kept for backtest compat; engine itself is gold-only
     parser.add_argument("--bars",   type=int, default=2000)
     parser.add_argument("--window", type=int, default=500)
@@ -301,6 +307,8 @@ if __name__ == "__main__":
             run_performance_layer()
         elif args.layer == "news":
             run_news_layer()
+        elif args.layer == "news_weekly":
+            run_news_weekly_layer()
         elif args.layer == "tracer":
             run_tracer_layer()
         elif args.layer == "cot_weekly":

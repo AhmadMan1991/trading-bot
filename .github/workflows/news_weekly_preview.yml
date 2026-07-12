@@ -1,0 +1,49 @@
+name: Weekly USD News Preview
+
+on:
+  schedule:
+    # Sunday, ahead of the new trading week (markets reopen ~21-22 UTC
+    # Sunday). Offset off the round hour/minute mark for the same
+    # high-load-avoidance reasoning as the other workflows.
+    - cron: '12 17 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  news_weekly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run weekly news preview
+        env:
+          TELEGRAM_TOKEN:    ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID:  ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python main.py --layer news_weekly
+
+      - name: Commit state (none expected — preview doesn't write any files)
+        run: |
+          git config user.name  "trading-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/ docs/ || true
+          if git diff --staged --quiet; then
+            echo "nothing to commit"
+          else
+            git commit -m "chore: weekly news preview [skip ci]"
+            for i in 1 2 3; do
+              git pull --rebase --autostash origin main && git push && break
+              echo "push attempt $i failed, retrying..."
+              git rebase --abort 2>/dev/null || true
+              sleep $((RANDOM % 10 + 5))
+            done
+          fi
