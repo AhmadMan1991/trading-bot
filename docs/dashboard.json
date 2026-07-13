@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-13 13:52:13.561119+00:00",
+  "updated_at": "2026-07-13 16:16:45.105943+00:00",
   "signals": [],
   "forecasts": [
     {
@@ -13,16 +13,16 @@
           "Structure: lower-highs & lower-lows"
         ],
         "cot": {
-          "net": 194019,
-          "change": 12680,
+          "net": 194246,
+          "change": 227,
           "cot_index": 41,
           "signal": "NEUTRAL",
-          "date": "2026-06-30",
+          "date": "2026-07-07",
           "source": "CFTC (official)"
         },
         "dollar_bias": "USD_NEUTRAL"
       },
-      "timestamp": "2026-07-10 19:29:19.377482+00:00",
+      "timestamp": "2026-07-13 16:16:41.717793+00:00",
       "chart": null
     }
   ],
@@ -63,16 +63,16 @@
   "cot": {
     "data": {
       "XAUUSD": {
-        "net": 194019,
-        "change": 12680,
+        "net": 194246,
+        "change": 227,
         "cot_index": 41,
         "signal": "NEUTRAL",
-        "date": "2026-06-30",
+        "date": "2026-07-07",
         "source": "CFTC (official)"
       }
     },
     "summary": "1/1 markets reporting. 0 bullish, 0 bearish, 1 neutral.",
-    "timestamp": "2026-07-10 19:29:18.094409+00:00"
+    "timestamp": "2026-07-13 16:16:40.668979+00:00"
   },
   "cot_history": [
     {
@@ -126,6 +126,19 @@
           "source": "CFTC (official)"
         }
       }
+    },
+    {
+      "date": "2026-07-13",
+      "data": {
+        "XAUUSD": {
+          "net": 194246,
+          "change": 227,
+          "cot_index": 41,
+          "signal": "NEUTRAL",
+          "date": "2026-07-07",
+          "source": "CFTC (official)"
+        }
+      }
     }
   ],
   "scenarios": {
@@ -135,13 +148,13 @@
         "EMA stack bearish (20<50<200)"
       ],
       "timeframe": "1H",
-      "price": 4102.31,
-      "support": 4056.96,
-      "resistance": 4137.7,
+      "price": 4013.3,
+      "support": 4002.72,
+      "resistance": 4112.97,
       "external_high": 4202.03,
-      "external_low": 3949.45,
-      "bos": null,
-      "updated_at": "2026-07-10 19:29:20.260314+00:00",
+      "external_low": 3959.59,
+      "bos": "BEARISH",
+      "updated_at": "2026-07-13 16:16:42.540941+00:00",
       "chart": "charts/scenario_1H.png"
     },
     "4H": {
@@ -151,13 +164,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "4H",
-      "price": 4102.31,
-      "support": 4022.2,
-      "resistance": 4202.03,
-      "external_high": 4594.65,
+      "price": 4013.3,
+      "support": 4002.72,
+      "resistance": 4179.38,
+      "external_high": 4569.27,
       "external_low": 3949.45,
-      "bos": null,
-      "updated_at": "2026-07-10 19:29:20.780519+00:00",
+      "bos": "BEARISH",
+      "updated_at": "2026-07-13 16:16:43.164483+00:00",
       "chart": "charts/scenario_4H.png"
     },
     "Daily": {
@@ -167,13 +180,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Daily",
-      "price": 4102.31,
+      "price": 4013.3,
       "support": 3949.45,
-      "resistance": 4547.29,
+      "resistance": 4515.8,
       "external_high": 5597.23,
-      "external_low": 3600.0,
+      "external_low": 3900.0,
       "bos": null,
-      "updated_at": "2026-07-10 19:29:21.286499+00:00",
+      "updated_at": "2026-07-13 16:16:43.747989+00:00",
       "chart": "charts/scenario_Daily.png"
     },
     "Weekly": {
@@ -182,13 +195,13 @@
         "EMA stack bullish (20>50>200)"
       ],
       "timeframe": "Weekly",
-      "price": 4101.84,
-      "support": 3600.0,
+      "price": 4013.94,
+      "support": 3900.0,
       "resistance": 5597.23,
       "external_high": 5597.23,
       "external_low": 1804.65,
       "bos": "BEARISH",
-      "updated_at": "2026-07-10 19:29:21.837800+00:00",
+      "updated_at": "2026-07-13 16:16:44.378988+00:00",
       "chart": "charts/scenario_Weekly.png"
     }
   },
