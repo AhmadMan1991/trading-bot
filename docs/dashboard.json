@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-18 06:28:18.118176+00:00",
+  "updated_at": "2026-07-20 13:25:48.948951+00:00",
   "signals": [],
   "forecasts": [
     {
@@ -259,72 +259,7 @@
     }
   },
   "news": {
-    "events": [
-      {
-        "title": "Core CPI m/m",
-        "currency": "USD",
-        "time": "2026-07-14 12:30:00+00:00",
-        "forecast": "0.2%",
-        "previous": "0.2%",
-        "actual": null
-      },
-      {
-        "title": "Core CPI y/y",
-        "currency": "USD",
-        "time": "2026-07-14 12:30:00+00:00",
-        "forecast": "2.8%",
-        "previous": "2.9%",
-        "actual": null
-      },
-      {
-        "title": "CPI m/m",
-        "currency": "USD",
-        "time": "2026-07-14 12:30:00+00:00",
-        "forecast": "-0.1%",
-        "previous": "0.5%",
-        "actual": null
-      },
-      {
-        "title": "CPI y/y",
-        "currency": "USD",
-        "time": "2026-07-14 12:30:00+00:00",
-        "forecast": "3.8%",
-        "previous": "4.2%",
-        "actual": null
-      },
-      {
-        "title": "Fed Chairman Warsh Testifies",
-        "currency": "USD",
-        "time": "2026-07-14 14:00:00+00:00",
-        "forecast": "",
-        "previous": "",
-        "actual": null
-      },
-      {
-        "title": "Core PPI m/m",
-        "currency": "USD",
-        "time": "2026-07-15 12:30:00+00:00",
-        "forecast": "0.3%",
-        "previous": "0.4%",
-        "actual": null
-      },
-      {
-        "title": "PPI m/m",
-        "currency": "USD",
-        "time": "2026-07-15 12:30:00+00:00",
-        "forecast": "0.0%",
-        "previous": "1.1%",
-        "actual": null
-      },
-      {
-        "title": "Fed Chairman Warsh Testifies",
-        "currency": "USD",
-        "time": "2026-07-15 14:00:00+00:00",
-        "forecast": "",
-        "previous": "",
-        "actual": null
-      }
-    ],
-    "updated_at": "2026-07-18 06:28:18.118131+00:00"
+    "events": [],
+    "updated_at": "2026-07-20 13:25:48.948895+00:00"
   }
 }
