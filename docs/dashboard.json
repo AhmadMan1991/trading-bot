@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-25 06:05:58.147055+00:00",
+  "updated_at": "2026-07-27 15:56:49.517113+00:00",
   "signals": [],
   "forecasts": [
     {
@@ -321,7 +321,48 @@
     }
   },
   "news": {
-    "events": [],
-    "updated_at": "2026-07-25 06:05:58.146999+00:00"
+    "events": [
+      {
+        "title": "Federal Funds Rate",
+        "currency": "USD",
+        "time": "2026-07-29 18:00:00+00:00",
+        "forecast": "3.75%",
+        "previous": "3.75%",
+        "actual": null
+      },
+      {
+        "title": "FOMC Statement",
+        "currency": "USD",
+        "time": "2026-07-29 18:00:00+00:00",
+        "forecast": "",
+        "previous": "",
+        "actual": null
+      },
+      {
+        "title": "FOMC Press Conference",
+        "currency": "USD",
+        "time": "2026-07-29 18:30:00+00:00",
+        "forecast": "",
+        "previous": "",
+        "actual": null
+      },
+      {
+        "title": "Advance GDP q/q",
+        "currency": "USD",
+        "time": "2026-07-30 12:30:00+00:00",
+        "forecast": "2.3%",
+        "previous": "2.0%",
+        "actual": null
+      },
+      {
+        "title": "Core PCE Price Index m/m",
+        "currency": "USD",
+        "time": "2026-07-30 12:30:00+00:00",
+        "forecast": "0.1%",
+        "previous": "0.3%",
+        "actual": null
+      }
+    ],
+    "updated_at": "2026-07-27 15:56:49.517046+00:00"
   }
 }
