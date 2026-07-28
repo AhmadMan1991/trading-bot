@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-27 20:51:32.898435+00:00",
+  "updated_at": "2026-07-28 00:13:04.577787+00:00",
   "signals": [],
   "forecasts": [
     {
@@ -362,7 +362,7 @@
         "title": "Advance GDP q/q",
         "currency": "USD",
         "time": "2026-07-30 12:30:00+00:00",
-        "forecast": "2.3%",
+        "forecast": "2.0%",
         "previous": "2.0%",
         "actual": null
       },
@@ -370,11 +370,11 @@
         "title": "Core PCE Price Index m/m",
         "currency": "USD",
         "time": "2026-07-30 12:30:00+00:00",
-        "forecast": "0.1%",
+        "forecast": "0.2%",
         "previous": "0.3%",
         "actual": null
       }
     ],
-    "updated_at": "2026-07-27 20:51:32.898401+00:00"
+    "updated_at": "2026-07-28 00:13:04.577742+00:00"
   }
 }
