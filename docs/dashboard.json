@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-03 19:11:58.982575+00:00",
+  "updated_at": "2026-08-03 20:39:05.237793+00:00",
   "signals": [],
   "forecasts": [
     {
@@ -355,7 +355,7 @@
         "title": "Non-Farm Employment Change",
         "currency": "USD",
         "time": "2026-08-07 12:30:00+00:00",
-        "forecast": "88K",
+        "forecast": "85K",
         "previous": "57K",
         "actual": null
       },
@@ -368,6 +368,6 @@
         "actual": null
       }
     ],
-    "updated_at": "2026-08-03 19:11:58.982527+00:00"
+    "updated_at": "2026-08-03 20:39:05.237759+00:00"
   }
 }
