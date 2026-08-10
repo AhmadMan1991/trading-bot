@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-07 23:15:38.561661+00:00",
+  "updated_at": "2026-08-10 07:41:37.526010+00:00",
   "signals": [],
   "forecasts": [
     {
@@ -339,38 +339,54 @@
   "news": {
     "events": [
       {
-        "title": "ISM Manufacturing PMI",
+        "title": "Core CPI m/m",
         "currency": "USD",
-        "time": "2026-08-03 14:00:00+00:00",
-        "forecast": "54.0",
-        "previous": "53.3",
+        "time": "2026-08-12 12:30:00+00:00",
+        "forecast": "0.2%",
+        "previous": "0.0%",
         "actual": null
       },
       {
-        "title": "Average Hourly Earnings m/m",
+        "title": "Core CPI y/y",
         "currency": "USD",
-        "time": "2026-08-07 12:30:00+00:00",
+        "time": "2026-08-12 12:30:00+00:00",
+        "forecast": "2.5%",
+        "previous": "2.6%",
+        "actual": null
+      },
+      {
+        "title": "CPI m/m",
+        "currency": "USD",
+        "time": "2026-08-12 12:30:00+00:00",
+        "forecast": "0.1%",
+        "previous": "-0.4%",
+        "actual": null
+      },
+      {
+        "title": "CPI y/y",
+        "currency": "USD",
+        "time": "2026-08-12 12:30:00+00:00",
+        "forecast": "3.4%",
+        "previous": "3.5%",
+        "actual": null
+      },
+      {
+        "title": "Core PPI m/m",
+        "currency": "USD",
+        "time": "2026-08-13 12:30:00+00:00",
         "forecast": "0.3%",
-        "previous": "0.3%",
+        "previous": "0.2%",
         "actual": null
       },
       {
-        "title": "Non-Farm Employment Change",
+        "title": "PPI m/m",
         "currency": "USD",
-        "time": "2026-08-07 12:30:00+00:00",
-        "forecast": "85K",
-        "previous": "57K",
-        "actual": null
-      },
-      {
-        "title": "Unemployment Rate",
-        "currency": "USD",
-        "time": "2026-08-07 12:30:00+00:00",
-        "forecast": "4.2%",
-        "previous": "4.2%",
+        "time": "2026-08-13 12:30:00+00:00",
+        "forecast": "0.2%",
+        "previous": "-0.3%",
         "actual": null
       }
     ],
-    "updated_at": "2026-08-07 23:15:38.561615+00:00"
+    "updated_at": "2026-08-10 07:41:37.525965+00:00"
   }
 }
