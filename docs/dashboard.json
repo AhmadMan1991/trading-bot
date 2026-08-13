@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-13 09:50:00.270031+00:00",
+  "updated_at": "2026-08-13 10:17:44.900498+00:00",
   "signals": [],
   "forecasts": [
     {
@@ -22,7 +22,7 @@
         },
         "dollar_bias": "USD_NEUTRAL"
       },
-      "timestamp": "2026-08-13 08:38:57.997021+00:00",
+      "timestamp": "2026-08-13 10:17:42.557529+00:00",
       "chart": null
     }
   ],
@@ -72,7 +72,7 @@
       }
     },
     "summary": "1/1 markets reporting. 0 bullish, 0 bearish, 1 neutral.",
-    "timestamp": "2026-08-13 08:38:56.511148+00:00"
+    "timestamp": "2026-08-13 10:17:41.399404+00:00"
   },
   "cot_history": [
     {
@@ -279,13 +279,13 @@
         "Structure: higher-highs & higher-lows"
       ],
       "timeframe": "1H",
-      "price": 4374.24,
-      "support": 4361.29,
+      "price": 4382.13,
+      "support": 4361.86,
       "resistance": 4449.78,
       "external_high": 4449.78,
       "external_low": 4022.04,
-      "bos": "BEARISH",
-      "updated_at": "2026-08-13 08:38:58.910809+00:00",
+      "bos": null,
+      "updated_at": "2026-08-13 10:17:43.286403+00:00",
       "chart": "charts/scenario_1H.png"
     },
     "4H": {
@@ -295,13 +295,13 @@
         "Structure: higher-highs & higher-lows"
       ],
       "timeframe": "4H",
-      "price": 4374.24,
+      "price": 4382.13,
       "support": 4230.24,
       "resistance": 4449.78,
       "external_high": 4449.78,
       "external_low": 3949.45,
       "bos": "BULLISH",
-      "updated_at": "2026-08-13 08:38:59.509318+00:00",
+      "updated_at": "2026-08-13 10:17:43.705903+00:00",
       "chart": "charts/scenario_4H.png"
     },
     "Daily": {
@@ -310,13 +310,13 @@
         "Structure: higher-highs & higher-lows"
       ],
       "timeframe": "Daily",
-      "price": 4374.24,
+      "price": 4382.13,
       "support": 3961.81,
       "resistance": 4449.78,
       "external_high": 5597.23,
       "external_low": 3949.45,
       "bos": "BULLISH",
-      "updated_at": "2026-08-13 08:39:00.130473+00:00",
+      "updated_at": "2026-08-13 10:17:44.112666+00:00",
       "chart": "charts/scenario_Daily.png"
     },
     "Weekly": {
@@ -326,13 +326,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Weekly",
-      "price": 4375.28,
+      "price": 4382.13,
       "support": 3949.45,
       "resistance": 5597.23,
       "external_high": 5597.23,
       "external_low": 1809.4,
       "bos": null,
-      "updated_at": "2026-08-13 08:39:00.760702+00:00",
+      "updated_at": "2026-08-13 10:17:44.530513+00:00",
       "chart": "charts/scenario_Weekly.png"
     }
   },
