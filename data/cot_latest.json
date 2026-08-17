@@ -1,12 +1,12 @@
 {
-  "updated_at": "2026-08-14 17:02:38.093618+00:00",
+  "updated_at": "2026-08-17 07:57:21.147379+00:00",
   "data": {
     "XAUUSD": {
-      "net": 197634,
-      "change": 15564,
-      "cot_index": 45,
+      "net": 217940,
+      "change": 20306,
+      "cot_index": 70,
       "signal": "NEUTRAL",
-      "date": "2026-08-04",
+      "date": "2026-08-11",
       "source": "CFTC (official)"
     }
   }
