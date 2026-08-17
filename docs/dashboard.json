@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-14 22:59:01.571798+00:00",
+  "updated_at": "2026-08-17 06:55:19.171746+00:00",
   "signals": [],
   "forecasts": [
     {
@@ -336,54 +336,14 @@
   "news": {
     "events": [
       {
-        "title": "Core CPI m/m",
+        "title": "FOMC Meeting Minutes",
         "currency": "USD",
-        "time": "2026-08-12 12:30:00+00:00",
-        "forecast": "0.2%",
-        "previous": "0.0%",
-        "actual": null
-      },
-      {
-        "title": "Core CPI y/y",
-        "currency": "USD",
-        "time": "2026-08-12 12:30:00+00:00",
-        "forecast": "2.5%",
-        "previous": "2.6%",
-        "actual": null
-      },
-      {
-        "title": "CPI m/m",
-        "currency": "USD",
-        "time": "2026-08-12 12:30:00+00:00",
-        "forecast": "0.1%",
-        "previous": "-0.4%",
-        "actual": null
-      },
-      {
-        "title": "CPI y/y",
-        "currency": "USD",
-        "time": "2026-08-12 12:30:00+00:00",
-        "forecast": "3.4%",
-        "previous": "3.5%",
-        "actual": null
-      },
-      {
-        "title": "Core PPI m/m",
-        "currency": "USD",
-        "time": "2026-08-13 12:30:00+00:00",
-        "forecast": "0.3%",
-        "previous": "0.2%",
-        "actual": null
-      },
-      {
-        "title": "PPI m/m",
-        "currency": "USD",
-        "time": "2026-08-13 12:30:00+00:00",
-        "forecast": "0.2%",
-        "previous": "-0.3%",
+        "time": "2026-08-19 18:00:00+00:00",
+        "forecast": "",
+        "previous": "",
         "actual": null
       }
     ],
-    "updated_at": "2026-08-14 22:59:01.571758+00:00"
+    "updated_at": "2026-08-17 06:55:19.171681+00:00"
   }
 }
