@@ -33,13 +33,47 @@ Examples:
 """
 
 import argparse
+import json
 import sys
 import traceback
+from datetime import datetime, timezone
 from pathlib import Path
 
 import telegram
 
 ASSET = "XAUUSD"
+
+# ── Telegram noise control ────────────────────────────────────────────────
+# The informational layers (COT / Macro / Gold Bias) used to Telegram-blast on
+# EVERY 30-min pipeline run — ~50+ messages/day of "Gold Bias: BULLISH" and the
+# same COT map, whether or not anything changed. That constant stream is what
+# read as "the bot fires every signal". These reads now go to Telegram only
+# when they actually CHANGE, or once at the first run of a new UTC day. The
+# dashboard still records every run, so nothing is lost — it's just not pushed.
+_NOTIFY_STATE = Path("data") / "notify_state.json"
+
+
+def _should_notify(key: str, value: str) -> bool:
+    """True only if `value` for `key` differs from what we last Telegram-sent,
+    or if we haven't sent this key yet today (UTC). Persisted in data/ so it
+    survives across GitHub Actions runs the same way the other state files do."""
+    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    state = {}
+    if _NOTIFY_STATE.exists():
+        try:
+            state = json.loads(_NOTIFY_STATE.read_text())
+        except Exception:
+            state = {}
+    entry = state.get(key) or {}
+    if entry.get("date") == today and entry.get("value") == value:
+        return False
+    state[key] = {"date": today, "value": value}
+    try:
+        _NOTIFY_STATE.parent.mkdir(exist_ok=True)
+        _NOTIFY_STATE.write_text(json.dumps(state, indent=2))
+    except Exception as e:
+        print(f"    ⚠ notify-state write failed: {e}")
+    return True
 
 
 def _send_gold_chart(interval: str, sig: dict, caption: str, layer: str = ""):
@@ -83,7 +117,12 @@ def run_cot_layer():
     cot_map = run_cot_agent()
     cot_list = [{"market": m, **c} for m, c in cot_map.items() if c]
     if cot_list:
-        telegram.send_text(telegram.format_cot_map(cot_list, summary=build_cot_summary(cot_map)))
+        # COT only updates weekly — send on change / once a day, not every run.
+        sig = ",".join(f"{m}:{(c or {}).get('signal','')}" for m, c in sorted(cot_map.items()) if c)
+        if _should_notify("cot", sig):
+            telegram.send_text(telegram.format_cot_map(cot_list, summary=build_cot_summary(cot_map)))
+        else:
+            print("  (COT unchanged — dashboard updated, Telegram skipped)")
     return cot_map
 
 
@@ -96,7 +135,11 @@ def run_macro_layer():
     if result.get("synthesis"):
         # esc() — free-form LLM text can contain "<"/">"/"&" that breaks
         # Telegram's HTML parser the same way the EMA-stack reasons did.
-        telegram.send_text(f"🌐 <b>Macro Read</b>\n\n{telegram.esc(result['synthesis'])}")
+        # Once a day is plenty for a macro read — it doesn't move every 30 min.
+        if _should_notify("macro", datetime.now(timezone.utc).strftime("%Y-%m-%d")):
+            telegram.send_text(f"🌐 <b>Macro Read</b>\n\n{telegram.esc(result['synthesis'])}")
+        else:
+            print("  (macro already sent today — Telegram skipped)")
     return result
 
 
@@ -119,7 +162,12 @@ def run_gold_bias_layer():
         # were breaking Telegram's HTML parser (it read "<50<200" as an
         # unclosed tag) and silently dropping this whole message.
         reasons = ", ".join(telegram.esc(r) for r in bias.get("reasons", [])[:3])
-        telegram.send_text(f"🥇 <b>Gold Bias (H4)</b>: {b}\n<i>{reasons}</i>")
+        # Send the bias only when it FLIPS (or once a day), not every run —
+        # a standing "BULLISH" repeated 18x/day is the noise, not a signal.
+        if _should_notify("gold_bias", b):
+            telegram.send_text(f"🥇 <b>Gold Bias (H4)</b>: {b}\n<i>{reasons}</i>")
+        else:
+            print(f"  (gold bias unchanged: {b} — dashboard updated, Telegram skipped)")
         try:
             dash.record_forecast(ASSET, b, None, bias, None)
         except Exception as e:

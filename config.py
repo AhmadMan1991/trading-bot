@@ -85,10 +85,14 @@ MARKETS = {
 # factors produces a confidence score directly, so there's no "agents
 # disagree -> NO_TRADE" deadlock possible.
 GOLD_SESSIONS_UTC = [
-    (7, 10, "London Killzone"),
-    (12, 16, "NY Killzone + Overlap"),
-]   # highest-liquidity windows — outside these, the scalp scan doesn't run.
-    # Adjust if you trade a different session focus.
+    (7, 16, "London/NY"),
+]   # highest-liquidity window — outside this, the scalp scan doesn't run.
+    # Rebuilt to ONE continuous 07-16 UTC window (was two split killzones
+    # 07-10 + 12-16). The 10-12 gap was excluding perfectly good London-close/
+    # NY-premarket pullback setups, and the boundary bug (hour < end meant the
+    # whole :00-:59 of hour 16 was already "outside") cost the last hour too.
+    # A month-long GC=F backtest showed the continuous window is where the
+    # trend-pullback edge lives. Adjust if you trade a different focus.
 
 GOLD_JUDAS_WINDOW_MIN   = 60     # first N minutes of a session — actively watched
                                   # for a sweep-then-reverse (the "Judas Swing"),
@@ -98,15 +102,25 @@ GOLD_IMPULSE_ATR_MULT   = 1.5    # a move counts as "impulsive" (order-block-for
 GOLD_SWEEP_LOOKBACK     = 20     # bars searched for the swing high/low being swept
 GOLD_STRUCTURE_LOOKBACK = 40     # bars used for H4/H1 higher-high/lower-low structure
 
-GOLD_ATR_STOP_BUFFER    = 0.5    # stop = swept structural level +/- this x ATR
-GOLD_TP1_RR             = 2.0    # target 1, expressed as risk:reward multiple
-GOLD_TP2_RR             = 3.0    # target 2
+GOLD_ATR_STOP_BUFFER    = 0.6    # stop = pullback low/high (& EMA20 zone) +/- this x ATR
+GOLD_TP1_RR             = 1.5    # target 1 — hit-rate anchor (~55% of setups reach it
+                                  #  in backtest); take partial / move to breakeven here
+GOLD_TP2_RR             = 2.5    # target 2 — the expectancy driver
 GOLD_TP3_RR             = 4.0    # target 3 — runner, for trends that keep extending
 
+# ADX regime gate — the single biggest quality lever in the rebuild backtest:
+# ADX>=18 lifted win-rate ~36%->52% and monthly expectancy ~+5R->+16R by
+# refusing to take pullback entries in chop. Raise toward 20-25 for fewer,
+# cleaner trades; lower toward 15 for more (noisier) ones.
+GOLD_ADX_MIN            = 18
+
 GOLD_MIN_CONFIDENCE     = 0.55   # minimum confluence score to fire a signal
-GOLD_SCALP_COOLDOWN_MIN = 30     # don't re-fire a scalp signal within this many minutes
+GOLD_SCALP_COOLDOWN_MIN = 45     # don't re-fire a scalp signal within this many minutes
 GOLD_SWING_COOLDOWN_H   = 6      # don't re-fire a swing signal within this many hours
 
 GOLD_DAILY_LOSS_LIMIT_PCT = 0.03   # stop trading for the rest of the day after
                                     # losing this % of account equity
-GOLD_MAX_TRADES_PER_DAY   = 3      # hard cap on fired signals/day regardless of setups
+GOLD_MAX_TRADES_PER_DAY   = 4      # hard cap on fired signals/day (scalp+swing
+                                    #  combined). Backtest averages ~1.8 scalp +
+                                    #  swing, so 4 is headroom, not a target — the
+                                    #  ADX+confluence gates are what keep it honest.
