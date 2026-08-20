@@ -26,8 +26,9 @@ OLLAMA_URL       = "https://ollama.com/api/chat"
 OLLAMA_MODEL     = "gpt-oss:20b-cloud"
 
 GEMINI_API_KEY   = os.environ.get("GEMINI_API_KEY", "")
-GEMINI_MODEL     = "gemini-2.5-flash"
-GEMINI_URL       = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
+# Used via the google-genai SDK (Interactions API) in macro_agent.py — no raw
+# REST URL needed anymore. genai.Client() reads GEMINI_API_KEY from the env.
+GEMINI_MODEL     = os.environ.get("GEMINI_MODEL", "gemini-3.7-flash")
 
 # GitHub Pages URL for the dashboard (repo made public, Pages serving /docs).
 # Override via env var if you host it elsewhere (Cloudflare Pages, Vercel, a
