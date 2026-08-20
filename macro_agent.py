@@ -25,7 +25,20 @@ from pathlib import Path
 import requests
 import pandas as pd
 
-from config import GEMINI_API_KEY, GEMINI_URL, OLLAMA_URL, OLLAMA_MODEL, OLLAMA_KEY
+from config import GEMINI_API_KEY, GEMINI_MODEL, OLLAMA_URL, OLLAMA_MODEL, OLLAMA_KEY
+
+# google-genai SDK (Interactions API). Client auto-reads GEMINI_API_KEY /
+# GOOGLE_API_KEY from the env. Lazily constructed so a run with no key set
+# (macro is an optional step) doesn't import-fail.
+_genai_client = None
+
+
+def _gemini_client():
+    global _genai_client
+    if _genai_client is None:
+        from google import genai
+        _genai_client = genai.Client()
+    return _genai_client
 
 DATA_ROOT   = Path(__file__).parent / "data"
 LATEST_FILE = DATA_ROOT / "macro_latest.json"
@@ -64,22 +77,12 @@ def fetch_live_macro_data() -> str:
     if not GEMINI_API_KEY:
         return ""
     try:
-        r = requests.post(
-            f"{GEMINI_URL}?key={GEMINI_API_KEY}",
-            headers={"content-type": "application/json"},
-            json={
-                "contents": [{"parts": [{"text": GEMINI_DATA_PROMPT}]}],
-                "tools": [{"google_search": {}}],
-                "generationConfig": {"maxOutputTokens": 4000, "temperature": 0.1},
-            },
-            timeout=90,
+        interaction = _gemini_client().interactions.create(
+            model=GEMINI_MODEL,
+            input=GEMINI_DATA_PROMPT,
+            tools=[{"type": "google_search"}],
         )
-        if not r.ok:
-            print(f"  [Gemini] {r.status_code}: {r.text[:200]}")
-            return ""
-        data = r.json()
-        parts = data.get("candidates", [{}])[0].get("content", {}).get("parts", [])
-        return "".join(p.get("text", "") for p in parts)
+        return (interaction.output_text or "").strip()
     except Exception as e:
         print(f"  [Gemini] failed: {e}")
         return ""

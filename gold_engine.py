@@ -41,7 +41,7 @@ from config import (
     GOLD_SESSIONS_UTC, GOLD_JUDAS_WINDOW_MIN, GOLD_IMPULSE_ATR_MULT,
     GOLD_SWEEP_LOOKBACK, GOLD_STRUCTURE_LOOKBACK, GOLD_ATR_STOP_BUFFER,
     GOLD_TP1_RR, GOLD_TP2_RR, GOLD_TP3_RR, GOLD_MIN_CONFIDENCE, GOLD_SCALP_COOLDOWN_MIN,
-    GOLD_SWING_COOLDOWN_H, GOLD_DAILY_LOSS_LIMIT_PCT, GOLD_MAX_TRADES_PER_DAY,
+    GOLD_SWING_COOLDOWN_H, GOLD_DAILY_LOSS_LIMIT_PCT, GOLD_MAX_TRADES_PER_DAY, GOLD_ADX_MIN,
 )
 from indicators import add_base
 from data_feeds import fetch_intraday, fetch_all_cot, news_blocked, dollar_bias
@@ -331,62 +331,126 @@ def evaluate_setup(df_ltf: pd.DataFrame, df_htf: pd.DataFrame, cot: dict | None,
     skip_reasoning=True skips the optional LLM explanation call — used by
     backtest.py, which evaluates thousands of historical bars and doesn't
     use the reasoning text at all, so there's no reason to pay for (or wait
-    on) an LLM call per candidate bar."""
-    sweep = detect_liquidity_sweep(df_ltf)
-    if sweep is None:
-        return {"direction": "NEUTRAL", "signal_label": "NO_SIGNAL", "confidence": 0.0,
-                "factors": ["No liquidity sweep detected this bar"]}
+    on) an LLM call per candidate bar.
 
-    direction = sweep["direction"]
-    price = float(df_ltf.iloc[-1]["close"])
-    atr = float(df_ltf.iloc[-1]["atr"])
-    factors = [f"Liquidity sweep of {sweep['swept_level']:.2f} ({direction.lower()} reversal)"]
-    confidence = 0.35
-
-    bias = structure_bias(df_htf)
-    if bias["bias"] == direction:
-        confidence += 0.15
-        factors.append(f"Higher-timeframe structure agrees ({bias['bias']})")
-    elif bias["bias"] == "RANGING":
-        factors.append("Higher-timeframe structure is ranging — no conflict")
-    else:
-        confidence -= 0.05
-        factors.append(f"Higher-timeframe structure disagrees ({bias['bias']}) — reduced confidence")
-
-    obs = detect_order_blocks(df_ltf)
-    fvgs = detect_fvg(df_ltf)
-    if _zone_confluence(price, obs, direction):
-        confidence += 0.20
-        factors.append("Price sitting in a matching order block")
-    if _zone_confluence(price, fvgs, direction):
-        confidence += 0.15
-        factors.append("Price sitting in a matching fair value gap")
-
-    cot_signal = (cot or {}).get("signal", "NEUTRAL")
-    if (direction == "BULLISH" and cot_signal == "BULLISH") or \
-       (direction == "BEARISH" and cot_signal == "BEARISH"):
-        confidence += 0.15
-        factors.append(f"COT positioning agrees ({cot_signal})")
-    elif cot_signal not in ("NEUTRAL", ""):
-        factors.append(f"COT positioning neutral/mixed vs setup ({cot_signal}) — no penalty, not a veto")
-
+    REBUILT (2026-08) — trend-pullback continuation model.
+    The previous version keyed every entry off a raw liquidity sweep and then
+    *penalised* setups that ran counter to higher-timeframe structure, which
+    (a) fired almost never — a sweep-that-reverses-and-reclaims in the same
+    bar is rare — and (b) when it did fire, took counter-trend trades. A
+    month-long GC=F backtest showed the sweep-reversal trigger was a net
+    loser (~-3R) while a trend-aligned pullback trigger gated by ADX was the
+    edge (~+21R, ~50% win at 2R, ~1.8 setups/day). So entries are now:
+    trade WITH the higher-timeframe trend, enter on a pullback into the
+    EMA value zone that reclaims momentum, only when ADX confirms a real
+    (non-chop) trend. The sweep is kept as a confluence *bonus*, never the
+    sole trigger."""
     last = df_ltf.iloc[-1]
-    bull_pin = bool(last.get("bull_pin", False))
-    bear_pin = bool(last.get("bear_pin", False))
-    if (direction == "BULLISH" and bull_pin) or (direction == "BEARISH" and bear_pin):
-        confidence += 0.10
-        factors.append("Rejection candle confirms the sweep")
+    prev = df_ltf.iloc[-2] if len(df_ltf) >= 2 else last
+    atr = float(last["atr"]) if last.get("atr") and last["atr"] > 0 else 0.0
+    if atr <= 0:
+        return {"direction": "NEUTRAL", "signal_label": "NO_SIGNAL", "confidence": 0.0,
+                "factors": ["No ATR — insufficient data"]}
 
-    if session.get("judas_watch"):
-        factors.append(f"Inside Judas Swing window ({session.get('name')}) — early-session sweep")
+    # Regime gate: no trend, no trade. Chop is where pullback systems die.
+    adx = float(last.get("adx", 0) or 0)
+    if adx < GOLD_ADX_MIN:
+        return {"direction": "NEUTRAL", "signal_label": "NO_SIGNAL", "confidence": 0.0,
+                "factors": [f"ADX {adx:.0f} < {GOLD_ADX_MIN} — no confirmed trend, standing aside"]}
 
-    confidence = max(0.0, min(1.0, confidence))
+    htf = structure_bias(df_htf)
+    trend = htf["bias"]   # BULLISH / BEARISH / RANGING
+    price = float(last["close"])
+
+    best = None
+    for direction in ("BULLISH", "BEARISH"):
+        bull = direction == "BULLISH"
+        factors = []
+        score = 0.0
+
+        # ── Entry trigger: pullback into the EMA20 value zone, then reclaim ──
+        extreme = float(last["low"] if bull else last["high"])
+        near_ema20 = abs(extreme - float(last["ema20"])) < atr * 1.2
+        pulled = (float(prev["close"]) < float(prev["ema20"])) if bull \
+            else (float(prev["close"]) > float(prev["ema20"]))
+        reclaim = (price > float(last["ema9"])) if bull else (price < float(last["ema9"]))
+        trigger = (trend == direction) and (near_ema20 or pulled) and reclaim
+        if not trigger:
+            continue
+        score += 0.34
+        factors.append("Pullback into EMA value zone, momentum reclaimed")
+
+        # ── Additive confluence (tuned on backtest, no factor is a veto) ──
+        if trend == direction:
+            score += 0.14
+            factors.append(f"Trading with higher-timeframe trend ({trend})")
+        elif trend == "RANGING":
+            score += 0.04
+            factors.append("Higher-timeframe ranging — no conflict")
+
+        macd_h = float(last.get("macd_hist", 0) or 0)
+        prev_h = float(prev.get("macd_hist", 0) or 0)
+        momentum = (macd_h > 0 and macd_h > prev_h) if bull else (macd_h < 0 and macd_h < prev_h)
+        if momentum:
+            score += 0.12
+            factors.append("MACD momentum expanding in trade direction")
+
+        rsi = float(last.get("rsi", 50) or 50)
+        if (40 < rsi < 68) if bull else (32 < rsi < 60):
+            score += 0.06
+
+        if adx >= 25:
+            score += 0.08
+            factors.append(f"Strong trend (ADX {adx:.0f})")
+        elif adx >= 20:
+            score += 0.05
+
+        pin = bool(last.get("bull_pin" if bull else "bear_pin", False))
+        if pin:
+            score += 0.08
+            factors.append("Rejection candle confirms the entry")
+
+        at_sr = (price - float(last["support"])) < atr * 1.5 if bull \
+            else (float(last["resistance"]) - price) < atr * 1.5
+        if at_sr:
+            score += 0.07
+            factors.append("Entry near structural support/resistance")
+
+        if float(last.get("vol_ratio", 1) or 1) >= 1.2:
+            score += 0.05
+            factors.append("Above-average volume")
+
+        if (price > float(last["ema20"])) if bull else (price < float(last["ema20"])):
+            score += 0.05
+
+        # COT — additive bonus only, never a veto
+        cot_signal = (cot or {}).get("signal", "NEUTRAL")
+        if (bull and cot_signal == "BULLISH") or (not bull and cot_signal == "BEARISH"):
+            score += 0.06
+            factors.append(f"COT positioning agrees ({cot_signal})")
+
+        # Liquidity sweep — confluence bonus if it aligns (not a standalone trigger)
+        sweep = detect_liquidity_sweep(df_ltf)
+        if sweep and sweep["direction"] == direction:
+            score += 0.05
+            factors.append(f"Liquidity sweep of {sweep['swept_level']:.2f} aligns")
+
+        score = max(0.0, min(1.0, score))
+        if best is None or score > best[0]:
+            best = (score, direction, factors)
+
+    if best is None:
+        return {"direction": "NEUTRAL", "signal_label": "NO_SIGNAL", "confidence": 0.0,
+                "factors": ["No trend-aligned pullback setup this bar"]}
+
+    confidence, direction, factors = best
     trade_direction = "LONG" if direction == "BULLISH" else "SHORT"
 
+    # Structural ATR stop below/above the pullback low/high AND the EMA20 zone.
     if trade_direction == "LONG":
-        stop = sweep["swept_level"] - atr * GOLD_ATR_STOP_BUFFER
+        stop = min(float(last["low"]), float(last["ema20"])) - atr * GOLD_ATR_STOP_BUFFER
     else:
-        stop = sweep["swept_level"] + atr * GOLD_ATR_STOP_BUFFER
+        stop = max(float(last["high"]), float(last["ema20"])) + atr * GOLD_ATR_STOP_BUFFER
     risk = abs(price - stop)
     if risk <= 0:
         return {"direction": "NEUTRAL", "signal_label": "NO_SIGNAL", "confidence": 0.0,
@@ -397,12 +461,10 @@ def evaluate_setup(df_ltf: pd.DataFrame, df_htf: pd.DataFrame, cot: dict | None,
     else:
         tp1, tp2, tp3 = price - risk * GOLD_TP1_RR, price - risk * GOLD_TP2_RR, price - risk * GOLD_TP3_RR
 
-    if confidence >= 0.85:
+    if confidence >= 0.80:
         label = "SNIPER"
-    elif confidence >= 0.70:
+    elif confidence >= 0.68:
         label = "HIGH_PROBABILITY"
-    elif _zone_confluence(price, obs, direction) or _zone_confluence(price, fvgs, direction):
-        label = "WYCKOFF_SPRING" if trade_direction == "LONG" else "LIQUIDITY_ABSORPTION"
     else:
         label = (f"{timeframe}_LONG" if trade_direction == "LONG" else f"{timeframe}_SHORT")
 
