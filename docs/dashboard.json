@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-21 09:24:22.844342+00:00",
+  "updated_at": "2026-08-21 09:46:49.680400+00:00",
   "signals": [],
   "forecasts": [
     {
@@ -21,7 +21,7 @@
         },
         "dollar_bias": "USD_NEUTRAL"
       },
-      "timestamp": "2026-08-21 08:52:01.992558+00:00",
+      "timestamp": "2026-08-21 09:46:45.939093+00:00",
       "chart": null
     }
   ],
@@ -71,7 +71,7 @@
       }
     },
     "summary": "1/1 markets reporting. 0 bullish, 0 bearish, 1 neutral.",
-    "timestamp": "2026-08-21 08:52:00.769845+00:00"
+    "timestamp": "2026-08-21 09:46:44.710471+00:00"
   },
   "cot_history": [
     {
@@ -278,13 +278,13 @@
         "Structure: higher-highs & higher-lows"
       ],
       "timeframe": "1H",
-      "price": 4580.9,
+      "price": 4583.18,
       "support": 4451.37,
-      "resistance": 4583.58,
-      "external_high": 4583.58,
+      "resistance": 4601.09,
+      "external_high": 4601.09,
       "external_low": 4310.61,
       "bos": "BULLISH",
-      "updated_at": "2026-08-21 08:52:02.891866+00:00",
+      "updated_at": "2026-08-21 09:46:46.808167+00:00",
       "chart": "charts/scenario_1H.png"
     },
     "4H": {
@@ -293,13 +293,13 @@
         "EMA stack bullish (20>50>200)"
       ],
       "timeframe": "4H",
-      "price": 4580.9,
+      "price": 4583.18,
       "support": 4325.97,
-      "resistance": 4583.58,
-      "external_high": 4583.58,
+      "resistance": 4601.09,
+      "external_high": 4601.09,
       "external_low": 3961.81,
       "bos": "BULLISH",
-      "updated_at": "2026-08-21 08:52:03.766956+00:00",
+      "updated_at": "2026-08-21 09:46:47.532331+00:00",
       "chart": "charts/scenario_4H.png"
     },
     "Daily": {
@@ -308,13 +308,13 @@
         "Structure: higher-highs & higher-lows"
       ],
       "timeframe": "Daily",
-      "price": 4580.9,
+      "price": 4583.18,
       "support": 3961.81,
-      "resistance": 4583.58,
+      "resistance": 4601.09,
       "external_high": 5597.23,
       "external_low": 3949.45,
       "bos": "BULLISH",
-      "updated_at": "2026-08-21 08:52:04.521096+00:00",
+      "updated_at": "2026-08-21 09:46:48.305428+00:00",
       "chart": "charts/scenario_Daily.png"
     },
     "Weekly": {
@@ -324,13 +324,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Weekly",
-      "price": 4582.94,
+      "price": 4583.67,
       "support": 3949.45,
       "resistance": 5597.23,
       "external_high": 5597.23,
       "external_low": 1810.1,
       "bos": null,
-      "updated_at": "2026-08-21 08:52:05.197880+00:00",
+      "updated_at": "2026-08-21 09:46:49.008545+00:00",
       "chart": "charts/scenario_Weekly.png"
     }
   },
