@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-21 23:16:15.108564+00:00",
+  "updated_at": "2026-08-24 06:58:06.399716+00:00",
   "signals": [
     {
       "layer": "gold_scalp",
@@ -386,14 +386,38 @@
   "news": {
     "events": [
       {
-        "title": "FOMC Meeting Minutes",
+        "title": "Core PCE Price Index m/m",
         "currency": "USD",
-        "time": "2026-08-19 18:00:00+00:00",
+        "time": "2026-08-26 12:30:00+00:00",
+        "forecast": "0.2%",
+        "previous": "0.1%",
+        "actual": null
+      },
+      {
+        "title": "Prelim GDP q/q",
+        "currency": "USD",
+        "time": "2026-08-26 12:30:00+00:00",
+        "forecast": "1.5%",
+        "previous": "1.5%",
+        "actual": null
+      },
+      {
+        "title": "Fed Chairman Warsh Speaks",
+        "currency": "USD",
+        "time": "2026-08-28 14:00:00+00:00",
         "forecast": "",
         "previous": "",
         "actual": null
+      },
+      {
+        "title": "Prelim Benchmark Payrolls Revision",
+        "currency": "USD",
+        "time": "2026-08-28 14:00:00+00:00",
+        "forecast": "",
+        "previous": "-911K",
+        "actual": null
       }
     ],
-    "updated_at": "2026-08-21 23:16:15.108530+00:00"
+    "updated_at": "2026-08-24 06:58:06.399662+00:00"
   }
 }
