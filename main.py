@@ -192,7 +192,9 @@ def run_gold_scalp_layer(cot_map=None):
     signals = run_gold_scalp(cot_map)
     print(f"\n  Fired: {len(signals)} gold scalp signal(s)")
     for sig in signals:
-        telegram.send_text(telegram.format_gold_signal_short(sig))
+        # ONE message per signal (the full plan) + the chart. The old build
+        # also sent a separate "short" headline — 3 pings per trade — which
+        # read as duplicate spam.
         telegram.send_text(telegram.format_gold_signal(sig))
         _send_gold_chart("15min", sig,
                           f"XAUUSD — {sig.get('direction')} scalp ({sig.get('signal_label')}, "
@@ -218,7 +220,6 @@ def run_gold_swing_layer(cot_map=None):
     signals = run_gold_swing(cot_map)
     print(f"\n  Fired: {len(signals)} gold swing signal(s)")
     for sig in signals:
-        telegram.send_text(telegram.format_gold_signal_short(sig))
         telegram.send_text(telegram.format_gold_signal(sig))
         _send_gold_chart("1h", sig,
                           f"XAUUSD — {sig.get('direction')} swing ({sig.get('signal_label')}, "

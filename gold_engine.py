@@ -42,7 +42,37 @@ from config import (
     GOLD_SWEEP_LOOKBACK, GOLD_STRUCTURE_LOOKBACK, GOLD_ATR_STOP_BUFFER,
     GOLD_TP1_RR, GOLD_TP2_RR, GOLD_TP3_RR, GOLD_MIN_CONFIDENCE, GOLD_SCALP_COOLDOWN_MIN,
     GOLD_SWING_COOLDOWN_H, GOLD_DAILY_LOSS_LIMIT_PCT, GOLD_MAX_TRADES_PER_DAY, GOLD_ADX_MIN,
+    GOLD_SCALP_RISK, GOLD_SWING_RISK,
 )
+
+
+def _risk_levels(direction: str, price: float, df: pd.DataFrame, atr: float, profile: dict) -> dict:
+    """Trade-type-aware stop + targets. Stop sits beyond the recent structural
+    swing (lookback bars) buffered by ATR, then the risk distance is CLAMPED to
+    [min_pct, max_pct] of price so it's always a sane ABSOLUTE size for the
+    instrument — a swing never gets a $1-5 stop, a scalp never gets a huge one.
+    Targets are R multiples of that clamped risk."""
+    lb = profile["lookback"]
+    recent = df.tail(lb)
+    long = direction == "LONG"
+    if long:
+        struct = float(recent["low"].min())
+        raw_stop = min(struct, float(df.iloc[-1]["ema20"])) - atr * profile["stop_atr"]
+        dist = price - raw_stop
+    else:
+        struct = float(recent["high"].max())
+        raw_stop = max(struct, float(df.iloc[-1]["ema20"])) + atr * profile["stop_atr"]
+        dist = raw_stop - price
+    # clamp the risk distance to a sane band for the instrument
+    dist = max(dist, price * profile["min_pct"])
+    dist = min(dist, price * profile["max_pct"])
+    stop = price - dist if long else price + dist
+    t1, t2, t3 = profile["tp"]
+    if long:
+        tp1, tp2, tp3 = price + dist * t1, price + dist * t2, price + dist * t3
+    else:
+        tp1, tp2, tp3 = price - dist * t1, price - dist * t2, price - dist * t3
+    return {"stop": stop, "tp1": tp1, "tp2": tp2, "tp3": tp3, "risk": dist, "rr1": t1}
 from indicators import add_base
 from data_feeds import fetch_intraday, fetch_all_cot, news_blocked, dollar_bias
 
@@ -446,20 +476,14 @@ def evaluate_setup(df_ltf: pd.DataFrame, df_htf: pd.DataFrame, cot: dict | None,
     confidence, direction, factors = best
     trade_direction = "LONG" if direction == "BULLISH" else "SHORT"
 
-    # Structural ATR stop below/above the pullback low/high AND the EMA20 zone.
-    if trade_direction == "LONG":
-        stop = min(float(last["low"]), float(last["ema20"])) - atr * GOLD_ATR_STOP_BUFFER
-    else:
-        stop = max(float(last["high"]), float(last["ema20"])) + atr * GOLD_ATR_STOP_BUFFER
-    risk = abs(price - stop)
+    # Trade-type-aware risk: SWING gets a wider, structural, %-floored stop and
+    # far targets (multi-day room); SCALP gets a tighter stop and near targets.
+    profile = GOLD_SWING_RISK if str(timeframe).upper() == "SWING" else GOLD_SCALP_RISK
+    lv = _risk_levels(trade_direction, price, df_ltf, atr, profile)
+    stop, tp1, tp2, tp3, risk = lv["stop"], lv["tp1"], lv["tp2"], lv["tp3"], lv["risk"]
     if risk <= 0:
         return {"direction": "NEUTRAL", "signal_label": "NO_SIGNAL", "confidence": 0.0,
                 "factors": ["Invalid stop distance"]}
-
-    if trade_direction == "LONG":
-        tp1, tp2, tp3 = price + risk * GOLD_TP1_RR, price + risk * GOLD_TP2_RR, price + risk * GOLD_TP3_RR
-    else:
-        tp1, tp2, tp3 = price - risk * GOLD_TP1_RR, price - risk * GOLD_TP2_RR, price - risk * GOLD_TP3_RR
 
     if confidence >= 0.80:
         label = "SNIPER"
@@ -472,7 +496,7 @@ def evaluate_setup(df_ltf: pd.DataFrame, df_htf: pd.DataFrame, cot: dict | None,
         "direction": trade_direction, "signal_label": label, "confidence": round(confidence, 2),
         "entry": round(price, 2), "stop_loss": round(stop, 2),
         "target_1": round(tp1, 2), "target_2": round(tp2, 2), "target_3": round(tp3, 2),
-        "risk_reward": GOLD_TP1_RR, "factors": factors,
+        "risk_reward": lv["rr1"], "risk_usd": round(risk, 2), "factors": factors,
         "reasoning": "" if skip_reasoning else _llm_reasoning(trade_direction, factors),
     }
 
