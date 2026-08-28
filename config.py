@@ -77,9 +77,28 @@ MARKETS = {
         "cot_name": "GOLD - COMMODITY EXCHANGE INC.",
         "asset_class": "commodity", "pip_digits": 2, "pip_usd": None,
         "sessions_utc": [(7, 21)], "rsi_os": 30, "rsi_ob": 70,
-        "decimals": 2, "emoji": "🥇",
+        "decimals": 2, "emoji": "🥇", "name": "Gold",
+    },
+    # BTC + EUR are handled by the additive multi_asset.py layer (same
+    # deterministic engine as gold), added to consolidate the retired
+    # scalp-council's coverage into the one validated engine.
+    "BTCUSD": {
+        "td": "BTC/USD", "yf": "BTC-USD", "asset_class": "crypto",
+        "decimals": 2, "emoji": "₿", "name": "Bitcoin",
+        "session_gated": False, "weekend": True,   # crypto trades 24/7
+    },
+    "EURUSD": {
+        "td": "EUR/USD", "yf": "EURUSD=X", "asset_class": "fx",
+        "decimals": 5, "emoji": "🇪🇺", "name": "Euro",
+        "session_gated": True, "weekend": False,   # FX: London/NY, weekdays
     },
 }
+
+# ── Multi-asset layer (BTC + EUR via the same engine) ────────────────────────
+# Set MULTI_ASSET=0 as an env var to run gold-only (the original behaviour).
+MULTI_ASSET_ENABLED = os.environ.get("MULTI_ASSET", "1") != "0"
+EXTRA_ASSETS = ["BTCUSD", "EURUSD"]
+EXTRA_MAX_TRADES_PER_DAY = 3   # per-asset daily cap for BTC/EUR (independent of gold)
 
 # ── Gold engine — ICT/SMC concepts ────────────────────────────────────────────
 # One deterministic engine, not a multi-agent debate: confluence of these
@@ -103,11 +122,37 @@ GOLD_IMPULSE_ATR_MULT   = 1.5    # a move counts as "impulsive" (order-block-for
 GOLD_SWEEP_LOOKBACK     = 20     # bars searched for the swing high/low being swept
 GOLD_STRUCTURE_LOOKBACK = 40     # bars used for H4/H1 higher-high/lower-low structure
 
-GOLD_ATR_STOP_BUFFER    = 0.6    # stop = pullback low/high (& EMA20 zone) +/- this x ATR
-GOLD_TP1_RR             = 1.5    # target 1 — hit-rate anchor (~55% of setups reach it
-                                  #  in backtest); take partial / move to breakeven here
-GOLD_TP2_RR             = 2.5    # target 2 — the expectancy driver
-GOLD_TP3_RR             = 4.0    # target 3 — runner, for trends that keep extending
+# ── Risk geometry — TRADE-TYPE AWARE ─────────────────────────────────────────
+# The old build used ONE stop formula (min(low,ema20) - 0.6*ATR) for BOTH
+# scalp and swing. On the 1h swing frame that collapsed to a $1-5 stop when
+# price sat on the EMA — not a swing, not even a scalp. And scalp targets were
+# scaled off that tiny risk, so they sat oddly far for a quick trade. Scalp and
+# swing are different trades and now get different geometry.
+#
+# Stop = structural swing low/high over LOOKBACK bars, buffered by STOP_ATR x
+# ATR, then CLAMPED to [MIN_STOP_PCT, MAX_STOP_PCT] of price — so gold (≈$4500)
+# always gets a sane absolute stop, never a micro-stop. Targets are R multiples
+# of that clamped risk. Profiles: (lookback, stop_atr, min_pct, max_pct, (tp1,tp2,tp3)).
+GOLD_SCALP_RISK = {
+    "lookback":  10,       # M15 bars for the structural stop reference
+    "stop_atr":  0.8,      # buffer beyond that swing low/high, in M15 ATRs
+    "min_pct":   0.0012,   # >= 0.12% of price  (~$5.4 @ 4500) — a real scalp stop
+    "max_pct":   0.005,    # <= 0.50% of price  (~$22   @ 4500)
+    "tp":        (1.0, 1.6, 2.5),   # NEAR targets — scalps bank quickly
+}
+GOLD_SWING_RISK = {
+    "lookback":  20,       # H1 bars for the structural stop reference
+    "stop_atr":  1.2,      # buffer beyond the swing, in H1 ATRs
+    "min_pct":   0.005,    # >= 0.50% of price  (~$22  @ 4500) — real swing room
+    "max_pct":   0.025,    # <= 2.50% of price  (~$112 @ 4500)
+    "tp":        (1.5, 3.0, 5.0),   # WIDE targets — multi-day holds run further
+}
+
+# Back-compat aliases (some tooling/telegram reads these). Default = scalp TP1.
+GOLD_ATR_STOP_BUFFER    = 0.8
+GOLD_TP1_RR             = 1.0
+GOLD_TP2_RR             = 1.6
+GOLD_TP3_RR             = 2.5
 
 # ADX regime gate — the single biggest quality lever in the rebuild backtest:
 # ADX>=18 lifted win-rate ~36%->52% and monthly expectancy ~+5R->+16R by
