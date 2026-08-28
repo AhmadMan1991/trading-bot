@@ -113,6 +113,30 @@ def fetch_okx(asset: str, interval: str, bars: int = 300) -> pd.DataFrame | None
 
 _intraday_cache: dict[tuple, pd.DataFrame] = {}
 
+# yfinance intraday fallback — free and un-rate-limited, used when TwelveData
+# returns None (e.g. 429 after the gold run exhausts the free per-minute quota,
+# which is exactly what starved EURUSD in the first multi-asset live run).
+# yfinance has no native 4h bar, so 4h is resampled from 60m.
+_YF_INT = {"15min": ("15m", "1mo"), "1h": ("60m", "3mo"),
+           "4h": ("60m", "6mo"), "1day": ("1d", "2y"), "1week": ("1wk", "5y")}
+
+
+def fetch_yf_intraday(asset: str, interval: str, bars: int = 300) -> pd.DataFrame | None:
+    mapped = _YF_INT.get(interval)
+    if not mapped or asset not in MARKETS or "yf" not in MARKETS[asset]:
+        return None
+    yf_int, period = mapped
+    df = fetch_yf(asset, period=period, interval=yf_int)
+    if df is None or df.empty:
+        return None
+    df = df[["open", "high", "low", "close"] + (["volume"] if "volume" in df.columns else [])]
+    if "volume" not in df.columns:
+        df["volume"] = 0.0
+    if interval == "4h":   # resample 60m -> 4h
+        df = df.resample("4h").agg({"open": "first", "high": "max", "low": "min",
+                                     "close": "last", "volume": "sum"}).dropna()
+    return df.tail(bars) if len(df) else None
+
 
 def fetch_intraday(asset: str, interval: str, bars: int = 300) -> pd.DataFrame | None:
     """Route to OKX for BTC/ETH, TwelveData for everything else. Cached
@@ -136,6 +160,14 @@ def fetch_intraday(asset: str, interval: str, bars: int = 300) -> pd.DataFrame |
             df = fetch_td(asset, interval, bars)
     else:
         df = fetch_td(asset, interval, bars)
+
+    # Free fallback when the primary source is unavailable / rate-limited —
+    # keeps BTC/EUR (and even gold) working after TwelveData 429s mid-run.
+    if df is None or len(df) < 60:
+        yf_df = fetch_yf_intraday(asset, interval, bars)
+        if yf_df is not None and (df is None or len(yf_df) > len(df)):
+            print(f"  [YF-fallback] {asset} {interval}: {len(yf_df)} bars")
+            df = yf_df
 
     if df is not None and (cached is None or len(df) > len(cached)):
         _intraday_cache[(asset, interval)] = df
