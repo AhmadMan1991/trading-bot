@@ -483,6 +483,43 @@ def format_gold_signal(sig: dict) -> str:
     return "\n".join(l for l in lines if l is not None)
 
 
+def format_asset_signal(sig: dict) -> str:
+    """Asset-generic version of format_gold_signal for the multi-asset layer
+    (BTC/EUR). Reads decimals/emoji/name from MARKETS so BTC ($100k, 2dp) and
+    EUR (1.08, 5dp) render correctly instead of gold's hardcoded 2dp/'GOLD'."""
+    from gold_engine import SIGNAL_TAXONOMY
+    from config import MARKETS
+    asset = sig.get("asset", "")
+    m = MARKETS.get(asset, {"decimals": 2, "emoji": "📊", "name": asset})
+    dec = m.get("decimals", 2)
+    label = sig.get("signal_label", "NO_SIGNAL")
+    emoji, name, desc = SIGNAL_TAXONOMY.get(label, ("📊", label, ""))
+    direction = sig.get("direction", "?")
+    arrow = "🟢" if direction == "LONG" else "🔴"
+    conf = sig.get("confidence", 0)
+    rr = sig.get("risk_reward", 0)
+    layer = sig.get("layer", "").upper()
+    factors = "\n".join(f"  • {esc(f)}" for f in sig.get("factors", [])[:6])
+    lines = [
+        f"{m['emoji']} <b>{m['name']} ({asset})</b> — {emoji} {name}",
+        f"<i>{desc}</i>" if desc else "",
+        "━━━━━━━━━━━━━━━━━━━━━",
+        f"{arrow} <b>{direction}</b> — {layer}  · conf {conf:.0%}",
+        f"Entry:  <code>{sig.get('entry', 0):.{dec}f}</code>",
+        f"Stop:   <code>{sig.get('stop_loss', 0):.{dec}f}</code>",
+        f"TP1:    <code>{sig.get('target_1', 0):.{dec}f}</code>  (1:{rr:.1f})",
+        f"TP2:    <code>{sig.get('target_2', 0):.{dec}f}</code>",
+        f"TP3:    <code>{sig.get('target_3', 0):.{dec}f}</code>",
+        "━━━━━━━━━━━━━━━━━━━━━",
+        factors,
+        "",
+        f"<i>{esc(sig.get('reasoning', ''))[:300]}</i>",
+    ]
+    if DASHBOARD_URL:
+        lines.append(f'\n🔗 <a href="{DASHBOARD_URL}/">Full dashboard</a>')
+    return "\n".join(l for l in lines if l is not None)
+
+
 def format_forecast_new(fc: dict) -> str:
     asset = fc["asset"]
     bias  = fc.get("bias", "N/A")

@@ -77,9 +77,28 @@ MARKETS = {
         "cot_name": "GOLD - COMMODITY EXCHANGE INC.",
         "asset_class": "commodity", "pip_digits": 2, "pip_usd": None,
         "sessions_utc": [(7, 21)], "rsi_os": 30, "rsi_ob": 70,
-        "decimals": 2, "emoji": "🥇",
+        "decimals": 2, "emoji": "🥇", "name": "Gold",
+    },
+    # BTC + EUR are handled by the additive multi_asset.py layer (same
+    # deterministic engine as gold), added to consolidate the retired
+    # scalp-council's coverage into the one validated engine.
+    "BTCUSD": {
+        "td": "BTC/USD", "yf": "BTC-USD", "asset_class": "crypto",
+        "decimals": 2, "emoji": "₿", "name": "Bitcoin",
+        "session_gated": False, "weekend": True,   # crypto trades 24/7
+    },
+    "EURUSD": {
+        "td": "EUR/USD", "yf": "EURUSD=X", "asset_class": "fx",
+        "decimals": 5, "emoji": "🇪🇺", "name": "Euro",
+        "session_gated": True, "weekend": False,   # FX: London/NY, weekdays
     },
 }
+
+# ── Multi-asset layer (BTC + EUR via the same engine) ────────────────────────
+# Set MULTI_ASSET=0 as an env var to run gold-only (the original behaviour).
+MULTI_ASSET_ENABLED = os.environ.get("MULTI_ASSET", "1") != "0"
+EXTRA_ASSETS = ["BTCUSD", "EURUSD"]
+EXTRA_MAX_TRADES_PER_DAY = 3   # per-asset daily cap for BTC/EUR (independent of gold)
 
 # ── Gold engine — ICT/SMC concepts ────────────────────────────────────────────
 # One deterministic engine, not a multi-agent debate: confluence of these

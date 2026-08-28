@@ -236,6 +236,27 @@ def run_gold_swing_layer(cot_map=None):
     return signals
 
 
+def run_extra_assets_layer():
+    """Step 5b — BTC + EUR through the SAME engine (consolidates the retired
+    scalp-council). Additive: independent per-asset state, never touches the
+    gold path above. Skips cleanly if MULTI_ASSET=0."""
+    from config import MULTI_ASSET_ENABLED
+    if not MULTI_ASSET_ENABLED:
+        return []
+    print("\n═══ STEP 5b — EXTRA ASSETS (BTC / EUR) ═══")
+    from multi_asset import run_extra_assets
+    from performance_tracker import log_open_signal
+    signals = run_extra_assets()
+    print(f"\n  Fired: {len(signals)} extra-asset signal(s)")
+    for sig in signals:
+        telegram.send_text(telegram.format_asset_signal(sig))
+        log_open_signal({**sig,
+                          "entry": sig.get("entry", 0), "stop": sig.get("stop_loss", 0),
+                          "tp1": sig.get("target_1", 0), "tp2": sig.get("target_2", 0),
+                          "tp3": sig.get("target_3", 0)})
+    return signals
+
+
 def run_performance_layer():
     """Step 6 (last) — audits the whole run: resolves TP1/TP2/STOP/EXPIRED,
     feeds resolved trades back into gold_engine's risk state (daily loss
@@ -268,6 +289,7 @@ def run_pipeline():
     run_gold_bias_layer()
     run_gold_scalp_layer(cot_map)
     run_gold_swing_layer(cot_map)
+    run_extra_assets_layer()
     run_performance_layer()
 
 
@@ -328,8 +350,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Gold-only Sequential Pipeline TradingBot")
     parser.add_argument("--layer", default=None,
                         choices=["cot", "macro", "gold_bias", "gold_scalp", "gold_swing",
-                                 "performance", "news", "news_weekly", "tracer", "cot_weekly",
-                                 "daily_brief", "backtest"])
+                                 "extra", "performance", "news", "news_weekly", "tracer",
+                                 "cot_weekly", "daily_brief", "backtest"])
     parser.add_argument("--asset",  default=None)   # kept for backtest compat; engine itself is gold-only
     parser.add_argument("--bars",   type=int, default=2000)
     parser.add_argument("--window", type=int, default=500)
@@ -352,6 +374,8 @@ if __name__ == "__main__":
             run_gold_scalp_layer()
         elif args.layer == "gold_swing":
             run_gold_swing_layer()
+        elif args.layer == "extra":
+            run_extra_assets_layer()
         elif args.layer == "performance":
             run_performance_layer()
         elif args.layer == "news":

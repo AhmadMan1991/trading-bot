@@ -492,11 +492,13 @@ def evaluate_setup(df_ltf: pd.DataFrame, df_htf: pd.DataFrame, cot: dict | None,
     else:
         label = (f"{timeframe}_LONG" if trade_direction == "LONG" else f"{timeframe}_SHORT")
 
+    # Round to 5dp (not 2) so FX like EURUSD (1.16000) keeps its precision;
+    # gold/BTC display formatters truncate to their own decimals anyway.
     return {
         "direction": trade_direction, "signal_label": label, "confidence": round(confidence, 2),
-        "entry": round(price, 2), "stop_loss": round(stop, 2),
-        "target_1": round(tp1, 2), "target_2": round(tp2, 2), "target_3": round(tp3, 2),
-        "risk_reward": lv["rr1"], "risk_usd": round(risk, 2), "factors": factors,
+        "entry": round(price, 5), "stop_loss": round(stop, 5),
+        "target_1": round(tp1, 5), "target_2": round(tp2, 5), "target_3": round(tp3, 5),
+        "risk_reward": lv["rr1"], "risk_usd": round(risk, 5), "factors": factors,
         "reasoning": "" if skip_reasoning else _llm_reasoning(trade_direction, factors),
     }
 
