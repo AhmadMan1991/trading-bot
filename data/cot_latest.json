@@ -1,12 +1,12 @@
 {
-  "updated_at": "2026-08-28 19:23:29.722032+00:00",
+  "updated_at": "2026-08-28 20:39:00.583993+00:00",
   "data": {
     "XAUUSD": {
-      "net": 222189,
-      "change": 4249,
+      "net": 243334,
+      "change": 21145,
       "cot_index": 100,
       "signal": "BEARISH",
-      "date": "2026-08-18",
+      "date": "2026-08-25",
       "source": "CFTC (official)"
     },
     "BTCUSD": null,
