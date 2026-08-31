@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-08-29 01:46:49.199857+00:00",
+  "updated_at": "2026-08-31 12:53:14.529336+00:00",
   "signals": [
     {
       "layer": "gold_scalp",
@@ -565,38 +565,38 @@
   "news": {
     "events": [
       {
-        "title": "Core PCE Price Index m/m",
+        "title": "ISM Manufacturing PMI",
         "currency": "USD",
-        "time": "2026-08-26 12:30:00+00:00",
-        "forecast": "0.2%",
+        "time": "2026-09-01 14:00:00+00:00",
+        "forecast": "55.2",
+        "previous": "55.6",
+        "actual": null
+      },
+      {
+        "title": "Average Hourly Earnings m/m",
+        "currency": "USD",
+        "time": "2026-09-04 12:30:00+00:00",
+        "forecast": "0.3%",
         "previous": "0.1%",
         "actual": null
       },
       {
-        "title": "Prelim GDP q/q",
+        "title": "Non-Farm Employment Change",
         "currency": "USD",
-        "time": "2026-08-26 12:30:00+00:00",
-        "forecast": "1.5%",
-        "previous": "1.5%",
+        "time": "2026-09-04 12:30:00+00:00",
+        "forecast": "58K",
+        "previous": "-23K",
         "actual": null
       },
       {
-        "title": "Fed Chairman Warsh Speaks",
+        "title": "Unemployment Rate",
         "currency": "USD",
-        "time": "2026-08-28 14:00:00+00:00",
-        "forecast": "",
-        "previous": "",
-        "actual": null
-      },
-      {
-        "title": "Prelim Benchmark Payrolls Revision",
-        "currency": "USD",
-        "time": "2026-08-28 14:00:00+00:00",
-        "forecast": "",
-        "previous": "-911K",
+        "time": "2026-09-04 12:30:00+00:00",
+        "forecast": "4.1%",
+        "previous": "4.1%",
         "actual": null
       }
     ],
-    "updated_at": "2026-08-29 01:46:49.199822+00:00"
+    "updated_at": "2026-08-31 12:53:14.529291+00:00"
   }
 }
