@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03 18:05:56.816786+00:00",
+  "updated_at": "2026-09-03 19:24:44.160778+00:00",
   "signals": [
     {
       "layer": "gold_swing",
@@ -262,18 +262,18 @@
         },
         "dollar_bias": "USD_WEAK"
       },
-      "timestamp": "2026-09-03 16:19:35.928975+00:00",
+      "timestamp": "2026-09-03 19:24:22.081254+00:00",
       "chart": null
     }
   ],
   "performance": {
-    "total": 18,
+    "total": 19,
     "wins": 5,
-    "losses": 12,
+    "losses": 13,
     "expired": 1,
-    "win_rate": 0.28,
-    "total_r": 11.2,
-    "avg_r": 0.62
+    "win_rate": 0.26,
+    "total_r": 10.2,
+    "avg_r": 0.54
   },
   "open_positions": [
     {
@@ -302,38 +302,7 @@
       "tp1": 1.15006,
       "tp2": 1.14137,
       "tp3": 1.12978,
-      "opened_at": "2026-09-01 16:52:56.362096+00:00",
-      "live_price": 1.16313,
-      "progress_pct": -0.756
-    },
-    {
-      "direction": "SHORT",
-      "signal_label": "SWING_SHORT",
-      "confidence": 0.59,
-      "entry": 1.15857,
-      "stop_loss": 1.16436,
-      "target_1": 1.14988,
-      "target_2": 1.14119,
-      "target_3": 1.12961,
-      "risk_reward": 1.5,
-      "risk_usd": 0.00579,
-      "factors": [
-        "Pullback into EMA value zone, momentum reclaimed",
-        "Trading with higher-timeframe trend (BEARISH)"
-      ],
-      "reasoning": "The price is pulling back into a key EMA value zone, signaling a re\u2011entry point for bearish bias. Momentum has recently shifted back to a negative stance, confirming the pullback is not a false move. With the higher\u2011timeframe trend remaining bearish, a short position aligns with the prevailing directional bias.",
-      "asset": "EURUSD",
-      "timestamp": "2026-09-02 19:28:53.361489+00:00",
-      "layer": "swing",
-      "timeframe": "1h/4h",
-      "session": "any",
-      "stop": 1.16436,
-      "tp1": 1.14988,
-      "tp2": 1.14119,
-      "tp3": 1.12961,
-      "opened_at": "2026-09-02 19:28:56.438858+00:00",
-      "live_price": 1.16313,
-      "progress_pct": -0.788
+      "opened_at": "2026-09-01 16:52:56.362096+00:00"
     }
   ],
   "daily_brief": {
@@ -406,7 +375,7 @@
       "EURUSD": null
     },
     "summary": "1/3 markets reporting. 0 bullish, 1 bearish, 0 neutral. Most extreme: XAUUSD at 100/100 (crowded long).",
-    "timestamp": "2026-09-03 16:19:33.063646+00:00"
+    "timestamp": "2026-09-03 19:24:20.837404+00:00"
   },
   "cot_history": [
     {
@@ -622,13 +591,13 @@
         "Structure: higher-highs & higher-lows"
       ],
       "timeframe": "1H",
-      "price": 4495.23,
-      "support": 4283.21,
+      "price": 4475.56,
+      "support": 4301.9,
       "resistance": 4510.6,
       "external_high": 4695.94,
       "external_low": 4283.21,
       "bos": "BULLISH",
-      "updated_at": "2026-09-03 16:19:37.441323+00:00",
+      "updated_at": "2026-09-03 19:24:26.171463+00:00",
       "chart": "charts/scenario_1H.png"
     },
     "4H": {
@@ -637,13 +606,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "4H",
-      "price": 4495.23,
+      "price": 4475.56,
       "support": 4283.21,
       "resistance": 4637.17,
       "external_high": 4695.94,
       "external_low": 3996.32,
       "bos": "BULLISH",
-      "updated_at": "2026-09-03 16:19:40.274214+00:00",
+      "updated_at": "2026-09-03 19:24:26.765852+00:00",
       "chart": "charts/scenario_4H.png"
     },
     "Daily": {
@@ -652,13 +621,13 @@
         "Structure: higher-highs & higher-lows"
       ],
       "timeframe": "Daily",
-      "price": 4495.23,
+      "price": 4475.56,
       "support": 3996.32,
       "resistance": 4695.94,
       "external_high": 5597.23,
       "external_low": 3949.45,
       "bos": null,
-      "updated_at": "2026-09-03 16:19:41.846298+00:00",
+      "updated_at": "2026-09-03 19:24:27.373221+00:00",
       "chart": "charts/scenario_Daily.png"
     },
     "Weekly": {
@@ -668,13 +637,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Weekly",
-      "price": 4493.79,
+      "price": 4474.63,
       "support": 3949.45,
       "resistance": 5597.23,
       "external_high": 5597.23,
       "external_low": 1810.1,
       "bos": null,
-      "updated_at": "2026-09-03 16:19:43.059147+00:00",
+      "updated_at": "2026-09-03 19:24:27.896325+00:00",
       "chart": "charts/scenario_Weekly.png"
     }
   },
