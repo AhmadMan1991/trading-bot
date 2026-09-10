@@ -1,6 +1,22 @@
 {
-  "updated_at": "2026-09-10 16:32:01.131597+00:00",
+  "updated_at": "2026-09-10 16:39:35.306880+00:00",
   "signals": [
+    {
+      "layer": "gold_swing",
+      "asset": "XAUUSD",
+      "direction": "SHORT",
+      "entry": 4359.19982,
+      "stop": 4454.78634,
+      "tp1": 4215.82004,
+      "tp2": 4072.44025,
+      "tp3": 3881.26721,
+      "score_or_conf": 0.67,
+      "timestamp": "2026-09-10 16:38:51.611888+00:00",
+      "chart": "charts/gold_swing_XAUUSD_20260910T163851Z.png",
+      "caption": "XAUUSD \u2014 SHORT swing (SWING_SHORT, conf 67%)",
+      "signal_label": "SWING_SHORT",
+      "sniper": false
+    },
     {
       "layer": "gold_swing",
       "asset": "XAUUSD",
@@ -295,18 +311,18 @@
         },
         "dollar_bias": "USD_NEUTRAL"
       },
-      "timestamp": "2026-09-09 16:52:01.887450+00:00",
+      "timestamp": "2026-09-10 16:38:38.291838+00:00",
       "chart": null
     }
   ],
   "performance": {
-    "total": 24,
+    "total": 25,
     "wins": 6,
-    "losses": 14,
+    "losses": 15,
     "expired": 4,
-    "win_rate": 0.25,
-    "total_r": 17.7,
-    "avg_r": 0.74
+    "win_rate": 0.24,
+    "total_r": 16.7,
+    "avg_r": 0.67
   },
   "open_positions": [
     {
@@ -334,40 +350,7 @@
       "tp1": 4299.0896,
       "tp2": 4202.32581,
       "tp3": 4073.30742,
-      "opened_at": "2026-09-08 16:34:02.727508+00:00",
-      "live_price": 4363.09405,
-      "progress_pct": 0.339
-    },
-    {
-      "direction": "LONG",
-      "signal_label": "HIGH_PROBABILITY",
-      "confidence": 0.74,
-      "entry": 78708.3,
-      "stop_loss": 77151.09674,
-      "target_1": 81044.10489,
-      "target_2": 83379.90978,
-      "target_3": 86494.31629,
-      "risk_reward": 1.5,
-      "risk_usd": 1557.20326,
-      "factors": [
-        "Pullback into EMA value zone, momentum reclaimed",
-        "Trading with higher-timeframe trend (BULLISH)",
-        "MACD momentum expanding in trade direction",
-        "Strong trend (ADX 34)"
-      ],
-      "reasoning": "The trade is long because the price pulled back into the EMA value zone and immediately reclaimed momentum, confirming a solid entry point. It aligns with the higher\u2011timeframe bullish trend, and the MACD shows expanding momentum in the trade direction. The ADX reading of 34 further confirms a strong, directional trend supporting the position.",
-      "asset": "BTCUSD",
-      "timestamp": "2026-09-08 16:34:03.296921+00:00",
-      "layer": "swing",
-      "timeframe": "1h/4h",
-      "session": "24h",
-      "stop": 77151.09674,
-      "tp1": 81044.10489,
-      "tp2": 83379.90978,
-      "tp3": 86494.31629,
-      "opened_at": "2026-09-08 16:34:13.681426+00:00",
-      "live_price": 76971.4,
-      "progress_pct": -1.115
+      "opened_at": "2026-09-08 16:34:02.727508+00:00"
     },
     {
       "direction": "LONG",
@@ -396,9 +379,7 @@
       "tp1": 1.17114,
       "tp2": 1.17986,
       "tp3": 1.19148,
-      "opened_at": "2026-09-08 16:34:14.036545+00:00",
-      "live_price": 1.16258,
-      "progress_pct": 0.018
+      "opened_at": "2026-09-08 16:34:14.036545+00:00"
     },
     {
       "direction": "LONG",
@@ -427,9 +408,93 @@
       "tp1": 1.17269,
       "tp2": 1.18142,
       "tp3": 1.19306,
-      "opened_at": "2026-09-09 16:52:22.855235+00:00",
-      "live_price": 1.16258,
-      "progress_pct": -0.237
+      "opened_at": "2026-09-09 16:52:22.855235+00:00"
+    },
+    {
+      "direction": "SHORT",
+      "signal_label": "SWING_SHORT",
+      "confidence": 0.67,
+      "entry": 4359.19982,
+      "stop_loss": 4454.78634,
+      "target_1": 4215.82004,
+      "target_2": 4072.44025,
+      "target_3": 3881.26721,
+      "risk_reward": 1.5,
+      "risk_usd": 95.58652,
+      "factors": [
+        "Pullback into EMA value zone, momentum reclaimed",
+        "Trading with higher-timeframe trend (BEARISH)",
+        "Strong trend (ADX 25)"
+      ],
+      "reasoning": "The price has retreated into the EMA value zone, confirming a pullback and allowing momentum to be reclaimed for a short entry. The higher\u2011time\u2011frame trend remains bearish, and the ADX reading of 25 confirms a strong trend, supporting the short position",
+      "asset": "XAUUSD",
+      "timestamp": "2026-09-10 16:38:45.422880+00:00",
+      "layer": "gold_swing",
+      "timeframe": "1h/4h",
+      "session": "any",
+      "stop": 4454.78634,
+      "tp1": 4215.82004,
+      "tp2": 4072.44025,
+      "tp3": 3881.26721,
+      "opened_at": "2026-09-10 16:38:51.612932+00:00"
+    },
+    {
+      "direction": "SHORT",
+      "signal_label": "SCALP_SHORT",
+      "confidence": 0.67,
+      "entry": 76970.0,
+      "stop_loss": 77354.85,
+      "target_1": 76585.15,
+      "target_2": 76354.24,
+      "target_3": 76007.875,
+      "risk_reward": 1.0,
+      "risk_usd": 384.85,
+      "factors": [
+        "Pullback into EMA value zone, momentum reclaimed",
+        "Trading with higher-timeframe trend (BEARISH)",
+        "Strong trend (ADX 39)"
+      ],
+      "reasoning": "The short entry is justified by a pullback into the EMA value zone where momentum has been reclaimed, confirming a reversal point. The trade aligns with the higher\u2011timeframe bearish trend and is supported by a strong directional bias, as evidenced by an ADX reading of 39. These factors collectively signal a high\u2011probability downward move for XAUUSD.",
+      "asset": "BTCUSD",
+      "timestamp": "2026-09-10 16:38:51.614778+00:00",
+      "layer": "scalp",
+      "timeframe": "15m",
+      "session": "24h",
+      "stop": 77354.85,
+      "tp1": 76585.15,
+      "tp2": 76354.24,
+      "tp3": 76007.875,
+      "opened_at": "2026-09-10 16:38:58.053824+00:00"
+    },
+    {
+      "direction": "SHORT",
+      "signal_label": "SNIPER",
+      "confidence": 0.84,
+      "entry": 76970.1,
+      "stop_loss": 78894.3525,
+      "target_1": 74083.72125,
+      "target_2": 71197.3425,
+      "target_3": 67348.8375,
+      "risk_reward": 1.5,
+      "risk_usd": 1924.2525,
+      "factors": [
+        "Pullback into EMA value zone, momentum reclaimed",
+        "Trading with higher-timeframe trend (BEARISH)",
+        "MACD momentum expanding in trade direction",
+        "Strong trend (ADX 39)",
+        "Above-average volume"
+      ],
+      "reasoning": "The short trade is justified by a pullback into a key EMA value zone, confirming a momentum shift back into bearish territory. The higher",
+      "asset": "BTCUSD",
+      "timestamp": "2026-09-10 16:38:53.922788+00:00",
+      "layer": "swing",
+      "timeframe": "1h/4h",
+      "session": "24h",
+      "stop": 78894.3525,
+      "tp1": 74083.72125,
+      "tp2": 71197.3425,
+      "tp3": 67348.8375,
+      "opened_at": "2026-09-10 16:38:58.666760+00:00"
     }
   ],
   "daily_brief": {
@@ -502,22 +567,9 @@
       "EURUSD": null
     },
     "summary": "1/3 markets reporting. 0 bullish, 1 bearish, 0 neutral. Most extreme: XAUUSD at 83/100 (crowded long).",
-    "timestamp": "2026-09-09 16:51:58.611496+00:00"
+    "timestamp": "2026-09-10 16:38:35.027021+00:00"
   },
   "cot_history": [
-    {
-      "date": "2026-08-19",
-      "data": {
-        "XAUUSD": {
-          "net": 217940,
-          "change": 20306,
-          "cot_index": 70,
-          "signal": "NEUTRAL",
-          "date": "2026-08-11",
-          "source": "CFTC (official)"
-        }
-      }
-    },
     {
       "date": "2026-08-20",
       "data": {
@@ -715,6 +767,21 @@
         "BTCUSD": null,
         "EURUSD": null
       }
+    },
+    {
+      "date": "2026-09-10",
+      "data": {
+        "XAUUSD": {
+          "net": 228124,
+          "change": -15210,
+          "cot_index": 83,
+          "signal": "BEARISH",
+          "date": "2026-09-01",
+          "source": "CFTC (official)"
+        },
+        "BTCUSD": null,
+        "EURUSD": null
+      }
     }
   ],
   "scenarios": {
@@ -725,13 +792,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "1H",
-      "price": 4407.25,
-      "support": 4341.97,
-      "resistance": 4443.2,
-      "external_high": 4637.17,
+      "price": 4359.2,
+      "support": 4324.51,
+      "resistance": 4432.62,
+      "external_high": 4514.11,
       "external_low": 4283.21,
-      "bos": null,
-      "updated_at": "2026-09-09 16:52:09.737417+00:00",
+      "bos": "BEARISH",
+      "updated_at": "2026-09-10 16:38:39.759427+00:00",
       "chart": "charts/scenario_1H.png"
     },
     "4H": {
@@ -740,13 +807,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "4H",
-      "price": 4407.25,
-      "support": 4341.97,
+      "price": 4359.2,
+      "support": 4324.51,
       "resistance": 4514.11,
       "external_high": 4695.94,
       "external_low": 3996.32,
       "bos": null,
-      "updated_at": "2026-09-09 16:52:13.503237+00:00",
+      "updated_at": "2026-09-10 16:38:41.731901+00:00",
       "chart": "charts/scenario_4H.png"
     },
     "Daily": {
@@ -755,13 +822,13 @@
         "Structure: higher-highs & higher-lows"
       ],
       "timeframe": "Daily",
-      "price": 4407.25,
+      "price": 4359.2,
       "support": 4022.04,
       "resistance": 4695.94,
       "external_high": 5597.23,
       "external_low": 3949.45,
       "bos": null,
-      "updated_at": "2026-09-09 16:52:14.876528+00:00",
+      "updated_at": "2026-09-10 16:38:43.520809+00:00",
       "chart": "charts/scenario_Daily.png"
     },
     "Weekly": {
@@ -771,13 +838,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Weekly",
-      "price": 4407.91,
+      "price": 4356.18,
       "support": 3949.45,
       "resistance": 5597.23,
       "external_high": 5597.23,
       "external_low": 1810.1,
       "bos": null,
-      "updated_at": "2026-09-09 16:52:16.130387+00:00",
+      "updated_at": "2026-09-10 16:38:45.037147+00:00",
       "chart": "charts/scenario_Weekly.png"
     }
   },
