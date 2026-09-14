@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-12 00:31:31.847999+00:00",
+  "updated_at": "2026-09-14 11:59:00.519789+00:00",
   "signals": [
     {
       "layer": "gold_swing",
@@ -817,54 +817,38 @@
   "news": {
     "events": [
       {
-        "title": "Core PPI m/m",
+        "title": "Federal Funds Rate",
         "currency": "USD",
-        "time": "2026-09-10 12:30:00+00:00",
-        "forecast": "0.3%",
-        "previous": "0.2%",
+        "time": "2026-09-16 18:00:00+00:00",
+        "forecast": "4.00%",
+        "previous": "3.75%",
         "actual": null
       },
       {
-        "title": "PPI m/m",
+        "title": "FOMC Economic Projections",
         "currency": "USD",
-        "time": "2026-09-10 12:30:00+00:00",
-        "forecast": "0.4%",
-        "previous": "0.0%",
+        "time": "2026-09-16 18:00:00+00:00",
+        "forecast": "",
+        "previous": "",
         "actual": null
       },
       {
-        "title": "Core CPI m/m",
+        "title": "FOMC Statement",
         "currency": "USD",
-        "time": "2026-09-11 12:30:00+00:00",
-        "forecast": "0.2%",
-        "previous": "0.2%",
+        "time": "2026-09-16 18:00:00+00:00",
+        "forecast": "",
+        "previous": "",
         "actual": null
       },
       {
-        "title": "Core CPI y/y",
+        "title": "FOMC Press Conference",
         "currency": "USD",
-        "time": "2026-09-11 12:30:00+00:00",
-        "forecast": "2.4%",
-        "previous": "2.5%",
-        "actual": null
-      },
-      {
-        "title": "CPI m/m",
-        "currency": "USD",
-        "time": "2026-09-11 12:30:00+00:00",
-        "forecast": "0.4%",
-        "previous": "0.1%",
-        "actual": null
-      },
-      {
-        "title": "CPI y/y",
-        "currency": "USD",
-        "time": "2026-09-11 12:30:00+00:00",
-        "forecast": "3.4%",
-        "previous": "3.4%",
+        "time": "2026-09-16 18:30:00+00:00",
+        "forecast": "",
+        "previous": "",
         "actual": null
       }
     ],
-    "updated_at": "2026-09-12 00:31:31.847963+00:00"
+    "updated_at": "2026-09-14 11:59:00.519744+00:00"
   }
 }
