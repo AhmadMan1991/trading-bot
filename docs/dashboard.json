@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-18 16:33:07.105664+00:00",
+  "updated_at": "2026-09-18 16:41:20.327055+00:00",
   "signals": [
     {
       "layer": "gold_swing",
@@ -372,9 +372,9 @@
           "date": "2026-09-08",
           "source": "CFTC (official)"
         },
-        "dollar_bias": "USD_STRONG"
+        "dollar_bias": "USD_NEUTRAL"
       },
-      "timestamp": "2026-09-18 12:11:44.536728+00:00",
+      "timestamp": "2026-09-18 16:41:00.349563+00:00",
       "chart": null
     }
   ],
@@ -413,9 +413,7 @@
       "tp1": 1.14542,
       "tp2": 1.13677,
       "tp3": 1.12523,
-      "opened_at": "2026-09-15 17:16:13.993650+00:00",
-      "live_price": 1.14725,
-      "progress_pct": 0.789
+      "opened_at": "2026-09-15 17:16:13.993650+00:00"
     },
     {
       "direction": "SHORT",
@@ -442,9 +440,7 @@
       "tp1": 1.13896,
       "tp2": 1.13036,
       "tp3": 1.11888,
-      "opened_at": "2026-09-17 17:14:15.721409+00:00",
-      "live_price": 1.14725,
-      "progress_pct": 0.037
+      "opened_at": "2026-09-17 17:14:15.721409+00:00"
     },
     {
       "direction": "SHORT",
@@ -473,9 +469,7 @@
       "tp1": 4309.5232,
       "tp2": 4244.29222,
       "tp3": 4157.31759,
-      "opened_at": "2026-09-18 12:11:53.846279+00:00",
-      "live_price": 4377.14139,
-      "progress_pct": -0.055
+      "opened_at": "2026-09-18 12:11:53.846279+00:00"
     }
   ],
   "daily_brief": {
@@ -548,7 +542,7 @@
       "EURUSD": null
     },
     "summary": "1/3 markets reporting. 0 bullish, 1 bearish, 0 neutral. Most extreme: XAUUSD at 87/100 (crowded long).",
-    "timestamp": "2026-09-18 12:11:42.082201+00:00"
+    "timestamp": "2026-09-18 16:40:59.283747+00:00"
   },
   "cot_history": [
     {
@@ -785,13 +779,13 @@
         "Structure: higher-highs & higher-lows"
       ],
       "timeframe": "1H",
-      "price": 4374.75,
-      "support": 4256.66,
+      "price": 4378.93,
+      "support": 4274.0,
       "resistance": 4399.22,
       "external_high": 4443.2,
       "external_low": 4238.37,
       "bos": null,
-      "updated_at": "2026-09-18 12:11:45.782390+00:00",
+      "updated_at": "2026-09-18 16:41:01.047854+00:00",
       "chart": "charts/scenario_1H.png"
     },
     "4H": {
@@ -800,13 +794,13 @@
         "EMA stack bearish (20<50<200)"
       ],
       "timeframe": "4H",
-      "price": 4374.75,
+      "price": 4378.93,
       "support": 4238.37,
       "resistance": 4399.22,
       "external_high": 4695.94,
-      "external_low": 4062.51,
+      "external_low": 4065.91,
       "bos": "BULLISH",
-      "updated_at": "2026-09-18 12:11:46.317250+00:00",
+      "updated_at": "2026-09-18 16:41:01.586704+00:00",
       "chart": "charts/scenario_4H.png"
     },
     "Daily": {
@@ -815,13 +809,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Daily",
-      "price": 4374.75,
+      "price": 4378.93,
       "support": 4238.37,
       "resistance": 4695.94,
       "external_high": 5597.23,
       "external_low": 3949.45,
       "bos": null,
-      "updated_at": "2026-09-18 12:11:46.924884+00:00",
+      "updated_at": "2026-09-18 16:41:02.178286+00:00",
       "chart": "charts/scenario_Daily.png"
     },
     "Weekly": {
@@ -831,13 +825,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Weekly",
-      "price": 4374.75,
+      "price": 4378.06,
       "support": 3949.45,
       "resistance": 5597.23,
       "external_high": 5597.23,
       "external_low": 1810.1,
       "bos": null,
-      "updated_at": "2026-09-18 12:11:47.439493+00:00",
+      "updated_at": "2026-09-18 16:41:02.672600+00:00",
       "chart": "charts/scenario_Weekly.png"
     }
   },
