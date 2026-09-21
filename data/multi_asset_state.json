@@ -1,9 +1,9 @@
 {
   "BTCUSD": {
-    "date": "2026-09-16",
+    "date": "2026-09-21",
     "trades_today": 1,
-    "last_scalp": null,
-    "last_swing": "2026-09-16 17:15:02.007457+00:00"
+    "last_scalp": "2026-09-21 13:55:38.588739+00:00",
+    "last_swing": null
   },
   "EURUSD": {
     "date": "2026-09-17",
