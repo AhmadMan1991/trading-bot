@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-19 00:28:53.418546+00:00",
+  "updated_at": "2026-09-21 12:09:52.227690+00:00",
   "signals": [
     {
       "layer": "gold_swing",
@@ -842,40 +842,7 @@
     }
   },
   "news": {
-    "events": [
-      {
-        "title": "Federal Funds Rate",
-        "currency": "USD",
-        "time": "2026-09-16 18:00:00+00:00",
-        "forecast": "4.00%",
-        "previous": "3.75%",
-        "actual": null
-      },
-      {
-        "title": "FOMC Economic Projections",
-        "currency": "USD",
-        "time": "2026-09-16 18:00:00+00:00",
-        "forecast": "",
-        "previous": "",
-        "actual": null
-      },
-      {
-        "title": "FOMC Statement",
-        "currency": "USD",
-        "time": "2026-09-16 18:00:00+00:00",
-        "forecast": "",
-        "previous": "",
-        "actual": null
-      },
-      {
-        "title": "FOMC Press Conference",
-        "currency": "USD",
-        "time": "2026-09-16 18:30:00+00:00",
-        "forecast": "",
-        "previous": "",
-        "actual": null
-      }
-    ],
-    "updated_at": "2026-09-19 00:28:53.418499+00:00"
+    "events": [],
+    "updated_at": "2026-09-21 12:09:52.227636+00:00"
   }
 }
