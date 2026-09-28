@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-26 00:54:57.629141+00:00",
+  "updated_at": "2026-09-28 13:05:03.009316+00:00",
   "signals": [
     {
       "layer": "gold_swing",
@@ -892,7 +892,48 @@
     }
   },
   "news": {
-    "events": [],
-    "updated_at": "2026-09-26 00:54:57.629086+00:00"
+    "events": [
+      {
+        "title": "Core PCE Price Index m/m",
+        "currency": "USD",
+        "time": "2026-09-30 12:30:00+00:00",
+        "forecast": "0.3%",
+        "previous": "0.2%",
+        "actual": null
+      },
+      {
+        "title": "Final GDP q/q",
+        "currency": "USD",
+        "time": "2026-09-30 12:30:00+00:00",
+        "forecast": "1.5%",
+        "previous": "1.5%",
+        "actual": null
+      },
+      {
+        "title": "Average Hourly Earnings m/m",
+        "currency": "USD",
+        "time": "2026-10-02 12:30:00+00:00",
+        "forecast": "0.3%",
+        "previous": "0.3%",
+        "actual": null
+      },
+      {
+        "title": "Non-Farm Employment Change",
+        "currency": "USD",
+        "time": "2026-10-02 12:30:00+00:00",
+        "forecast": "98K",
+        "previous": "162K",
+        "actual": null
+      },
+      {
+        "title": "Unemployment Rate",
+        "currency": "USD",
+        "time": "2026-10-02 12:30:00+00:00",
+        "forecast": "4.1%",
+        "previous": "4.1%",
+        "actual": null
+      }
+    ],
+    "updated_at": "2026-09-28 13:05:03.009280+00:00"
   }
 }
