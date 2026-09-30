@@ -1,6 +1,22 @@
 {
-  "updated_at": "2026-09-30 17:56:53.471517+00:00",
+  "updated_at": "2026-09-30 18:33:24.678275+00:00",
   "signals": [
+    {
+      "layer": "gold_swing",
+      "asset": "XAUUSD",
+      "direction": "SHORT",
+      "entry": 4154.60717,
+      "stop": 4237.82486,
+      "tp1": 4029.78063,
+      "tp2": 3904.95409,
+      "tp3": 3738.51871,
+      "score_or_conf": 0.71,
+      "timestamp": "2026-09-30 18:32:59.602946+00:00",
+      "chart": "charts/gold_swing_XAUUSD_20260930T183259Z.png",
+      "caption": "XAUUSD \u2014 SHORT swing (HIGH_PROBABILITY, conf 71%)",
+      "signal_label": "HIGH_PROBABILITY",
+      "sniper": false
+    },
     {
       "layer": "gold_swing",
       "asset": "XAUUSD",
@@ -391,7 +407,7 @@
         },
         "dollar_bias": "USD_NEUTRAL"
       },
-      "timestamp": "2026-09-30 13:35:38.639918+00:00",
+      "timestamp": "2026-09-30 18:32:48.695247+00:00",
       "chart": null
     }
   ],
@@ -430,9 +446,7 @@
       "tp1": 1.12854,
       "tp2": 1.12001,
       "tp3": 1.10864,
-      "opened_at": "2026-09-28 21:21:27.602150+00:00",
-      "live_price": 1.1364,
-      "progress_pct": 0.079
+      "opened_at": "2026-09-28 21:21:27.602150+00:00"
     },
     {
       "direction": "SHORT",
@@ -459,9 +473,63 @@
       "tp1": 1.12618,
       "tp2": 1.11767,
       "tp3": 1.10632,
-      "opened_at": "2026-09-29 13:58:46.285108+00:00",
-      "live_price": 1.1364,
-      "progress_pct": -0.302
+      "opened_at": "2026-09-29 13:58:46.285108+00:00"
+    },
+    {
+      "direction": "SHORT",
+      "signal_label": "HIGH_PROBABILITY",
+      "confidence": 0.71,
+      "entry": 4154.60717,
+      "stop_loss": 4237.82486,
+      "target_1": 4029.78063,
+      "target_2": 3904.95409,
+      "target_3": 3738.51871,
+      "risk_reward": 1.5,
+      "risk_usd": 83.21769,
+      "factors": [
+        "Pullback into EMA value zone, momentum reclaimed",
+        "Trading with higher-timeframe trend (BEARISH)",
+        "MACD momentum expanding in trade direction"
+      ],
+      "reasoning": "The price pulled back into the EMA value zone, confirming a temporary support level, but momentum has since shifted back into the trade direction, indicating a reversal of the prior rally. The higher\u2011timeframe trend remains bearish, providing a macro\u2011level bias that aligns with the short position.",
+      "asset": "XAUUSD",
+      "timestamp": "2026-09-30 18:32:51.571258+00:00",
+      "layer": "gold_swing",
+      "timeframe": "1h/4h",
+      "session": "any",
+      "stop": 4237.82486,
+      "tp1": 4029.78063,
+      "tp2": 3904.95409,
+      "tp3": 3738.51871,
+      "opened_at": "2026-09-30 18:32:59.604243+00:00"
+    },
+    {
+      "direction": "SHORT",
+      "signal_label": "HIGH_PROBABILITY",
+      "confidence": 0.71,
+      "entry": 1.13343,
+      "stop_loss": 1.13941,
+      "target_1": 1.12446,
+      "target_2": 1.11549,
+      "target_3": 1.10352,
+      "risk_reward": 1.5,
+      "risk_usd": 0.00598,
+      "factors": [
+        "Pullback into EMA value zone, momentum reclaimed",
+        "Trading with higher-timeframe trend (BEARISH)",
+        "MACD momentum expanding in trade direction"
+      ],
+      "reasoning": "The price pulled back into the EMA value zone and immediately reclaimed bearish momentum, confirming a short entry. This move aligns with the higher\u2011timeframe bearish trend, providing a supportive directional bias. MACD momentum is expanding in the trade direction, reinforcing the expectation of a continued downtrend.",
+      "asset": "EURUSD",
+      "timestamp": "2026-09-30 18:33:00.671390+00:00",
+      "layer": "swing",
+      "timeframe": "1h/4h",
+      "session": "any",
+      "stop": 1.13941,
+      "tp1": 1.12446,
+      "tp2": 1.11549,
+      "tp3": 1.10352,
+      "opened_at": "2026-09-30 18:33:04.491139+00:00"
     }
   ],
   "daily_brief": {
@@ -534,7 +602,7 @@
       "EURUSD": null
     },
     "summary": "1/3 markets reporting. 0 bullish, 1 bearish, 0 neutral. Most extreme: XAUUSD at 80/100 (crowded long).",
-    "timestamp": "2026-09-30 13:35:36.845798+00:00"
+    "timestamp": "2026-09-30 18:32:47.472281+00:00"
   },
   "cot_history": [
     {
@@ -765,18 +833,19 @@
   ],
   "scenarios": {
     "1H": {
-      "bias": "BULLISH",
+      "bias": "RANGING",
       "reasons": [
+        "EMA stack bearish (20<50<200)",
         "Structure: higher-highs & higher-lows"
       ],
       "timeframe": "1H",
-      "price": 4190.0,
-      "support": 4112.09,
+      "price": 4154.61,
+      "support": 4122.69,
       "resistance": 4220.15,
       "external_high": 4399.22,
       "external_low": 4111.8,
-      "bos": null,
-      "updated_at": "2026-09-30 13:35:39.417122+00:00",
+      "bos": "BEARISH",
+      "updated_at": "2026-09-30 18:32:49.409079+00:00",
       "chart": "charts/scenario_1H.png"
     },
     "4H": {
@@ -786,13 +855,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "4H",
-      "price": 4190.0,
+      "price": 4154.61,
       "support": 4111.8,
       "resistance": 4315.6,
       "external_high": 4695.94,
       "external_low": 4111.8,
       "bos": null,
-      "updated_at": "2026-09-30 13:35:40.011151+00:00",
+      "updated_at": "2026-09-30 18:32:50.012788+00:00",
       "chart": "charts/scenario_4H.png"
     },
     "Daily": {
@@ -802,13 +871,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Daily",
-      "price": 4190.0,
+      "price": 4154.61,
       "support": 4111.8,
       "resistance": 4695.94,
       "external_high": 5597.23,
       "external_low": 3949.45,
       "bos": "BEARISH",
-      "updated_at": "2026-09-30 13:35:40.626461+00:00",
+      "updated_at": "2026-09-30 18:32:50.669095+00:00",
       "chart": "charts/scenario_Daily.png"
     },
     "Weekly": {
@@ -818,13 +887,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Weekly",
-      "price": 4193.91,
+      "price": 4154.24,
       "support": 3949.45,
       "resistance": 5597.23,
       "external_high": 5597.23,
       "external_low": 1810.1,
       "bos": null,
-      "updated_at": "2026-09-30 13:35:41.195972+00:00",
+      "updated_at": "2026-09-30 18:32:51.238195+00:00",
       "chart": "charts/scenario_Weekly.png"
     }
   },
