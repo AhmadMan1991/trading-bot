@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-01 00:51:52.436878+00:00",
+  "updated_at": "2026-10-01 12:34:42.470612+00:00",
   "signals": [
     {
       "layer": "gold_swing",
@@ -935,7 +935,7 @@
         "title": "Non-Farm Employment Change",
         "currency": "USD",
         "time": "2026-10-02 12:30:00+00:00",
-        "forecast": "90K",
+        "forecast": "89K",
         "previous": "162K",
         "actual": null
       },
@@ -948,6 +948,6 @@
         "actual": null
       }
     ],
-    "updated_at": "2026-10-01 00:51:52.436831+00:00"
+    "updated_at": "2026-10-01 12:34:42.470560+00:00"
   }
 }
