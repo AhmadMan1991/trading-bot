@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-01 13:13:24.128516+00:00",
+  "updated_at": "2026-10-01 14:25:08.190350+00:00",
   "signals": [
     {
       "layer": "gold_swing",
@@ -447,8 +447,8 @@
       "tp2": 1.12001,
       "tp3": 1.10864,
       "opened_at": "2026-09-28 21:21:27.602150+00:00",
-      "live_price": 1.13312,
-      "progress_pct": 0.463
+      "live_price": 1.12857,
+      "progress_pct": 0.996
     },
     {
       "direction": "SHORT",
@@ -476,8 +476,8 @@
       "tp2": 1.11767,
       "tp3": 1.10632,
       "opened_at": "2026-09-29 13:58:46.285108+00:00",
-      "live_price": 1.13312,
-      "progress_pct": 0.184
+      "live_price": 1.12857,
+      "progress_pct": 0.719
     },
     {
       "direction": "SHORT",
@@ -506,8 +506,8 @@
       "tp2": 3904.95409,
       "tp3": 3738.51871,
       "opened_at": "2026-09-30 18:32:59.604243+00:00",
-      "live_price": 4156.06074,
-      "progress_pct": -0.017
+      "live_price": 4156.45969,
+      "progress_pct": -0.022
     },
     {
       "direction": "SHORT",
@@ -536,8 +536,8 @@
       "tp2": 1.11549,
       "tp3": 1.10352,
       "opened_at": "2026-09-30 18:33:04.491139+00:00",
-      "live_price": 1.13312,
-      "progress_pct": 0.035
+      "live_price": 1.12857,
+      "progress_pct": 0.542
     }
   ],
   "daily_brief": {
