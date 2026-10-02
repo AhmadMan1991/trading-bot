@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-02 12:33:53.777164+00:00",
+  "updated_at": "2026-10-02 13:47:54.423714+00:00",
   "signals": [
     {
       "layer": "gold_swing",
@@ -394,8 +394,7 @@
       "forecast": {
         "bias": "BEARISH",
         "reasons": [
-          "EMA stack bearish (20<50<200)",
-          "Structure: lower-highs & lower-lows"
+          "EMA stack bearish (20<50<200)"
         ],
         "cot": {
           "net": 225853,
@@ -405,9 +404,9 @@
           "date": "2026-09-22",
           "source": "CFTC (official)"
         },
-        "dollar_bias": "USD_STRONG"
+        "dollar_bias": "USD_NEUTRAL"
       },
-      "timestamp": "2026-10-01 19:46:14.539899+00:00",
+      "timestamp": "2026-10-02 13:47:43.416773+00:00",
       "chart": null
     }
   ],
@@ -447,9 +446,7 @@
       "tp1": 4029.78063,
       "tp2": 3904.95409,
       "tp3": 3738.51871,
-      "opened_at": "2026-09-30 18:32:59.604243+00:00",
-      "live_price": 4180.14124,
-      "progress_pct": -0.307
+      "opened_at": "2026-09-30 18:32:59.604243+00:00"
     }
   ],
   "daily_brief": {
@@ -522,24 +519,9 @@
       "EURUSD": null
     },
     "summary": "1/3 markets reporting. 0 bullish, 1 bearish, 0 neutral. Most extreme: XAUUSD at 80/100 (crowded long).",
-    "timestamp": "2026-10-01 19:46:12.535430+00:00"
+    "timestamp": "2026-10-02 13:47:41.118794+00:00"
   },
   "cot_history": [
-    {
-      "date": "2026-09-11",
-      "data": {
-        "XAUUSD": {
-          "net": 228124,
-          "change": -15210,
-          "cot_index": 83,
-          "signal": "BEARISH",
-          "date": "2026-09-01",
-          "source": "CFTC (official)"
-        },
-        "BTCUSD": null,
-        "EURUSD": null
-      }
-    },
     {
       "date": "2026-09-14",
       "data": {
@@ -749,39 +731,50 @@
         "BTCUSD": null,
         "EURUSD": null
       }
+    },
+    {
+      "date": "2026-10-02",
+      "data": {
+        "XAUUSD": {
+          "net": 225853,
+          "change": -4485,
+          "cot_index": 80,
+          "signal": "BEARISH",
+          "date": "2026-09-22",
+          "source": "CFTC (official)"
+        },
+        "BTCUSD": null,
+        "EURUSD": null
+      }
     }
   ],
   "scenarios": {
     "1H": {
-      "bias": "BEARISH",
-      "reasons": [
-        "EMA stack bearish (20<50<200)",
-        "Structure: lower-highs & lower-lows"
-      ],
+      "bias": "RANGING",
+      "reasons": [],
       "timeframe": "1H",
-      "price": 4175.31,
-      "support": 4139.78,
-      "resistance": 4220.15,
+      "price": 4189.51,
+      "support": 4134.45,
+      "resistance": 4225.65,
       "external_high": 4384.53,
       "external_low": 4111.8,
       "bos": null,
-      "updated_at": "2026-10-01 19:46:15.253065+00:00",
+      "updated_at": "2026-10-02 13:47:44.216017+00:00",
       "chart": "charts/scenario_1H.png"
     },
     "4H": {
       "bias": "BEARISH",
       "reasons": [
-        "EMA stack bearish (20<50<200)",
-        "Structure: lower-highs & lower-lows"
+        "EMA stack bearish (20<50<200)"
       ],
       "timeframe": "4H",
-      "price": 4175.31,
+      "price": 4189.51,
       "support": 4111.8,
-      "resistance": 4315.6,
+      "resistance": 4287.41,
       "external_high": 4695.94,
       "external_low": 4111.8,
       "bos": null,
-      "updated_at": "2026-10-01 19:46:15.693813+00:00",
+      "updated_at": "2026-10-02 13:47:44.764695+00:00",
       "chart": "charts/scenario_4H.png"
     },
     "Daily": {
@@ -791,13 +784,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Daily",
-      "price": 4175.31,
+      "price": 4189.51,
       "support": 4111.8,
       "resistance": 4695.94,
       "external_high": 5597.23,
       "external_low": 3949.45,
       "bos": "BEARISH",
-      "updated_at": "2026-10-01 19:46:16.169601+00:00",
+      "updated_at": "2026-10-02 13:47:45.334634+00:00",
       "chart": "charts/scenario_Daily.png"
     },
     "Weekly": {
@@ -807,13 +800,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Weekly",
-      "price": 4175.31,
+      "price": 4188.02,
       "support": 3949.45,
       "resistance": 5597.23,
       "external_high": 5597.23,
       "external_low": 1810.1,
       "bos": null,
-      "updated_at": "2026-10-01 19:46:16.603889+00:00",
+      "updated_at": "2026-10-02 13:47:45.849111+00:00",
       "chart": "charts/scenario_Weekly.png"
     }
   },
