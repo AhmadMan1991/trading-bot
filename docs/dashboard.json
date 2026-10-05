@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-03 00:36:04.401933+00:00",
+  "updated_at": "2026-10-05 13:47:36.877826+00:00",
   "signals": [
     {
       "layer": "gold_swing",
@@ -846,46 +846,14 @@
   "news": {
     "events": [
       {
-        "title": "Core PCE Price Index m/m",
+        "title": "FOMC Meeting Minutes",
         "currency": "USD",
-        "time": "2026-09-30 12:30:00+00:00",
-        "forecast": "0.3%",
-        "previous": "0.2%",
-        "actual": null
-      },
-      {
-        "title": "Final GDP q/q",
-        "currency": "USD",
-        "time": "2026-09-30 12:30:00+00:00",
-        "forecast": "1.5%",
-        "previous": "1.5%",
-        "actual": null
-      },
-      {
-        "title": "Average Hourly Earnings m/m",
-        "currency": "USD",
-        "time": "2026-10-02 12:30:00+00:00",
-        "forecast": "0.3%",
-        "previous": "0.3%",
-        "actual": null
-      },
-      {
-        "title": "Non-Farm Employment Change",
-        "currency": "USD",
-        "time": "2026-10-02 12:30:00+00:00",
-        "forecast": "89K",
-        "previous": "162K",
-        "actual": null
-      },
-      {
-        "title": "Unemployment Rate",
-        "currency": "USD",
-        "time": "2026-10-02 12:30:00+00:00",
-        "forecast": "4.1%",
-        "previous": "4.1%",
+        "time": "2026-10-07 18:00:00+00:00",
+        "forecast": "",
+        "previous": "",
         "actual": null
       }
     ],
-    "updated_at": "2026-10-03 00:36:04.401897+00:00"
+    "updated_at": "2026-10-05 13:47:36.877771+00:00"
   }
 }
