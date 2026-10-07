@@ -1,6 +1,22 @@
 {
-  "updated_at": "2026-10-07 19:05:42.938102+00:00",
+  "updated_at": "2026-10-07 20:07:32.572261+00:00",
   "signals": [
+    {
+      "layer": "gold_swing",
+      "asset": "XAUUSD",
+      "direction": "SHORT",
+      "entry": 4103.70058,
+      "stop": 4173.15475,
+      "tp1": 3999.51933,
+      "tp2": 3895.33808,
+      "tp3": 3756.42975,
+      "score_or_conf": 0.67,
+      "timestamp": "2026-10-07 20:07:17.885537+00:00",
+      "chart": "charts/gold_swing_XAUUSD_20261007T200717Z.png",
+      "caption": "XAUUSD \u2014 SHORT swing (SWING_SHORT, conf 67%)",
+      "signal_label": "SWING_SHORT",
+      "sniper": false
+    },
     {
       "layer": "gold_swing",
       "asset": "XAUUSD",
@@ -407,7 +423,7 @@
         },
         "dollar_bias": "USD_STRONG"
       },
-      "timestamp": "2026-10-07 14:25:15.035623+00:00",
+      "timestamp": "2026-10-07 20:07:09.829450+00:00",
       "chart": null
     }
   ],
@@ -420,7 +436,64 @@
     "total_r": 31.4,
     "avg_r": 0.51
   },
-  "open_positions": [],
+  "open_positions": [
+    {
+      "direction": "SHORT",
+      "signal_label": "SWING_SHORT",
+      "confidence": 0.67,
+      "entry": 4103.70058,
+      "stop_loss": 4173.15475,
+      "target_1": 3999.51933,
+      "target_2": 3895.33808,
+      "target_3": 3756.42975,
+      "risk_reward": 1.5,
+      "risk_usd": 69.45417,
+      "factors": [
+        "Pullback into EMA value zone, momentum reclaimed",
+        "Trading with higher-timeframe trend (BEARISH)",
+        "Strong trend (ADX 29)"
+      ],
+      "reasoning": "The price has pulled back into the EMA value zone, where downside momentum has been reclaimed, signaling a bearish reversal. This move is in line with the higher\u2011timeframe bearish trend and is reinforced",
+      "asset": "XAUUSD",
+      "timestamp": "2026-10-07 20:07:12.870101+00:00",
+      "layer": "gold_swing",
+      "timeframe": "1h/4h",
+      "session": "any",
+      "stop": 4173.15475,
+      "tp1": 3999.51933,
+      "tp2": 3895.33808,
+      "tp3": 3756.42975,
+      "opened_at": "2026-10-07 20:07:17.886749+00:00"
+    },
+    {
+      "direction": "SHORT",
+      "signal_label": "SWING_SHORT",
+      "confidence": 0.67,
+      "entry": 1.11951,
+      "stop_loss": 1.12635,
+      "target_1": 1.10926,
+      "target_2": 1.099,
+      "target_3": 1.08533,
+      "risk_reward": 1.5,
+      "risk_usd": 0.00684,
+      "factors": [
+        "Pullback into EMA value zone, momentum reclaimed",
+        "Trading with higher-timeframe trend (BEARISH)",
+        "Strong trend (ADX 34)"
+      ],
+      "reasoning": "The short entry is justified by a pullback into the EMA value zone where momentum has been reclaimed, confirming a reversal point. It aligns with the higher\u2011timeframe bearish trend and the ADX reading of 34 indicates a strong trend, reinforcing the conviction to sell. This confluence of factors supports a confident short position.",
+      "asset": "EURUSD",
+      "timestamp": "2026-10-07 20:07:18.846339+00:00",
+      "layer": "swing",
+      "timeframe": "1h/4h",
+      "session": "any",
+      "stop": 1.12635,
+      "tp1": 1.10926,
+      "tp2": 1.099,
+      "tp3": 1.08533,
+      "opened_at": "2026-10-07 20:07:22.049074+00:00"
+    }
+  ],
   "daily_brief": {
     "date": "2026-10-07",
     "summary": "\u0627\u0644\u0645\u0624\u0634\u0631\u0627\u062a \u0627\u0644\u062d\u0627\u0644\u064a\u0629 \u062a\u0634\u064a\u0631 \u0625\u0644\u0649 \u062a\u0631\u0627\u062c\u0639 \u0645\u062d\u062a\u0645\u0644 \u0641\u064a \u0627\u0644\u0630\u0647\u0628 (XAUUSD) \u0648\u0627\u0644\u0632\u0648\u062c \u0627\u0644\u064a\u0648\u0631\u0648/\u0627\u0644\u062f\u0648\u0644\u0627\u0631 (EURUSD)\u060c \u0645\u0639 \u062f\u0631\u062c\u0627\u062a \u0633\u0644\u0628\u064a\u0629 \u0639\u0627\u0644\u064a\u0629 \u0648\u062a\u0648\u062c\u0647 \u0628\u0627\u0626\u0633\u060c \u0641\u064a \u062d\u064a\u0646 \u064a\u0638\u0647\u0631 \u0627\u0644\u0628\u064a\u062a\u0643\u0648\u064a\u0646 (BTCUSD) \u0627\u062a\u062c\u0627\u0647\u064b\u0627 \u0635\u0639\u0648\u062f\u064a\u064b\u0627 \u0637\u0641\u064a\u0641\u064b\u0627. \u064a\u064f\u0646\u0635\u062d \u0628\u0645\u0631\u0627\u0642\u0628\u0629 \u062a\u062d\u0631\u0643\u0627\u062a XAUUSD \u0648EURUSD \u0639\u0646 \u0643\u062b\u0628\u060c \u0625\u0630 \u0642\u062f \u062a\u062a\u0623\u062b\u0631\u0627\u0646 \u0628\u0623\u064a \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0642\u062a\u0635\u0627\u062f\u064a\u0629 \u0642\u0627\u062f\u0645\u0629 \u0623\u0648 \u062a\u062d\u0648\u0644\u0627\u062a \u0641\u064a \u0633\u064a\u0627\u0633\u0627\u062a \u0627\u0644\u0627\u062d\u062a\u064a\u0627\u0637\u064a. \u0628\u064a\u0646\u0645\u0627 \u064a\u0638\u0644 \u0627\u0644\u0628\u064a\u062a\u0643\u0648\u064a\u0646 \u0641\u064a \u0648\u0636\u0639 \u0628\u0627\u0626\u0633 \u0642\u0644\u064a\u0644\u064b\u0627\u060c \u0642\u062f \u064a\u062a\u0623\u062b\u0631 \u0623\u064a\u0636\u064b\u0627 \u0628\u0627\u0644\u0638\u0631\u0648\u0641 \u0627\u0644\u0639\u0627\u0645\u0629 \u0644\u0644\u0633\u0648\u0642. \u26a0\ufe0f \u0627\u0644\u062e\u0637\u0631 \u0627\u0644\u0623\u0643\u0628\u0631: \u062a\u0648\u0642\u0639\u0627\u062a \u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u062a\u0636\u062e\u0645 \u0623\u0648 \u062a\u063a\u064a\u064a\u0631\u0627\u062a \u0645\u0641\u0627\u062c\u0626\u0629 \u0641\u064a \u0633\u064a\u0627\u0633\u0627\u062a \u0627\u0644\u0628\u0646\u0648\u0643 \u0627\u0644\u0645\u0631\u0643\u0632\u064a\u0629 \u0627\u0644\u062a\u064a \u0642\u062f \u062a\u064f\u0642\u0644\u0628 \u0627\u0644\u0627\u062a\u062c\u0627\u0647\u0627\u062a \u0627\u0644\u062d\u0627\u0644\u064a\u0629.",
@@ -491,7 +564,7 @@
       "EURUSD": null
     },
     "summary": "1/3 markets reporting. 0 bullish, 0 bearish, 1 neutral.",
-    "timestamp": "2026-10-07 14:25:12.733361+00:00"
+    "timestamp": "2026-10-07 20:07:08.669974+00:00"
   },
   "cot_history": [
     {
@@ -724,16 +797,17 @@
     "1H": {
       "bias": "BEARISH",
       "reasons": [
-        "EMA stack bearish (20<50<200)"
+        "EMA stack bearish (20<50<200)",
+        "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "1H",
-      "price": 4098.3,
+      "price": 4103.7,
       "support": 4061.73,
       "resistance": 4183.93,
       "external_high": 4315.6,
       "external_low": 4061.73,
-      "bos": "BEARISH",
-      "updated_at": "2026-10-07 14:25:15.890951+00:00",
+      "bos": null,
+      "updated_at": "2026-10-07 20:07:10.774632+00:00",
       "chart": "charts/scenario_1H.png"
     },
     "4H": {
@@ -743,13 +817,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "4H",
-      "price": 4098.3,
+      "price": 4103.7,
       "support": 4061.73,
       "resistance": 4225.65,
       "external_high": 4695.94,
       "external_low": 4061.73,
       "bos": "BEARISH",
-      "updated_at": "2026-10-07 14:25:16.482117+00:00",
+      "updated_at": "2026-10-07 20:07:11.331872+00:00",
       "chart": "charts/scenario_4H.png"
     },
     "Daily": {
@@ -759,13 +833,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Daily",
-      "price": 4098.3,
+      "price": 4103.7,
       "support": 4061.73,
       "resistance": 4514.11,
       "external_high": 5597.23,
       "external_low": 3949.45,
       "bos": "BEARISH",
-      "updated_at": "2026-10-07 14:25:17.151219+00:00",
+      "updated_at": "2026-10-07 20:07:11.980332+00:00",
       "chart": "charts/scenario_Daily.png"
     },
     "Weekly": {
@@ -775,13 +849,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Weekly",
-      "price": 4097.29,
+      "price": 4103.7,
       "support": 3949.45,
       "resistance": 5597.23,
       "external_high": 5597.23,
       "external_low": 1810.1,
       "bos": null,
-      "updated_at": "2026-10-07 14:25:17.711864+00:00",
+      "updated_at": "2026-10-07 20:07:12.530584+00:00",
       "chart": "charts/scenario_Weekly.png"
     }
   },
