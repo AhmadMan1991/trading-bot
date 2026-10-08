@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-08 19:05:18.584783+00:00",
+  "updated_at": "2026-10-08 20:04:46.362246+00:00",
   "signals": [
     {
       "layer": "gold_swing",
@@ -421,9 +421,9 @@
           "date": "2026-09-29",
           "source": "CFTC (official)"
         },
-        "dollar_bias": "USD_STRONG"
+        "dollar_bias": "USD_NEUTRAL"
       },
-      "timestamp": "2026-10-07 20:07:09.829450+00:00",
+      "timestamp": "2026-10-08 20:04:31.357206+00:00",
       "chart": null
     }
   ],
@@ -463,9 +463,7 @@
       "tp1": 3999.51933,
       "tp2": 3895.33808,
       "tp3": 3756.42975,
-      "opened_at": "2026-10-07 20:07:17.886749+00:00",
-      "live_price": 4159.39990234375,
-      "progress_pct": -0.802
+      "opened_at": "2026-10-07 20:07:17.886749+00:00"
     },
     {
       "direction": "SHORT",
@@ -493,9 +491,7 @@
       "tp1": 1.10926,
       "tp2": 1.099,
       "tp3": 1.08533,
-      "opened_at": "2026-10-07 20:07:22.049074+00:00",
-      "live_price": 1.1222084760665894,
-      "progress_pct": -0.395
+      "opened_at": "2026-10-07 20:07:22.049074+00:00"
     }
   ],
   "daily_brief": {
@@ -568,24 +564,9 @@
       "EURUSD": null
     },
     "summary": "1/3 markets reporting. 0 bullish, 0 bearish, 1 neutral.",
-    "timestamp": "2026-10-07 20:07:08.669974+00:00"
+    "timestamp": "2026-10-08 20:04:29.466545+00:00"
   },
   "cot_history": [
-    {
-      "date": "2026-09-17",
-      "data": {
-        "XAUUSD": {
-          "net": 231960,
-          "change": 3836,
-          "cot_index": 87,
-          "signal": "BEARISH",
-          "date": "2026-09-08",
-          "source": "CFTC (official)"
-        },
-        "BTCUSD": null,
-        "EURUSD": null
-      }
-    },
     {
       "date": "2026-09-18",
       "data": {
@@ -795,23 +776,38 @@
         "BTCUSD": null,
         "EURUSD": null
       }
+    },
+    {
+      "date": "2026-10-08",
+      "data": {
+        "XAUUSD": {
+          "net": 218632,
+          "change": -7221,
+          "cot_index": 72,
+          "signal": "NEUTRAL",
+          "date": "2026-09-29",
+          "source": "CFTC (official)"
+        },
+        "BTCUSD": null,
+        "EURUSD": null
+      }
     }
   ],
   "scenarios": {
     "1H": {
-      "bias": "BEARISH",
+      "bias": "RANGING",
       "reasons": [
         "EMA stack bearish (20<50<200)",
-        "Structure: lower-highs & lower-lows"
+        "Structure: higher-highs & higher-lows"
       ],
       "timeframe": "1H",
-      "price": 4103.7,
+      "price": 4132.14,
       "support": 4061.73,
-      "resistance": 4183.93,
-      "external_high": 4315.6,
+      "resistance": 4146.28,
+      "external_high": 4287.41,
       "external_low": 4061.73,
       "bos": null,
-      "updated_at": "2026-10-07 20:07:10.774632+00:00",
+      "updated_at": "2026-10-08 20:04:32.475584+00:00",
       "chart": "charts/scenario_1H.png"
     },
     "4H": {
@@ -821,13 +817,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "4H",
-      "price": 4103.7,
+      "price": 4132.14,
       "support": 4061.73,
       "resistance": 4225.65,
-      "external_high": 4695.94,
+      "external_high": 4688.81,
       "external_low": 4061.73,
-      "bos": "BEARISH",
-      "updated_at": "2026-10-07 20:07:11.331872+00:00",
+      "bos": null,
+      "updated_at": "2026-10-08 20:04:32.985628+00:00",
       "chart": "charts/scenario_4H.png"
     },
     "Daily": {
@@ -837,13 +833,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Daily",
-      "price": 4103.7,
+      "price": 4132.14,
       "support": 4061.73,
       "resistance": 4514.11,
       "external_high": 5597.23,
       "external_low": 3949.45,
       "bos": "BEARISH",
-      "updated_at": "2026-10-07 20:07:11.980332+00:00",
+      "updated_at": "2026-10-08 20:04:33.545979+00:00",
       "chart": "charts/scenario_Daily.png"
     },
     "Weekly": {
@@ -853,13 +849,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Weekly",
-      "price": 4103.7,
+      "price": 4132.14,
       "support": 3949.45,
       "resistance": 5597.23,
       "external_high": 5597.23,
       "external_low": 1810.1,
       "bos": null,
-      "updated_at": "2026-10-07 20:07:12.530584+00:00",
+      "updated_at": "2026-10-08 20:04:34.035230+00:00",
       "chart": "charts/scenario_Weekly.png"
     }
   },
