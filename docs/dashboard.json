@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-12 16:40:57.758339+00:00",
+  "updated_at": "2026-10-12 22:13:35.117307+00:00",
   "signals": [
     {
       "layer": "gold_scalp",
@@ -859,7 +859,7 @@
         "title": "Core Retail Sales m/m",
         "currency": "USD",
         "time": "2026-10-15 12:30:00+00:00",
-        "forecast": "0.5%",
+        "forecast": "0.6%",
         "previous": "1.4%",
         "actual": null
       },
@@ -867,7 +867,7 @@
         "title": "PPI m/m",
         "currency": "USD",
         "time": "2026-10-15 12:30:00+00:00",
-        "forecast": "0.5%",
+        "forecast": "0.6%",
         "previous": "0.4%",
         "actual": null
       },
@@ -888,6 +888,6 @@
         "actual": null
       }
     ],
-    "updated_at": "2026-10-12 14:35:58.900275+00:00"
+    "updated_at": "2026-10-12 22:13:35.117251+00:00"
   }
 }
