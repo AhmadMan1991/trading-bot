@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-14 11:51:01.779147+00:00",
+  "updated_at": "2026-10-14 12:49:14.431220+00:00",
   "signals": [
     {
       "layer": "gold_scalp",
@@ -421,12 +421,12 @@
   "forecasts": [
     {
       "asset": "XAUUSD",
-      "bias": "BULLISH",
+      "bias": "BEARISH",
       "price": null,
       "forecast": {
-        "bias": "BULLISH",
+        "bias": "BEARISH",
         "reasons": [
-          "Structure: higher-highs & higher-lows"
+          "EMA stack bearish (20<50<200)"
         ],
         "cot": {
           "net": 210335,
@@ -436,9 +436,9 @@
           "date": "2026-10-06",
           "source": "CFTC (official)"
         },
-        "dollar_bias": "USD_WEAK"
+        "dollar_bias": "USD_STRONG"
       },
-      "timestamp": "2026-10-13 20:36:26.970732+00:00",
+      "timestamp": "2026-10-14 12:49:10.617692+00:00",
       "chart": null
     }
   ],
@@ -522,24 +522,9 @@
       "EURUSD": null
     },
     "summary": "1/3 markets reporting. 0 bullish, 0 bearish, 1 neutral.",
-    "timestamp": "2026-10-13 20:36:25.792512+00:00"
+    "timestamp": "2026-10-14 12:49:08.641593+00:00"
   },
   "cot_history": [
-    {
-      "date": "2026-09-23",
-      "data": {
-        "XAUUSD": {
-          "net": 230338,
-          "change": -1622,
-          "cot_index": 85,
-          "signal": "BEARISH",
-          "date": "2026-09-15",
-          "source": "CFTC (official)"
-        },
-        "BTCUSD": null,
-        "EURUSD": null
-      }
-    },
     {
       "date": "2026-09-24",
       "data": {
@@ -749,35 +734,53 @@
         "BTCUSD": null,
         "EURUSD": null
       }
+    },
+    {
+      "date": "2026-10-14",
+      "data": {
+        "XAUUSD": {
+          "net": 210335,
+          "change": -8297,
+          "cot_index": 63,
+          "signal": "NEUTRAL",
+          "date": "2026-10-06",
+          "source": "CFTC (official)"
+        },
+        "BTCUSD": null,
+        "EURUSD": null
+      }
     }
   ],
   "scenarios": {
     "1H": {
-      "bias": "RANGING",
-      "reasons": [],
+      "bias": "BEARISH",
+      "reasons": [
+        "EMA stack bearish (20<50<200)",
+        "Structure: lower-highs & lower-lows"
+      ],
       "timeframe": "1H",
-      "price": 4157.97,
-      "support": 4147.48,
+      "price": 4095.39,
+      "support": 4087.64,
       "resistance": 4200.45,
       "external_high": 4225.65,
       "external_low": 4061.73,
-      "bos": null,
-      "updated_at": "2026-10-13 20:36:28.498317+00:00",
+      "bos": "BEARISH",
+      "updated_at": "2026-10-14 12:49:11.518212+00:00",
       "chart": "charts/scenario_1H.png"
     },
     "4H": {
-      "bias": "BULLISH",
+      "bias": "BEARISH",
       "reasons": [
-        "Structure: higher-highs & higher-lows"
+        "EMA stack bearish (20<50<200)"
       ],
       "timeframe": "4H",
-      "price": 4157.97,
-      "support": 4061.73,
+      "price": 4095.39,
+      "support": 4087.64,
       "resistance": 4216.21,
       "external_high": 4514.11,
       "external_low": 4061.73,
       "bos": null,
-      "updated_at": "2026-10-13 20:36:29.188726+00:00",
+      "updated_at": "2026-10-14 12:49:12.010320+00:00",
       "chart": "charts/scenario_4H.png"
     },
     "Daily": {
@@ -787,13 +790,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Daily",
-      "price": 4157.97,
+      "price": 4095.39,
       "support": 4061.73,
       "resistance": 4443.2,
       "external_high": 5597.23,
       "external_low": 3949.45,
       "bos": "BEARISH",
-      "updated_at": "2026-10-13 20:36:29.899789+00:00",
+      "updated_at": "2026-10-14 12:49:12.506520+00:00",
       "chart": "charts/scenario_Daily.png"
     },
     "Weekly": {
@@ -803,13 +806,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Weekly",
-      "price": 4157.97,
+      "price": 4094.06,
       "support": 3949.45,
       "resistance": 5597.23,
       "external_high": 5597.23,
       "external_low": 1810.1,
       "bos": null,
-      "updated_at": "2026-10-13 20:36:30.545406+00:00",
+      "updated_at": "2026-10-14 12:49:13.030777+00:00",
       "chart": "charts/scenario_Weekly.png"
     }
   },
