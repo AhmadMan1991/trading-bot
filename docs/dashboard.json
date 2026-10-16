@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-16 16:48:39.806447+00:00",
+  "updated_at": "2026-10-16 16:53:44.959637+00:00",
   "signals": [
     {
       "layer": "gold_swing",
@@ -469,9 +469,9 @@
           "date": "2026-10-06",
           "source": "CFTC (official)"
         },
-        "dollar_bias": "USD_WEAK"
+        "dollar_bias": "USD_NEUTRAL"
       },
-      "timestamp": "2026-10-16 12:16:20.181330+00:00",
+      "timestamp": "2026-10-16 16:53:34.207127+00:00",
       "chart": null
     }
   ],
@@ -513,9 +513,7 @@
       "tp1": 4125.65397,
       "tp2": 4077.50059,
       "tp3": 4013.29607,
-      "opened_at": "2026-10-16 12:16:28.584319+00:00",
-      "live_price": 4163.13149,
-      "progress_pct": 0.222
+      "opened_at": "2026-10-16 12:16:28.584319+00:00"
     }
   ],
   "daily_brief": {
@@ -588,7 +586,7 @@
       "EURUSD": null
     },
     "summary": "1/3 markets reporting. 0 bullish, 0 bearish, 1 neutral.",
-    "timestamp": "2026-10-16 12:16:17.783440+00:00"
+    "timestamp": "2026-10-16 16:53:33.486126+00:00"
   },
   "cot_history": [
     {
@@ -824,13 +822,13 @@
         "Structure: higher-highs & higher-lows"
       ],
       "timeframe": "1H",
-      "price": 4173.81,
-      "support": 4100.21,
-      "resistance": 4191.47,
+      "price": 4158.69,
+      "support": 4131.93,
+      "resistance": 4198.87,
       "external_high": 4216.21,
       "external_low": 4061.73,
-      "bos": "BULLISH",
-      "updated_at": "2026-10-16 12:16:21.360840+00:00",
+      "bos": null,
+      "updated_at": "2026-10-16 16:53:35.257712+00:00",
       "chart": "charts/scenario_1H.png"
     },
     "4H": {
@@ -840,13 +838,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "4H",
-      "price": 4173.81,
+      "price": 4158.69,
       "support": 4073.82,
       "resistance": 4216.21,
       "external_high": 4514.11,
       "external_low": 4061.73,
       "bos": null,
-      "updated_at": "2026-10-16 12:16:21.926830+00:00",
+      "updated_at": "2026-10-16 16:53:35.626004+00:00",
       "chart": "charts/scenario_4H.png"
     },
     "Daily": {
@@ -856,13 +854,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Daily",
-      "price": 4173.81,
-      "support": 4061.73,
-      "resistance": 4443.2,
-      "external_high": 5597.23,
-      "external_low": 3949.45,
+      "price": 4158.69,
+      "support": 4066.06,
+      "resistance": 4443.1,
+      "external_high": 5595.46,
+      "external_low": 3944.23,
       "bos": null,
-      "updated_at": "2026-10-16 12:16:22.493884+00:00",
+      "updated_at": "2026-10-16 16:53:36.025326+00:00",
       "chart": "charts/scenario_Daily.png"
     },
     "Weekly": {
@@ -872,13 +870,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Weekly",
-      "price": 4174.83,
-      "support": 3949.45,
-      "resistance": 5597.23,
-      "external_high": 5597.23,
+      "price": 4159.9,
+      "support": 3944.23,
+      "resistance": 5595.46,
+      "external_high": 5595.46,
       "external_low": 1810.1,
       "bos": null,
-      "updated_at": "2026-10-16 12:16:22.988466+00:00",
+      "updated_at": "2026-10-16 16:53:36.365811+00:00",
       "chart": "charts/scenario_Weekly.png"
     }
   },
