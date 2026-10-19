@@ -1,12 +1,12 @@
 {
-  "updated_at": "2026-10-16 16:53:33.485570+00:00",
+  "updated_at": "2026-10-19 14:34:59.219076+00:00",
   "data": {
     "XAUUSD": {
-      "net": 210335,
-      "change": -8297,
-      "cot_index": 63,
+      "net": 207879,
+      "change": -2456,
+      "cot_index": 60,
       "signal": "NEUTRAL",
-      "date": "2026-10-06",
+      "date": "2026-10-13",
       "source": "CFTC (official)"
     },
     "BTCUSD": null,
