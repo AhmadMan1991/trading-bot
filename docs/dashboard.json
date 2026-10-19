@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-16 23:54:38.882244+00:00",
+  "updated_at": "2026-10-19 12:19:39.544875+00:00",
   "signals": [
     {
       "layer": "gold_swing",
@@ -883,80 +883,7 @@
     }
   },
   "news": {
-    "events": [
-      {
-        "title": "Core CPI m/m",
-        "currency": "USD",
-        "time": "2026-10-14 12:30:00+00:00",
-        "forecast": "0.2%",
-        "previous": "0.3%",
-        "actual": null
-      },
-      {
-        "title": "Core CPI y/y",
-        "currency": "USD",
-        "time": "2026-10-14 12:30:00+00:00",
-        "forecast": "2.5%",
-        "previous": "2.4%",
-        "actual": null
-      },
-      {
-        "title": "CPI m/m",
-        "currency": "USD",
-        "time": "2026-10-14 12:30:00+00:00",
-        "forecast": "0.6%",
-        "previous": "0.4%",
-        "actual": null
-      },
-      {
-        "title": "CPI y/y",
-        "currency": "USD",
-        "time": "2026-10-14 12:30:00+00:00",
-        "forecast": "3.6%",
-        "previous": "3.4%",
-        "actual": null
-      },
-      {
-        "title": "Core PPI m/m",
-        "currency": "USD",
-        "time": "2026-10-15 12:30:00+00:00",
-        "forecast": "0.3%",
-        "previous": "0.2%",
-        "actual": null
-      },
-      {
-        "title": "Core Retail Sales m/m",
-        "currency": "USD",
-        "time": "2026-10-15 12:30:00+00:00",
-        "forecast": "0.6%",
-        "previous": "1.4%",
-        "actual": null
-      },
-      {
-        "title": "PPI m/m",
-        "currency": "USD",
-        "time": "2026-10-15 12:30:00+00:00",
-        "forecast": "0.6%",
-        "previous": "0.4%",
-        "actual": null
-      },
-      {
-        "title": "Retail Sales m/m",
-        "currency": "USD",
-        "time": "2026-10-15 12:30:00+00:00",
-        "forecast": "0.3%",
-        "previous": "1.2%",
-        "actual": null
-      },
-      {
-        "title": "Fed Chairman Warsh Speaks",
-        "currency": "USD",
-        "time": "2026-10-16 03:30:00+00:00",
-        "forecast": "",
-        "previous": "",
-        "actual": null
-      }
-    ],
-    "updated_at": "2026-10-16 23:54:38.882195+00:00"
+    "events": [],
+    "updated_at": "2026-10-19 12:19:39.544830+00:00"
   }
 }
