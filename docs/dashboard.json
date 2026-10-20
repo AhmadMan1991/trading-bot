@@ -1,6 +1,22 @@
 {
-  "updated_at": "2026-10-20 17:34:56.029804+00:00",
+  "updated_at": "2026-10-20 17:55:43.066316+00:00",
   "signals": [
+    {
+      "layer": "gold_swing",
+      "asset": "XAUUSD",
+      "direction": "SHORT",
+      "entry": 4125.18871,
+      "stop": 4171.30497,
+      "tp1": 4056.01432,
+      "tp2": 3986.83993,
+      "tp3": 3894.60741,
+      "score_or_conf": 0.67,
+      "timestamp": "2026-10-20 17:55:26.068417+00:00",
+      "chart": "charts/gold_swing_XAUUSD_20261020T175526Z.png",
+      "caption": "XAUUSD \u2014 SHORT swing (SWING_SHORT, conf 67%)",
+      "signal_label": "SWING_SHORT",
+      "sniper": false
+    },
     {
       "layer": "gold_swing",
       "asset": "XAUUSD",
@@ -468,9 +484,9 @@
           "date": "2026-10-13",
           "source": "CFTC (official)"
         },
-        "dollar_bias": "USD_NEUTRAL"
+        "dollar_bias": "USD_WEAK"
       },
-      "timestamp": "2026-10-19 20:08:45.566197+00:00",
+      "timestamp": "2026-10-20 17:55:18.945653+00:00",
       "chart": null
     }
   ],
@@ -512,9 +528,7 @@
       "tp1": 79395.62461,
       "tp2": 76841.34922,
       "tp3": 73435.64871,
-      "opened_at": "2026-10-19 14:35:12.070516+00:00",
-      "live_price": 82747.8,
-      "progress_pct": -0.469
+      "opened_at": "2026-10-19 14:35:12.070516+00:00"
     },
     {
       "direction": "SHORT",
@@ -543,9 +557,35 @@
       "tp1": 1.11317,
       "tp2": 1.10476,
       "tp3": 1.09354,
-      "opened_at": "2026-10-19 14:35:12.541332+00:00",
-      "live_price": 1.12364,
-      "progress_pct": -0.367
+      "opened_at": "2026-10-19 14:35:12.541332+00:00"
+    },
+    {
+      "direction": "SHORT",
+      "signal_label": "SWING_SHORT",
+      "confidence": 0.67,
+      "entry": 4125.18871,
+      "stop_loss": 4171.30497,
+      "target_1": 4056.01432,
+      "target_2": 3986.83993,
+      "target_3": 3894.60741,
+      "risk_reward": 1.5,
+      "risk_usd": 46.11626,
+      "factors": [
+        "Pullback into EMA value zone, momentum reclaimed",
+        "Trading with higher-timeframe trend (BEARISH)",
+        "Strong trend (ADX 32)"
+      ],
+      "reasoning": "The price has pulled back into the EMA value zone and has already reclaimed momentum, confirming a short bias. This move occurs within a higher\u2011timeframe bearish trend, and the ADX reading of 32 indicates a strong trend, reinforcing the short decision. The confluence of these factors validates the trade.",
+      "asset": "XAUUSD",
+      "timestamp": "2026-10-20 17:55:21.615035+00:00",
+      "layer": "gold_swing",
+      "timeframe": "1h/4h",
+      "session": "any",
+      "stop": 4171.30497,
+      "tp1": 4056.01432,
+      "tp2": 3986.83993,
+      "tp3": 3894.60741,
+      "opened_at": "2026-10-20 17:55:26.069441+00:00"
     }
   ],
   "daily_brief": {
@@ -618,24 +658,9 @@
       "EURUSD": null
     },
     "summary": "1/3 markets reporting. 0 bullish, 0 bearish, 1 neutral.",
-    "timestamp": "2026-10-19 20:08:44.216547+00:00"
+    "timestamp": "2026-10-20 17:55:15.121368+00:00"
   },
   "cot_history": [
-    {
-      "date": "2026-09-29",
-      "data": {
-        "XAUUSD": {
-          "net": 225853,
-          "change": -4485,
-          "cot_index": 80,
-          "signal": "BEARISH",
-          "date": "2026-09-22",
-          "source": "CFTC (official)"
-        },
-        "BTCUSD": null,
-        "EURUSD": null
-      }
-    },
     {
       "date": "2026-09-30",
       "data": {
@@ -845,22 +870,38 @@
         "BTCUSD": null,
         "EURUSD": null
       }
+    },
+    {
+      "date": "2026-10-20",
+      "data": {
+        "XAUUSD": {
+          "net": 207879,
+          "change": -2456,
+          "cot_index": 60,
+          "signal": "NEUTRAL",
+          "date": "2026-10-13",
+          "source": "CFTC (official)"
+        },
+        "BTCUSD": null,
+        "EURUSD": null
+      }
     }
   ],
   "scenarios": {
     "1H": {
       "bias": "BEARISH",
       "reasons": [
-        "EMA stack bearish (20<50<200)"
+        "EMA stack bearish (20<50<200)",
+        "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "1H",
-      "price": 4140.52,
-      "support": 4137.0,
+      "price": 4125.19,
+      "support": 4111.84,
       "resistance": 4190.13,
       "external_high": 4216.21,
-      "external_low": 4061.73,
+      "external_low": 4073.82,
       "bos": "BEARISH",
-      "updated_at": "2026-10-19 20:08:46.162021+00:00",
+      "updated_at": "2026-10-20 17:55:20.138054+00:00",
       "chart": "charts/scenario_1H.png"
     },
     "4H": {
@@ -869,13 +910,13 @@
         "EMA stack bearish (20<50<200)"
       ],
       "timeframe": "4H",
-      "price": 4140.52,
+      "price": 4125.19,
       "support": 4073.82,
       "resistance": 4198.87,
       "external_high": 4443.2,
       "external_low": 4061.73,
       "bos": null,
-      "updated_at": "2026-10-19 20:08:46.554286+00:00",
+      "updated_at": "2026-10-20 17:55:20.542224+00:00",
       "chart": "charts/scenario_4H.png"
     },
     "Daily": {
@@ -885,13 +926,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Daily",
-      "price": 4140.52,
+      "price": 4123.86,
       "support": 4066.06,
       "resistance": 4402.7,
       "external_high": 5595.46,
       "external_low": 3944.23,
       "bos": null,
-      "updated_at": "2026-10-19 20:08:46.979053+00:00",
+      "updated_at": "2026-10-20 17:55:21.008750+00:00",
       "chart": "charts/scenario_Daily.png"
     },
     "Weekly": {
@@ -901,13 +942,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Weekly",
-      "price": 4140.52,
+      "price": 4125.19,
       "support": 3944.23,
       "resistance": 5595.46,
       "external_high": 5595.46,
       "external_low": 1810.1,
       "bos": null,
-      "updated_at": "2026-10-19 20:08:47.297793+00:00",
+      "updated_at": "2026-10-20 17:55:21.425708+00:00",
       "chart": "charts/scenario_Weekly.png"
     }
   },
