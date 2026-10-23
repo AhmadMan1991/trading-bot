@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-23 11:37:50.234975+00:00",
+  "updated_at": "2026-10-23 12:34:28.038126+00:00",
   "signals": [
     {
       "layer": "gold_scalp",
@@ -503,51 +503,20 @@
         },
         "dollar_bias": "USD_NEUTRAL"
       },
-      "timestamp": "2026-10-22 17:55:49.806593+00:00",
+      "timestamp": "2026-10-23 12:34:17.100390+00:00",
       "chart": null
     }
   ],
   "performance": {
-    "total": 75,
+    "total": 76,
     "wins": 19,
-    "losses": 38,
+    "losses": 39,
     "expired": 18,
     "win_rate": 0.25,
-    "total_r": 41.9,
-    "avg_r": 0.56
+    "total_r": 40.9,
+    "avg_r": 0.54
   },
-  "open_positions": [
-    {
-      "direction": "SHORT",
-      "signal_label": "SCALP_SHORT",
-      "confidence": 0.67,
-      "entry": 81318.6,
-      "stop_loss": 81725.193,
-      "target_1": 80912.007,
-      "target_2": 80668.0512,
-      "target_3": 80302.1175,
-      "risk_reward": 1.0,
-      "risk_usd": 406.593,
-      "factors": [
-        "Pullback into EMA value zone, momentum reclaimed",
-        "Trading with higher-timeframe trend (BEARISH)",
-        "Strong trend (ADX 40)"
-      ],
-      "reasoning": "The price pulled back into the EMA value zone and regained momentum, confirming a bearish bias in the higher\u2011timeframe trend. With the ADX at 40, the trend is strong and well",
-      "asset": "BTCUSD",
-      "timestamp": "2026-10-22 17:55:53.624227+00:00",
-      "layer": "scalp",
-      "timeframe": "15m",
-      "session": "24h",
-      "stop": 81725.193,
-      "tp1": 80912.007,
-      "tp2": 80668.0512,
-      "tp3": 80302.1175,
-      "opened_at": "2026-10-22 17:55:57.569930+00:00",
-      "live_price": 81490.8,
-      "progress_pct": -0.424
-    }
-  ],
+  "open_positions": [],
   "daily_brief": {
     "date": "2026-10-23",
     "summary": "\u0627\u0644\u0630\u0647\u0628 (XAUUSD) \u064a\u0638\u0647\u0631 \u062a\u062d\u0644\u064a\u0644\u0627\u064b \u0628\u0627\u0626\u0633\u0627\u064b \u0645\u0639 \u062f\u0631\u062c\u0629 \u0633\u0644\u0628\u064a\u0629 \u0639\u0627\u0644\u064a\u0629\u060c \u0645\u0627 \u064a\u0634\u064a\u0631 \u0625\u0644\u0649 \u0636\u063a\u0648\u0637 \u0647\u0628\u0648\u0637\u064a\u0629 \u0645\u062d\u062a\u0645\u0644\u0629 \u0641\u064a \u0627\u0644\u0633\u0648\u0642. \u0628\u064a\u0646\u0645\u0627 \u0627\u0644\u0628\u064a\u062a\u0643\u0648\u064a\u0646 (BTCUSD) \u0648\u0627\u0644\u0632\u0648\u062c \u0627\u0644\u064a\u0648\u0631\u0648/\u0627\u0644\u062f\u0648\u0644\u0627\u0631 (EURUSD) \u064a\u0638\u0644\u0627\u0646 \u0641\u064a \u0646\u0637\u0627\u0642 \u0645\u0633\u062a\u0642\u0631 \u0645\u0639 \u062f\u0631\u062c\u0627\u062a \u0633\u0644\u0628\u064a\u0629 \u062e\u0641\u064a\u0641\u0629\u060c \u0645\u0627 \u064a\u0628\u0631\u0632 \u0639\u062f\u0645 \u0648\u062c\u0648\u062f \u0627\u062a\u062c\u0627\u0647 \u0648\u0627\u0636\u062d. \u064a\u064f\u0646\u0635\u062d \u0628\u0645\u0631\u0627\u0642\u0628\u0629 \u062a\u062d\u0631\u0643\u0627\u062a \u0627\u0644\u0630\u0647\u0628 \u0648\u0627\u0644\u0628\u064a\u062a\u0643\u0648\u064a\u0646 \u0643\u0623\u0635\u0644\u064a\u0646 \u0631\u0626\u064a\u0633\u064a\u064a\u0646 \u0644\u0647\u0630\u0627 \u0627\u0644\u064a\u0648\u0645\u060c \u062d\u064a\u062b \u0642\u062f \u062a\u062a\u0623\u062b\u0631 \u0643\u0644\u0627\u0647\u0645\u0627 \u0628\u0627\u0644\u0642\u0631\u0627\u0631\u0627\u062a \u0627\u0644\u0646\u0642\u062f\u064a\u0629 \u0627\u0644\u0623\u062e\u064a\u0631\u0629. \u26a0\ufe0f \u0627\u0644\u062e\u0637\u0631 \u0627\u0644\u0623\u0643\u0628\u0631: \u0627\u0644\u0628\u064a\u0627\u0646\u0627\u062a \u0627\u0644\u0627\u0642\u062a\u0635\u0627\u062f\u064a\u0629 \u0627\u0644\u0642\u0631\u064a\u0628\u0629 \u0645\u062b\u0644 \u062a\u0642\u0631\u064a\u0631 \u0627\u0644\u0628\u0637\u0627\u0644\u0629 \u0623\u0648 \u0646\u0645\u0648 \u0627\u0644\u0646\u0627\u062a\u062c \u0627\u0644\u0645\u062d\u0644\u064a \u0627\u0644\u0625\u062c\u0645\u0627\u0644\u064a \u0642\u062f \u062a\u063a\u064a\u0631 \u0645\u0633\u0627\u0631 \u0627\u0644\u0633\u0648\u0642 \u0628\u0634\u0643\u0644 \u0645\u0641\u0627\u062c\u0626.",
@@ -618,24 +587,9 @@
       "EURUSD": null
     },
     "summary": "1/3 markets reporting. 0 bullish, 0 bearish, 1 neutral.",
-    "timestamp": "2026-10-22 17:55:48.619907+00:00"
+    "timestamp": "2026-10-23 12:34:14.571233+00:00"
   },
   "cot_history": [
-    {
-      "date": "2026-10-02",
-      "data": {
-        "XAUUSD": {
-          "net": 225853,
-          "change": -4485,
-          "cot_index": 80,
-          "signal": "BEARISH",
-          "date": "2026-09-22",
-          "source": "CFTC (official)"
-        },
-        "BTCUSD": null,
-        "EURUSD": null
-      }
-    },
     {
       "date": "2026-10-05",
       "data": {
@@ -845,22 +799,38 @@
         "BTCUSD": null,
         "EURUSD": null
       }
+    },
+    {
+      "date": "2026-10-23",
+      "data": {
+        "XAUUSD": {
+          "net": 207879,
+          "change": -2456,
+          "cot_index": 60,
+          "signal": "NEUTRAL",
+          "date": "2026-10-13",
+          "source": "CFTC (official)"
+        },
+        "BTCUSD": null,
+        "EURUSD": null
+      }
     }
   ],
   "scenarios": {
     "1H": {
       "bias": "BEARISH",
       "reasons": [
-        "EMA stack bearish (20<50<200)"
+        "EMA stack bearish (20<50<200)",
+        "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "1H",
-      "price": 4045.67,
-      "support": 4034.8,
+      "price": 4027.16,
+      "support": 3987.72,
       "resistance": 4142.67,
       "external_high": 4216.21,
-      "external_low": 4034.8,
-      "bos": "BEARISH",
-      "updated_at": "2026-10-22 17:55:50.866518+00:00",
+      "external_low": 3987.72,
+      "bos": null,
+      "updated_at": "2026-10-23 12:34:17.996611+00:00",
       "chart": "charts/scenario_1H.png"
     },
     "4H": {
@@ -870,13 +840,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "4H",
-      "price": 4045.67,
-      "support": 4034.8,
-      "resistance": 4198.87,
-      "external_high": 4443.2,
-      "external_low": 4034.8,
+      "price": 4027.16,
+      "support": 3987.72,
+      "resistance": 4190.13,
+      "external_high": 4432.62,
+      "external_low": 3987.72,
       "bos": "BEARISH",
-      "updated_at": "2026-10-22 17:55:51.550949+00:00",
+      "updated_at": "2026-10-23 12:34:18.527970+00:00",
       "chart": "charts/scenario_4H.png"
     },
     "Daily": {
@@ -886,13 +856,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Daily",
-      "price": 4045.67,
-      "support": 4034.8,
+      "price": 4027.16,
+      "support": 3987.72,
       "resistance": 4399.77,
       "external_high": 5595.46,
       "external_low": 3944.23,
       "bos": "BEARISH",
-      "updated_at": "2026-10-22 17:55:52.296320+00:00",
+      "updated_at": "2026-10-23 12:34:19.090467+00:00",
       "chart": "charts/scenario_Daily.png"
     },
     "Weekly": {
@@ -902,13 +872,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Weekly",
-      "price": 4045.67,
+      "price": 4029.14,
       "support": 3944.23,
       "resistance": 5595.46,
       "external_high": 5595.46,
       "external_low": 1810.1,
       "bos": null,
-      "updated_at": "2026-10-22 17:55:52.923838+00:00",
+      "updated_at": "2026-10-23 12:34:19.605241+00:00",
       "chart": "charts/scenario_Weekly.png"
     }
   },
