@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-30 18:01:46.111353+00:00",
+  "updated_at": "2026-10-30 19:10:19.023167+00:00",
   "signals": [
     {
       "layer": "gold_swing",
@@ -534,51 +534,20 @@
         },
         "dollar_bias": "USD_NEUTRAL"
       },
-      "timestamp": "2026-10-30 13:59:42.128616+00:00",
+      "timestamp": "2026-10-30 19:10:03.007606+00:00",
       "chart": null
     }
   ],
   "performance": {
-    "total": 82,
+    "total": 83,
     "wins": 20,
-    "losses": 42,
+    "losses": 43,
     "expired": 20,
     "win_rate": 0.24,
     "total_r": 40.4,
     "avg_r": 0.49
   },
   "open_positions": [
-    {
-      "direction": "SHORT",
-      "signal_label": "HIGH_PROBABILITY",
-      "confidence": 0.72,
-      "entry": 77210.2,
-      "stop_loss": 77596.251,
-      "target_1": 76824.149,
-      "target_2": 76592.5184,
-      "target_3": 76245.0725,
-      "risk_reward": 1.0,
-      "risk_usd": 386.051,
-      "factors": [
-        "Pullback into EMA value zone, momentum reclaimed",
-        "Trading with higher-timeframe trend (BEARISH)",
-        "Strong trend (ADX 35)",
-        "Above-average volume"
-      ],
-      "reasoning": "The short entry is justified by a pullback into the",
-      "asset": "BTCUSD",
-      "timestamp": "2026-10-30 13:59:45.708331+00:00",
-      "layer": "scalp",
-      "timeframe": "15m",
-      "session": "24h",
-      "stop": 77596.251,
-      "tp1": 76824.149,
-      "tp2": 76592.5184,
-      "tp3": 76245.0725,
-      "opened_at": "2026-10-30 13:59:52.916110+00:00",
-      "live_price": 77094.6,
-      "progress_pct": 0.299
-    },
     {
       "direction": "SHORT",
       "signal_label": "HIGH_PROBABILITY",
@@ -606,9 +575,7 @@
       "tp1": 1.10326,
       "tp2": 1.0912,
       "tp3": 1.07511,
-      "opened_at": "2026-10-30 13:59:53.353531+00:00",
-      "live_price": 1.11505,
-      "progress_pct": 0.022
+      "opened_at": "2026-10-30 13:59:53.353531+00:00"
     }
   ],
   "daily_brief": {
@@ -681,7 +648,7 @@
       "EURUSD": null
     },
     "summary": "1/3 markets reporting. 0 bullish, 0 bearish, 1 neutral.",
-    "timestamp": "2026-10-30 13:59:40.039137+00:00"
+    "timestamp": "2026-10-30 19:10:01.886381+00:00"
   },
   "cot_history": [
     {
@@ -918,13 +885,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "1H",
-      "price": 3915.53,
-      "support": 3914.22,
-      "resistance": 4069.89,
+      "price": 3878.6,
+      "support": 3875.97,
+      "resistance": 4046.45,
       "external_high": 4190.13,
-      "external_low": 3914.22,
+      "external_low": 3875.97,
       "bos": "BEARISH",
-      "updated_at": "2026-10-30 13:59:42.935886+00:00",
+      "updated_at": "2026-10-30 19:10:04.681591+00:00",
       "chart": "charts/scenario_1H.png"
     },
     "4H": {
@@ -933,13 +900,13 @@
         "EMA stack bearish (20<50<200)"
       ],
       "timeframe": "4H",
-      "price": 3915.53,
-      "support": 3914.22,
+      "price": 3878.6,
+      "support": 3875.97,
       "resistance": 4081.97,
       "external_high": 4399.22,
-      "external_low": 3914.22,
+      "external_low": 3875.97,
       "bos": "BEARISH",
-      "updated_at": "2026-10-30 13:59:43.657745+00:00",
+      "updated_at": "2026-10-30 19:10:05.327450+00:00",
       "chart": "charts/scenario_4H.png"
     },
     "Daily": {
@@ -949,13 +916,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Daily",
-      "price": 3915.53,
-      "support": 3914.22,
+      "price": 3878.6,
+      "support": 3875.97,
       "resistance": 4402.7,
       "external_high": 5595.46,
-      "external_low": 3886.49,
+      "external_low": 3875.97,
       "bos": "BEARISH",
-      "updated_at": "2026-10-30 13:59:44.353694+00:00",
+      "updated_at": "2026-10-30 19:10:06.054243+00:00",
       "chart": "charts/scenario_Daily.png"
     },
     "Weekly": {
@@ -965,13 +932,13 @@
         "Structure: lower-highs & lower-lows"
       ],
       "timeframe": "Weekly",
-      "price": 3917.01,
-      "support": 3916.71,
+      "price": 3877.42,
+      "support": 3875.97,
       "resistance": 5595.46,
       "external_high": 5595.46,
       "external_low": 1810.1,
       "bos": "BEARISH",
-      "updated_at": "2026-10-30 13:59:44.988409+00:00",
+      "updated_at": "2026-10-30 19:10:06.617841+00:00",
       "chart": "charts/scenario_Weekly.png"
     }
   },
