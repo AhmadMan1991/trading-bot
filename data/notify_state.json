@@ -1,10 +1,10 @@
 {
   "cot": {
-    "date": "2026-10-29",
+    "date": "2026-10-30",
     "value": "XAUUSD:NEUTRAL"
   },
   "gold_bias": {
-    "date": "2026-10-29",
-    "value": "RANGING"
+    "date": "2026-10-30",
+    "value": "BEARISH"
   }
 }
