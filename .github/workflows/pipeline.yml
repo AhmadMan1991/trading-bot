@@ -7,7 +7,7 @@ on:
     # session-gated even though gold_scalp only fires inside a killzone.
     # Runs the full chain as ONE job so every step sees the previous step's
     # fresh output:
-    #   COT -> Macro (Gemini) -> Gold Bias -> Gold Scalp -> Gold Swing
+    #   COT -> Gold Bias -> Gold Scalp -> Gold Swing
     #   -> Performance (audits the run, updates the daily-loss circuit breaker)
     # This replaces the old 9-asset/5-engine chain (scalp/swing/council/
     # forecast/deep_pipeline) entirely — those files are deprecated stubs,
@@ -44,8 +44,6 @@ jobs:
           TELEGRAM_TOKEN:    ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID:  ${{ secrets.TELEGRAM_CHAT_ID }}
           TWELVEDATA_KEY:    ${{ secrets.TWELVEDATA_KEY }}
-          OLLAMA_API_KEY:    ${{ secrets.OLLAMA_API_KEY }}
-          GEMINI_API_KEY:    ${{ secrets.GEMINI_API_KEY }}
         run: python main.py
 
       - name: Commit dashboard + state

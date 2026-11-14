@@ -21,14 +21,9 @@ TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 TELEGRAM_URL     = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
 
 TWELVEDATA_KEY   = os.environ.get("TWELVEDATA_KEY", "")
-OLLAMA_KEY       = os.environ.get("OLLAMA_API_KEY", "")
-OLLAMA_URL       = "https://ollama.com/api/chat"
-OLLAMA_MODEL     = "gpt-oss:20b-cloud"
-
-GEMINI_API_KEY   = os.environ.get("GEMINI_API_KEY", "")
-# Used via the google-genai SDK (Interactions API) in macro_agent.py — no raw
-# REST URL needed anymore. genai.Client() reads GEMINI_API_KEY from the env.
-GEMINI_MODEL     = os.environ.get("GEMINI_MODEL", "gemini-3.7-flash")
+# No LLM in the pipeline. All narrative/synthesis (Ollama, Gemini) was removed —
+# the engine is fully deterministic: signals, levels, COT, scenarios,
+# performance. No LLM API key is needed to run anything.
 
 # GitHub Pages URL for the dashboard (repo made public, Pages serving /docs).
 # Override via env var if you host it elsewhere (Cloudflare Pages, Vercel, a
