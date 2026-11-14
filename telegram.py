@@ -40,6 +40,38 @@ def send_photo(image_bytes: bytes, caption: str = "", chat_id: str = TELEGRAM_CH
           data={"chat_id": chat_id, "caption": caption[:1024], "parse_mode": "HTML"})
 
 
+def format_outlook(o: dict) -> str:
+    """One symbol's 4H/Daily/Weekly structural outlook (see outlook.py)."""
+    d = o.get("decimals", 2)
+    def fx(v):
+        return "—" if v is None else f"{float(v):,.{d}f}"
+    b, s, lv, sc, vol = o["bias"], o["structure"], o["levels"], o["scenarios"], o["volatility"]
+    def tgts(t):
+        return ", ".join(fx(x) for x in t) if t else "open air"
+    lines = [
+        f"{b['icon']} <b>{esc(o['name'])} ({esc(o['symbol'])})</b> — <b>{esc(b['label'])}</b>",
+        f"<i>Price {fx(o['price'])} · bias {b['norm']:+.2f}</i>",
+        f"<b>Structure</b>: 4H {esc(s['h4'])} · D {esc(s['daily'])} · W {esc(s['weekly'])}",
+        f"<b>Levels</b>: PDH {fx(lv['pdh'])} · PDL {fx(lv['pdl'])} · PWH {fx(lv['pwh'])} · PWL {fx(lv['pwl'])}",
+    ]
+    if sc["bull"]["trigger"] is not None:
+        lines.append(f"🐂 Above <b>{fx(sc['bull']['trigger'])}</b> → {tgts(sc['bull']['targets'])}")
+    if sc["bear"]["trigger"] is not None:
+        lines.append(f"🐻 Below <b>{fx(sc['bear']['trigger'])}</b> → {tgts(sc['bear']['targets'])}")
+    if vol["used_pct"] is not None:
+        lines.append(f"<i>ADR used {vol['used_pct']:.0f}% — {esc(vol['note'])}</i>")
+    return "\n".join(lines)
+
+
+def send_outlook(outlooks: list[dict]):
+    """Post the full multi-symbol outlook as one daily Telegram message."""
+    if not outlooks:
+        return
+    header = "📊 <b>MARKET OUTLOOK</b> — 4H / Daily / Weekly"
+    blocks = [format_outlook(o) for o in outlooks]
+    send_text(header + "\n\n" + "\n\n".join(blocks))
+
+
 def _bar(value: int, width: int = 8) -> str:
     filled = round(max(0, min(100, value)) / 100 * width)
     color  = "🔴" if value >= 75 else "🟢" if value <= 25 else "🟡"
