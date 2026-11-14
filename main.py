@@ -9,7 +9,10 @@ exactly what produced rare, conflicting, debate-gated NO_TRADE signals.
 
 New chain, XAUUSD only:
 
-    COT → Macro (Gemini) → Gold Bias → Gold Scalp → Gold Swing → Performance
+    COT → Gold Bias → Gold Scalp → Gold Swing → Performance
+
+The pipeline is fully deterministic — no LLM/narrative anywhere (the old
+Macro step, which depended on an external LLM, was removed).
 
 Tracer and News stay OUTSIDE this chain — always-on, faster-cadence agents
 (live position tracking, red-folder news timing). Daily Brief and Weekly COT
@@ -20,7 +23,6 @@ Every step is individually runnable via --layer <name> for standalone testing.
 Examples:
   python main.py                       # full sequential pipeline
   python main.py --layer cot
-  python main.py --layer macro
   python main.py --layer gold_bias
   python main.py --layer gold_scalp
   python main.py --layer gold_swing
@@ -124,23 +126,6 @@ def run_cot_layer():
         else:
             print("  (COT unchanged — dashboard updated, Telegram skipped)")
     return cot_map
-
-
-def run_macro_layer():
-    """Step 2 — Gemini-grounded live macro gather + Ollama synthesis.
-    Optional: skips cleanly if GEMINI_API_KEY isn't set."""
-    print("\n═══ STEP 2 — MACRO AGENT (Gemini + Ollama) ═══")
-    from macro_agent import run_macro_agent
-    result = run_macro_agent()
-    if result.get("synthesis"):
-        # esc() — free-form LLM text can contain "<"/">"/"&" that breaks
-        # Telegram's HTML parser the same way the EMA-stack reasons did.
-        # Once a day is plenty for a macro read — it doesn't move every 30 min.
-        if _should_notify("macro", datetime.now(timezone.utc).strftime("%Y-%m-%d")):
-            telegram.send_text(f"🌐 <b>Macro Read</b>\n\n{telegram.esc(result['synthesis'])}")
-        else:
-            print("  (macro already sent today — Telegram skipped)")
-    return result
 
 
 def run_gold_bias_layer():
@@ -285,7 +270,6 @@ def run_pipeline():
     30-60min during London/NY sessions (07-16 UTC weekdays) via pipeline.yml —
     tighter than the old 2h cycle since scalp setups are session-timed."""
     cot_map = run_cot_layer()
-    run_macro_layer()
     run_gold_bias_layer()
     run_gold_scalp_layer(cot_map)
     run_gold_swing_layer(cot_map)
@@ -349,7 +333,7 @@ def run_backtest_layer(assets=None, bars=2000, window=500):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Gold-only Sequential Pipeline TradingBot")
     parser.add_argument("--layer", default=None,
-                        choices=["cot", "macro", "gold_bias", "gold_scalp", "gold_swing",
+                        choices=["cot", "gold_bias", "gold_scalp", "gold_swing",
                                  "extra", "performance", "news", "news_weekly", "tracer",
                                  "cot_weekly", "daily_brief", "backtest"])
     parser.add_argument("--asset",  default=None)   # kept for backtest compat; engine itself is gold-only
@@ -366,8 +350,6 @@ if __name__ == "__main__":
             run_pipeline()
         elif args.layer == "cot":
             run_cot_layer()
-        elif args.layer == "macro":
-            run_macro_layer()
         elif args.layer == "gold_bias":
             run_gold_bias_layer()
         elif args.layer == "gold_scalp":

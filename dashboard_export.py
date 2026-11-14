@@ -93,15 +93,6 @@ def record_performance(perf_summary: dict, open_positions: list) -> None:
     _save(d)
 
 
-def record_macro(synthesis: str) -> None:
-    """Record the latest Gemini-sourced macro synthesis (called by macro_agent, step 2 of the pipeline)."""
-    if not synthesis:
-        return
-    d = _load()
-    d["macro"] = {"synthesis": synthesis, "timestamp": str(pd.Timestamp.now(tz="UTC"))}
-    _save(d)
-
-
 def record_scenarios(scenarios: dict) -> None:
     """Record the 1H/4H/Daily/Weekly structural snapshot
     (gold_engine.run_gold_scenarios()) + each timeframe's chart. One slot

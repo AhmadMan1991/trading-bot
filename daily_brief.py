@@ -16,18 +16,16 @@ reads, so this doesn't depend on a deprecated module:
           + latest fired gold_scalp/gold_swing signal in the last 24h(+-1)
 
 That combination can range roughly -5..+5; displayed clipped to -4..+4 to
-match the template. The executive-summary paragraph is LLM-written (Ollama)
+match the template. The executive-summary paragraph is built deterministically
 from the computed table so the narrative actually reflects the numbers,
 rather than being freeform/unfounded commentary.
 """
 
-import time
 from pathlib import Path
 
-import requests
 import pandas as pd
 
-from config import MARKETS, OLLAMA_URL, OLLAMA_MODEL, OLLAMA_KEY
+from config import MARKETS
 from gold_engine import structure_bias
 from data_feeds import fetch_intraday, fetch_all_cot
 from indicators import add_base
@@ -122,43 +120,30 @@ def compute_asset_scores(assets: list | None = None) -> list[dict]:
     return rows
 
 
-def _ollama_text(system: str, user: str, max_tokens: int = 500) -> str:
-    """Same Ollama Cloud endpoint the rest of the system uses, but returns raw
-    text instead of parsed JSON — free-form Arabic prose isn't safe to force
-    through a JSON round-trip."""
-    for attempt in range(2):
-        try:
-            r = requests.post(OLLAMA_URL,
-                              headers={"Authorization": f"Bearer {OLLAMA_KEY}",
-                                       "Content-Type": "application/json"},
-                              json={"model": OLLAMA_MODEL, "stream": False,
-                                    "options": {"temperature": 0.4, "num_predict": max(max_tokens, 800)},
-                                    "messages": [{"role": "system", "content": system},
-                                                 {"role": "user",   "content": user}]},
-                              timeout=120)
-            if not r.ok:
-                time.sleep(3)
-                continue
-            return r.json()["message"]["content"].strip()
-        except Exception:
-            if attempt < 1:
-                time.sleep(2)
-    return "تعذر توليد الملخص التنفيذي هذا اليوم — راجع جدول الأصول أدناه مباشرة."
-
-
-SUMMARY_SYSTEM_AR = """أنت محلل أسواق مالية. تكتب ملخصًا تنفيذيًا يوميًا موجزًا بالعربية
-الفصحى، بأسلوب مهني مباشر (3-5 جمل)، بناءً فقط على جدول النقاط المرفق — لا تخترع
-بيانات أو أخبارًا غير مذكورة في الجدول. اذكر أبرز أصلين للمراقبة، وأنهِ الملخص بسطر
-تحذير يبدأ بـ '⚠️ الخطر الأكبر:' يشير إلى أكبر عامل يمكن أن يقلب الصورة (مثل بيانات
-اقتصادية قادمة أو تشبع في التموضع). أخرج نص عادي فقط بدون markdown."""
+_BIAS_AR = {"BULLISH": "صاعد", "BEARISH": "هابط", "NEUTRAL": "محايد"}
 
 
 def generate_executive_summary(scores: list[dict]) -> str:
-    table_txt = "\n".join(
-        f"{r['asset']}: score={r['score']:+d} bias={r['bias']} cot={r['cot_signal']}"
-        for r in scores
-    )
-    return _ollama_text(SUMMARY_SYSTEM_AR, f"جدول نقاط اليوم:\n{table_txt}")
+    """Deterministic Arabic executive summary built directly from the scored
+    table — no LLM. Highlights the two strongest assets by absolute score and
+    adds a rule-based risk note."""
+    if not scores:
+        return "لا توجد بيانات كافية اليوم — راجع جدول الأصول أدناه مباشرة."
+    top = scores[:2]
+    parts = []
+    for r in top:
+        bias_ar = _BIAS_AR.get(r.get("bias", "NEUTRAL"), r.get("bias", ""))
+        parts.append(f"{r.get('emoji', '')} {r['asset']}: اتجاه {bias_ar} "
+                     f"(ثقة {r.get('confidence_ar', '')}، نقاط {r['score']:+d})")
+    lead = "أبرز الأصول للمراقبة اليوم — " + "؛ ".join(parts) + "."
+    strongest = top[0]
+    if abs(strongest["score"]) >= 4:
+        risk = "⚠️ الخطر الأكبر: تشبّع في التموضع عند الأصل الأقوى — احذر الانعكاس المضاد."
+    elif strongest.get("confidence") == "low":
+        risk = "⚠️ الخطر الأكبر: إشارات ضعيفة ومتضاربة — يُفضّل انتظار تأكيد أوضح."
+    else:
+        risk = "⚠️ الخطر الأكبر: بيانات اقتصادية أمريكية قادمة قد تقلب الصورة — تابع المفكرة."
+    return lead + "\n" + risk
 
 
 _ACTION_AR = {

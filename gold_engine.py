@@ -33,11 +33,10 @@ import json
 import time
 from pathlib import Path
 
-import requests
 import pandas as pd
 
 from config import (
-    MARKETS, OLLAMA_URL, OLLAMA_MODEL, OLLAMA_KEY, ACCOUNT_SIZE, RISK_PCT,
+    MARKETS, ACCOUNT_SIZE, RISK_PCT,
     GOLD_SESSIONS_UTC, GOLD_JUDAS_WINDOW_MIN, GOLD_IMPULSE_ATR_MULT,
     GOLD_SWEEP_LOOKBACK, GOLD_STRUCTURE_LOOKBACK, GOLD_ATR_STOP_BUFFER,
     GOLD_TP1_RR, GOLD_TP2_RR, GOLD_TP3_RR, GOLD_MIN_CONFIDENCE, GOLD_SCALP_COOLDOWN_MIN,
@@ -315,37 +314,13 @@ def _save_state(state: dict) -> None:
 
 
 # =============================================================================
-# OPTIONAL REASONING TEXT (not part of the decision — decision is deterministic)
+# REASONING TEXT (deterministic — the decision itself is already deterministic)
 # =============================================================================
 
-_REASONING_SYSTEM = """You are a gold (XAUUSD) trading desk analyst. Given a
-list of factual factors behind a signal that has ALREADY been decided
-(you are not making the call, only explaining it), write a tight 2-3 sentence
-professional explanation. Plain text, no markdown, no hedging about whether
-to take the trade — that decision is already made."""
-
-
-def _llm_reasoning(direction: str, factors: list[str]) -> str:
-    fallback = f"{direction} — " + "; ".join(factors)
-    if not OLLAMA_KEY:
-        return fallback
-    try:
-        r = requests.post(
-            OLLAMA_URL,
-            headers={"Authorization": f"Bearer {OLLAMA_KEY}", "Content-Type": "application/json"},
-            json={"model": OLLAMA_MODEL, "stream": False,
-                  "options": {"temperature": 0.3, "num_predict": 200},
-                  "messages": [{"role": "system", "content": _REASONING_SYSTEM},
-                               {"role": "user", "content": f"Direction: {direction}\nFactors: " + "; ".join(factors)}]},
-            timeout=45,
-        )
-        if r.ok:
-            text = r.json()["message"]["content"].strip()
-            if text:
-                return text
-    except Exception as e:
-        print(f"    ⚠ reasoning LLM call failed, using fallback text: {e}")
-    return fallback
+def _reasoning(direction: str, factors: list[str]) -> str:
+    """Deterministic one-line explanation of an already-decided signal: the
+    direction plus the factors that produced it. No LLM involved."""
+    return f"{direction} — " + "; ".join(factors)
 
 
 # =============================================================================
@@ -499,7 +474,7 @@ def evaluate_setup(df_ltf: pd.DataFrame, df_htf: pd.DataFrame, cot: dict | None,
         "entry": round(price, 5), "stop_loss": round(stop, 5),
         "target_1": round(tp1, 5), "target_2": round(tp2, 5), "target_3": round(tp3, 5),
         "risk_reward": lv["rr1"], "risk_usd": round(risk, 5), "factors": factors,
-        "reasoning": "" if skip_reasoning else _llm_reasoning(trade_direction, factors),
+        "reasoning": "" if skip_reasoning else _reasoning(trade_direction, factors),
     }
 
 
