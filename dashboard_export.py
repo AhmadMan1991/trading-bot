@@ -93,6 +93,14 @@ def record_performance(perf_summary: dict, open_positions: list) -> None:
     _save(d)
 
 
+def record_outlook(outlooks: list) -> None:
+    """Record the per-symbol 4H/Daily/Weekly outlook (outlook.py). Replaces the
+    whole list each run — it's a current snapshot, not a history log."""
+    d = _load()
+    d["outlook"] = {"symbols": outlooks, "updated_at": str(pd.Timestamp.now(tz="UTC"))}
+    _save(d)
+
+
 def record_scenarios(scenarios: dict) -> None:
     """Record the 1H/4H/Daily/Weekly structural snapshot
     (gold_engine.run_gold_scenarios()) + each timeframe's chart. One slot

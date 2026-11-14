@@ -95,6 +95,14 @@ MULTI_ASSET_ENABLED = os.environ.get("MULTI_ASSET", "1") != "0"
 EXTRA_ASSETS = ["BTCUSD", "EURUSD"]
 EXTRA_MAX_TRADES_PER_DAY = 3   # per-asset daily cap for BTC/EUR (independent of gold)
 
+# ── Outlook (per-symbol 4H/Daily/Weekly structural report) ───────────────────
+# The deterministic outlook (outlook.py) runs over these symbols and posts a
+# once-daily report to Telegram + the dashboard. Defaults to everything in
+# MARKETS; override with a comma list, e.g. OUTLOOK_SYMBOLS="XAUUSD,NAS100,USDJPY,GBPUSD"
+# (each symbol must have a MARKETS entry so the data feed knows its ticker).
+OUTLOOK_SYMBOLS = [s.strip().upper() for s in os.environ.get("OUTLOOK_SYMBOLS", "").split(",") if s.strip()] \
+    or list(MARKETS.keys())
+
 # ── Gold engine — ICT/SMC concepts ────────────────────────────────────────────
 # One deterministic engine, not a multi-agent debate: confluence of these
 # factors produces a confidence score directly, so there's no "agents

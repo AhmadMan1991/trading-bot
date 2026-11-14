@@ -226,6 +226,37 @@ function analytics(d){
     <div class="card"><h3>COT positioning trend</h3>${cotHtml}</div>
   </div>`;
 }
+function outlook(o){
+  const list=(o&&o.symbols)||[];
+  if(!list.length) return '';
+  const cards=list.map(x=>{
+    const a=x.symbol||'', b=x.bias||{}, s=x.structure||{}, lv=x.levels||{}, sc=x.scenarios||{}, vol=x.volatility||{};
+    const tgts=t=>(t&&t.length)?t.map(v=>fmtPrice(v,a)).join(', '):'open air';
+    const bull=sc.bull||{}, bear=sc.bear||{};
+    return `<div class="card">
+      <div class="sig top">
+        <span class="asset">${esc(x.emoji||'')} ${esc(a)}</span>
+        <span class="chip ${biasClass(b.label)}">${esc(b.icon||'')} ${esc(b.label||'—')}</span>
+        <span class="when">${b.norm!=null?(b.norm>0?'+':'')+b.norm:''}</span>
+      </div>
+      <div style="margin-top:7px;font-size:12.5px"><span class="muted">Structure</span>&nbsp; <b style="font-variant-numeric:tabular-nums">4H ${esc(s.h4||'—')} · D ${esc(s.daily||'—')} · W ${esc(s.weekly||'—')}</b></div>
+      <div class="sig levels" style="margin-top:8px">
+        <span>Price <b>${fmtPrice(x.price,a)}</b></span>
+        <span>In week <b>${lv.pos_in_week_pct!=null?lv.pos_in_week_pct+'%':'—'}</b></span>
+        <span>PDH <b>${fmtPrice(lv.pdh,a)}</b></span>
+        <span>PDL <b>${fmtPrice(lv.pdl,a)}</b></span>
+        <span>PWH <b>${fmtPrice(lv.pwh,a)}</b></span>
+        <span>PWL <b>${fmtPrice(lv.pwl,a)}</b></span>
+      </div>
+      <div class="small" style="margin-top:9px">
+        ${bull.trigger!=null?`<div class="pos">🐂 Above ${fmtPrice(bull.trigger,a)} → <span class="muted">${tgts(bull.targets)}</span></div>`:''}
+        ${bear.trigger!=null?`<div class="neg">🐻 Below ${fmtPrice(bear.trigger,a)} → <span class="muted">${tgts(bear.targets)}</span></div>`:''}
+      </div>
+      ${vol.used_pct!=null?`<div class="small muted" style="margin-top:8px">ADR used ${Math.round(vol.used_pct)}% — ${esc(vol.note||'')}</div>`:''}
+    </div>`;
+  }).join('');
+  return `<h2 class="sec">Outlook · 4H / Daily / Weekly</h2><div class="grid sig">${cards}</div>`;
+}
 function scenarios(s){
   if(!s||!Object.keys(s).length) return '';
   const order=['1H','4H','Daily','Weekly'].filter(k=>s[k]);
@@ -355,6 +386,7 @@ function render(d){
   app.innerHTML =
     kpis(d.performance) +
     analytics(d) +
+    outlook(d.outlook) +
     openPositions(d.open_positions) +
     scenarios(d.scenarios) +
     brief(d.daily_brief) +

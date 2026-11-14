@@ -31,6 +31,7 @@ Examples:
   python main.py --layer tracer        # standalone, own schedule
   python main.py --layer cot_weekly    # standalone, own schedule
   python main.py --layer daily_brief   # standalone, own schedule
+  python main.py --layer outlook       # 4H/D/W outlook, all symbols
   python main.py --layer backtest --asset XAUUSD --bars 2000
 """
 
@@ -288,6 +289,28 @@ def run_performance_layer():
         print(f"    ⚠ dashboard export failed: {e}")
 
 
+def run_outlook_layer():
+    """Deterministic 4H/Daily/Weekly structural outlook for every configured
+    symbol (OUTLOOK_SYMBOLS). Refreshes the dashboard every run; posts the
+    combined report to Telegram once per day."""
+    print("\n═══ OUTLOOK — 4H/Daily/Weekly (all symbols) ═══")
+    from outlook import run_outlook
+    import dashboard_export as dash
+    outlooks = run_outlook()
+    if not outlooks:
+        print("  no outlook data")
+        return
+    try:
+        dash.record_outlook(outlooks)
+    except Exception as e:
+        print(f"    ⚠ dashboard export failed: {e}")
+    if _should_notify("outlook", datetime.now(timezone.utc).strftime("%Y-%m-%d")):
+        telegram.send_outlook(outlooks)
+        print(f"  📨 outlook sent for {len(outlooks)} symbol(s)")
+    else:
+        print("  (outlook already sent today — Telegram skipped)")
+
+
 def run_pipeline():
     """The full sequential chain, gold-only. Recommended cadence: every
     30-60min during London/NY sessions (07-16 UTC weekdays) via pipeline.yml —
@@ -298,6 +321,7 @@ def run_pipeline():
     run_gold_swing_layer(cot_map)
     run_extra_assets_layer()
     run_performance_layer()
+    run_outlook_layer()
 
 
 # ─────────────────────────────────────────────────────────────────────────
@@ -358,7 +382,7 @@ if __name__ == "__main__":
     parser.add_argument("--layer", default=None,
                         choices=["cot", "cot_map", "gold_bias", "gold_scalp", "gold_swing",
                                  "extra", "performance", "news", "news_weekly", "tracer",
-                                 "cot_weekly", "daily_brief", "backtest"])
+                                 "cot_weekly", "daily_brief", "outlook", "backtest"])
     parser.add_argument("--asset",  default=None)   # kept for backtest compat; engine itself is gold-only
     parser.add_argument("--bars",   type=int, default=2000)
     parser.add_argument("--window", type=int, default=500)
@@ -395,6 +419,8 @@ if __name__ == "__main__":
             run_cot_weekly_layer()
         elif args.layer == "daily_brief":
             run_daily_brief_layer()
+        elif args.layer == "outlook":
+            run_outlook_layer()
         elif args.layer == "backtest":
             run_backtest_layer(assets, args.bars, args.window)
         print("\n  ✅ run complete")
